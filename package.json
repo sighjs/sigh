@@ -1,0 +1,38 @@
+{
+  "name": "sigh",
+  "version": "0.0.1",
+  "description": "Another tool for managing web asset pipelines",
+  "main": "index",
+  "directories": {
+    "lib": "./lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "grunt build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sighjs/sigh.git"
+  },
+  "keywords": [
+    "build",
+    "assets",
+    "pipeline"
+  ],
+  "author": "James Pike <github@chilon.net>",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/sighjs/sigh/issues"
+  },
+  "dependencies": {
+    "mercator": "^0.1.9",
+    "source-map-support": "^0.2.8",
+    "traceur": "0.0.78"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "jit-grunt": "^0.9.0"
+  }
+}
