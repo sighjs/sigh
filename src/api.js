@@ -1,14 +1,42 @@
-import Resource from './Resource'
 import fs from 'fs'
 import _ from 'lodash'
+import rewire from 'rewire'
 import path from 'path'
 
-export { Resource }
+import UserError from './errors'
+import Resource from './Resource'
+import Operation from './Operation'
+
+export { UserError, Resource, Operation }
+
+// should be in seperate directory :(
+// see: https://github.com/google/traceur-compiler/issues/1538
+import glob from './glob'
+import all from './all'
+import concat from './concat'
+import write from './write'
+
+var plugins = { glob, all, concat, write }
+
+// Run Sigh.js
+export function invoke(opts) {
+  try {
+    invokeHelper(opts)
+  }
+  catch (e) {
+    if (e instanceof UserError) {
+      // TODO: add some red stuff before it
+      console.warn(e.message)
+      process.exit(1)
+    }
+    else {
+      throw e
+    }
+  }
+}
 
 /// Run the Sigh.js file in the current directory with the given options.
-export function invoke(opts) {
-  console.log("TODO: invoke sigh %j", opts)
-
+function invokeHelper(opts) {
   var sighPkgs = []
 
   var packageJson = JSON.parse(fs.readFileSync('package.json'))
@@ -22,9 +50,55 @@ export function invoke(opts) {
     })
   })
 
-  var sighModule = require(path.join(process.cwd(), 'Sigh'))
-  // sighModule.__set__('path', 'poo')
+  // TODO: also inject package.json dependencies
+  var sighModule = rewire(path.join(process.cwd(), 'Sigh'))
+  _.forEach(plugins, (plugin, key) => injectPlugin(sighModule, key))
 
-  console.log("sigh packages", sighPkgs)
+  var pipelines = {}
+  sighModule(pipelines)
 
+  // console.log("TODO: invoke sigh %j", opts)
+  if (opts.pipelines.length) {
+    Object.keys(pipelines).forEach(name => {
+      if (opts.pipelines.indexOf(name) === -1)
+        delete pipelines[name]
+    })
+  }
+
+  function initPlugin(operation) {
+    operation.next('build')
+
+    // TODO: wait for operation to resolve before calling watch
+    if (opts.watch)
+      operation.next('watch')
+  }
+
+  pipelines = _.mapValues(pipelines, (pipeline, name) => {
+    function checkFinalOpIsSink(operation) {
+      if (operation.inputs !== undefined)
+        throw new UserError('pipeline ' + name + ' should end in sink')
+    }
+
+    pipeline.unshift(initPlugin)
+    var pipeline = _.reduceRight(pipeline, (nextFunc, opFunc) => {
+      return new Operation(opFunc, nextFunc)
+    }, new Operation(checkFinalOpIsSink))
+
+    return pipeline
+  })
+
+  _.forEach(pipelines, pipeline => pipeline.event())
+}
+
+function injectPlugin(module, pluginName) {
+  var plugin = plugins[pluginName]
+  if (! plugin)
+    throw new UserError("Non-existant plugin `" + pluginName + "'")
+
+  try {
+    module.__set__(pluginName, plugin)
+  }
+  catch (e) {
+    throw new UserError("Sigh.js needs `var " + pluginName + "' statement")
+  }
 }
