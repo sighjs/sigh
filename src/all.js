@@ -1,4 +1,5 @@
 import { pipelineToOperation } from './pipeline'
+import _ from 'lodash'
 
 export default function(...pipelines) {
 
@@ -10,7 +11,13 @@ export default function(...pipelines) {
   })
 
   return operation => {
-    console.log("all: => %j", operation.inputs)
-    return []
+    return Promise.all(
+      _.map(childOps, childOp => childOp.execute(operation.inputs))
+    )
+    .then(_.flatten)
+    .then(resources => {
+      console.log("all: %j => %j", operation.inputs, resources)
+      return resources
+    })
   }
 }

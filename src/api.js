@@ -69,7 +69,14 @@ function invokeHelper(opts) {
   var operations = _.mapValues(pipelines, pipelineToOperation)
 
   _.forEach(operations, operation => {
-    operation.execute(opts.watch ? 'watch' : 'build').catch(rootErrorHandler)
+    operation.execute(opts.watch ? 'watch' : 'build')
+    .then(resources => {
+      if (resources === undefined)
+        console.log("reached end of pipeline")
+      else
+        throw new UserError("Pipeline leaked resources, should end in a sink")
+    })
+    .catch(rootErrorHandler)
   })
 }
 
