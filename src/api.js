@@ -6,6 +6,7 @@ import path from 'path'
 import { UserError, rootErrorHandler } from './errors'
 import Resource from './Resource'
 import Operation from './Operation'
+import { pipelineToOperation } from './pipeline'
 
 export { UserError, Resource, Operation }
 
@@ -65,14 +66,10 @@ function invokeHelper(opts) {
     })
   }
 
-  pipelines = _.mapValues(pipelines, (pipeline, name) => {
-    return _.reduceRight(pipeline, (nextFunc, opFunc) => {
-      return new Operation(opFunc, nextFunc)
-    }, new Operation(pipeline.pop()))
-  })
+  var operations = _.mapValues(pipelines, pipelineToOperation)
 
-  _.forEach(pipelines, pipeline => {
-    pipeline.execute(opts.watch ? 'watch' : 'build').catch(rootErrorHandler)
+  _.forEach(operations, operation => {
+    operation.execute(opts.watch ? 'watch' : 'build').catch(rootErrorHandler)
   })
 }
 
