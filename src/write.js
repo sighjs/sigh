@@ -26,8 +26,7 @@ function writeResource(outputDir, resource) {
       resource.data += '\n' + suffix
 
     promise = promise.then(() => {
-      var map = resource.map
-      // map.rebaseSourcePaths(targetDir)
+      var map = resource.map.rebaseSourcePaths(outputDir)
       return Promise.promisify(fs.writeFile)(path.join(outputDir, mapPath), map)
     })
   }
