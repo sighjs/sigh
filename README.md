@@ -2,9 +2,13 @@
 
 ## Yet another asset pipeline
 
-* Should support source maps at every stage of the pipeline like [plumber](https://github.com/plumberjs/plumber).
-* Should be simple like [gobble](https://github.com/gobblejs/gobble).
-* Should support watching files and updating the pipeline as files change.
+* Should support source maps at every stage of the pipeline like [plumber][plumber] and [gulp][gulp]
+* Should be easy to write plugins in a small number of lines of code like [gobble][gobble]
+* Should support watching files and updating the pipeline as files change like [plumber][plumber]
+
+[plumber]: https://github.com/plumberjs/plumber
+[gobble]: https://github.com/gobblejs/gobble
+[gulp]: https://github.com/gulpjs/gulp
 
 ## Using sigh
 
