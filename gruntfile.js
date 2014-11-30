@@ -5,8 +5,11 @@ module.exports = function(grunt) {
         files: 'src/**/*.js',
         tasks: ['build']
       },
+      options: {
+        spawn: false
+      }
     },
-    clean: ['lib']
+    clean: ['lib/*']
   })
 
   require('jit-grunt')(grunt)
@@ -14,9 +17,11 @@ module.exports = function(grunt) {
   grunt.registerTask('build', function() {
     var done = this.async()
 
+    // because traceur puts the map in a different directory
+    process.chdir('lib')
     grunt.util.spawn({
-      cmd: 'traceur',
-      args: '--modules commonjs --source-maps --dir src lib'.split(' ')
+      cmd: '../node_modules/.bin/traceur',
+      args: '--modules commonjs --source-maps --dir ../src .'.split(' ')
     },
     function(error, result, code) {
       // traceur doesn't use exit codes properly...
@@ -24,6 +29,7 @@ module.exports = function(grunt) {
         grunt.log.error('\007' + result.stderr)
       done()
     })
+    process.chdir('..')
   })
   grunt.registerTask('default', 'build')
 }
