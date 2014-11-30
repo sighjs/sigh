@@ -1,4 +1,5 @@
 import Promise from 'bluebird'
+import path from 'path'
 
 import { UserError, rootErrorHandler } from './errors'
 import Resource from './Resource'
@@ -7,6 +8,7 @@ export default class {
   constructor(func, nextOp) {
     this._func = func
     this._nextOp = nextOp
+    this.resources = {}
   }
 
   get forWatch() {
@@ -32,8 +34,7 @@ export default class {
   }
 
   makeResource(filePath) {
-    // TODO: cache it
-    return new Resource(filePath)
+    return this.resources[path.resolve(filePath)] = new Resource(filePath)
   }
 
   // Trigger re-execution of the upstream pipeline asynchronously (e.g. due
