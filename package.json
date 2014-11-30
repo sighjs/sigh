@@ -25,9 +25,11 @@
     "url": "https://github.com/sighjs/sigh/issues"
   },
   "dependencies": {
+    "lodash": "^2.4.1",
     "mercator": "^0.1.9",
     "source-map-support": "^0.2.8",
-    "traceur": "0.0.78"
+    "traceur": "0.0.78",
+    "traceur-runtime": "0.0.59"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
