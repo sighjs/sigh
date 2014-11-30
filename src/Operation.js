@@ -16,6 +16,12 @@ export default class {
     return this.inputs === 'build'
   }
 
+  // ensure this is a source operation (one with no inputs)
+  assertSource() {
+    if (this.inputs instanceof Array)
+      throw new UserError('expected operation to be source')
+  }
+
   // Execute this operation with the given inputs.
   execute(inputs) {
     this.inputs = inputs
@@ -36,7 +42,6 @@ export default class {
     Promise.try(this._next.bind(this, inputs)).catch(rootErrorHandler)
   }
 
-  // A plugin can call this to execute the upstream pipe again
   _next(inputs) {
     if (this._nextOp) {
       if (inputs === undefined)
@@ -47,11 +52,5 @@ export default class {
     else if (inputs !== undefined) {
       throw new UserError('pipeline must end in a sink')
     }
-  }
-
-  // ensure this is a source operation (one with no inputs)
-  enforceSource() {
-    if (this.inputs instanceof Array)
-      throw new UserError('expected operation to be source')
   }
 }

@@ -6,10 +6,15 @@ var glob = Promise.promisify(_glob)
 
 function build(operation, patterns) {
   console.log("glob build: => %j", patterns, operation.inputs)
-  return Promise
-    .all(patterns.map(pattern => glob(pattern)))
-    .then(_.flatten)
-    .map(filePath => operation.makeResource(filePath))
+  return Promise.all(
+    Promise
+      .all(patterns.map(pattern => glob(pattern)))
+      .then(_.flatten)
+      .map(filePath => {
+        var resource = operation.makeResource(filePath)
+        return resource.loadFromFs()
+      })
+  )
 }
 
 function watch(operation, patterns) {
@@ -19,7 +24,7 @@ function watch(operation, patterns) {
 
 export default function(...patterns) {
   return operation => {
-    operation.enforceSource()
+    operation.assertSource()
     return build(operation, patterns).then(resources => {
       if (operation.forWatch)
         watch(operation, patterns)

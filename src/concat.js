@@ -1,10 +1,20 @@
-import { SourceMap } from 'mercator'
+import _ from 'lodash'
 
-// file root minus extension
-export default function(outputFileRoot) {
+function lineCount(source) {
+    return source.split('\n').length;
+}
+
+export default function(outputFilePath) {
   return operation => {
-
     console.log("concat: => %j", operation.inputs)
-    return []
+
+    var concated = _.reduce(operation.inputs, (concated, resource) => {
+      concated.map = concated.map.append(resource.map, lineCount(concated.data))
+      concated.data += '\n' + resource.data
+      return concated
+    })
+
+    concated.setFilePath(outputFilePath)
+    return [concated]
   }
 }

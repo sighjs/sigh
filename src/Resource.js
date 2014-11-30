@@ -1,5 +1,8 @@
 import _ from 'lodash'
+import fs from 'fs'
 import path from 'path'
+import Promise from 'bluebird'
+import mercator from 'mercator'
 
 /**
  * @param {String} path The absolute or relative path to the resource
@@ -11,11 +14,25 @@ export default class Resource {
     if (typeof filePath === 'object') {
       var other = filePath;
       _.assign(this, _.pick(other, 'filePath', 'fileName'))
-      return
     }
+    else {
+      this.setFilePath(filePath)
+    }
+  }
 
+  setFilePath(filePath) {
     this.filePath = filePath
     this.fileName = path.basename(this.filePath)
+  }
+
+  // Return a promise that reads the resource from the filesystem.
+  loadFromFs() {
+    // TODO: also look for map
+    return Promise.promisify(fs.readFile)(this.filePath).then(data => {
+      this.data = data.toString()
+      this.map = mercator.SourceMap.forSource(this.data, path.resolve(this.filePath))
+      return this
+    })
   }
 
   clone() {
