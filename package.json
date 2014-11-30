@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "bluebird": "^2.3.11",
-    "gaze": "^0.6.4",
+    "gaze": "0.5.1",
     "glob": "^4.2.1",
     "lodash": "^2.4.1",
     "mercator": "^0.1.9",

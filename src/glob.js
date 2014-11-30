@@ -16,8 +16,8 @@ function build(operation, patterns) {
 }
 
 function watch(operation, patterns) {
-  // debounce delay doesn't help much for when vim moves files
-  gaze(patterns, { debounceDelay: 200 }, function(err, watcher) {
+  // debounce delay doesn't seem to work
+  gaze(patterns, function(err, watcher) {
     if (err) {
       console.warn('Problem establishing filesystem watch')
       return
@@ -27,8 +27,6 @@ function watch(operation, patterns) {
       console.log(event, filepath)
     })
   })
-  // TODO: register glob watches and call operation.next when they fire
-  return []
 }
 
 export default function(...patterns) {
