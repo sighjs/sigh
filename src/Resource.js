@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import 'path'
+import path from 'path'
 
 /**
  * @param {String} path The absolute or relative path to the resource
