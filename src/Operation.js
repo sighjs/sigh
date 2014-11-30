@@ -1,5 +1,7 @@
-import { UserError, rootErrorHandler } from './errors'
 import Promise from 'bluebird'
+
+import { UserError, rootErrorHandler } from './errors'
+import Resource from './Resource'
 
 export default class {
   constructor(func, nextOp) {
@@ -8,11 +10,9 @@ export default class {
   }
 
   get forWatch() {
-    this._enforceSource()
     return this.inputs === 'watch'
   }
   get forBuild() {
-    this._enforceSource()
     return this.inputs === 'build'
   }
 
@@ -23,6 +23,11 @@ export default class {
       return this._func(this)
     })
     .then(this._next.bind(this))
+  }
+
+  makeResource(filePath) {
+    // TODO: cache it
+    return new Resource(filePath)
   }
 
   // Trigger re-execution of the upstream pipeline asynchronously (e.g. due
@@ -45,8 +50,8 @@ export default class {
   }
 
   // ensure this is a source operation (one with no inputs)
-  _enforceSource() {
+  enforceSource() {
     if (this.inputs instanceof Array)
-      throw Error('expected operation to be source')
+      throw new UserError('expected operation to be source')
   }
 }

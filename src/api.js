@@ -72,7 +72,7 @@ function invokeHelper(opts) {
   })
 
   _.forEach(pipelines, pipeline => {
-    pipeline.execute('build').catch(rootErrorHandler)
+    pipeline.execute(opts.watch ? 'watch' : 'build').catch(rootErrorHandler)
   })
 }
 
