@@ -52,5 +52,8 @@ export default class {
     else if (inputs !== undefined) {
       throw new UserError('pipeline must end in a sink')
     }
+    else {
+      console.log("reached end of pipeline")
+    }
   }
 }

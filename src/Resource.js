@@ -13,7 +13,7 @@ export default class Resource {
   constructor(filePath) {
     if (typeof filePath === 'object') {
       var other = filePath;
-      _.assign(this, _.pick(other, 'filePath', 'fileName'))
+      _.assign(this, _.pick(other, 'filePath', 'fileName', 'type', 'data', 'map'))
     }
     else {
       this.setFilePath(filePath)
@@ -23,6 +23,7 @@ export default class Resource {
   setFilePath(filePath) {
     this.filePath = filePath
     this.fileName = path.basename(this.filePath)
+    this.type = path.extname(this.fileName).slice(1)
   }
 
   // Return a promise that reads the resource from the filesystem.
@@ -37,6 +38,10 @@ export default class Resource {
 
   clone() {
     return new Resource(this)
+  }
+
+  get sourceMapFileName() {
+    return this.fileName + '.map'
   }
 
   /// Assign new properties to be merged in to current properties

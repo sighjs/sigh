@@ -5,7 +5,7 @@ export class UserError {
 export function rootErrorHandler(err) {
   // TODO: make
   if (err instanceof UserError)
-    console.log('\x07' + err)
+    console.log('\x07error:', err.message)
   else
     console.log('\x07Unexpected error:', err.stack ? err.stack : err)
 }
