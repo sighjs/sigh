@@ -25,6 +25,7 @@
     "url": "https://github.com/sighjs/sigh/issues"
   },
   "dependencies": {
+    "bluebird": "^2.3.11",
     "lodash": "^2.4.1",
     "mercator": "^0.1.9",
     "rewire": "^2.1.3",

@@ -1,4 +1,5 @@
-import UserError from './errors'
+import { UserError } from './errors'
+import Promise from 'bluebird'
 
 export default class {
   constructor(func, nextOp) {
@@ -15,16 +16,25 @@ export default class {
     return this.inputs === 'build'
   }
 
-  event() {
-    this._func(this)
+  execute(inputs) {
+    this.inputs = inputs
+    return Promise.try(() => {
+      return this._func(this)
+    })
+    .then(outputs => {
+      if (this._nextOp) {
+        if (outputs === undefined)
+          throw new UserError('sinks may only be at the end of a pipeline')
+
+        return this._nextOp.execute(outputs)
+      }
+      else if (outputs !== undefined) {
+        throw new UserError('pipeline must end in a sink')
+      }
+    })
   }
 
-  next(outputs) {
-    this._nextOp.inputs = outputs
-    this._nextOp.event()
-  }
-
-  // ensure this is a source operation (i.e. one with no inputs)
+  // ensure this is a source operation (one with no inputs)
   _enforceSource() {
     if (this.inputs instanceof Array)
       throw Error('expected operation to be source')

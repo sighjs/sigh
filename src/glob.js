@@ -1,15 +1,15 @@
 var patterns
 
 function build(operation) {
-  // TODO:
   console.log("glob build: => %j", operation.inputs)
-  operation.next([])
+  // TODO:
+  return []
 }
 
 function watch(operation) {
   console.log("glob watch: => %j", operation.inputs)
   // TODO:
-  // operation.next([])
+  return []
 }
 
 export default function(..._patterns) {
@@ -17,10 +17,10 @@ export default function(..._patterns) {
 
   return operation => {
     if (operation.forWatch) {
-      watch(operation)
+      return watch(operation)
     }
     else if (operation.forBuild) {
-      build(operation)
+      return build(operation)
     }
   }
 }

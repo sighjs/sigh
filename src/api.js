@@ -3,7 +3,7 @@ import _ from 'lodash'
 import rewire from 'rewire'
 import path from 'path'
 
-import UserError from './errors'
+import { UserError } from './errors'
 import Resource from './Resource'
 import Operation from './Operation'
 
@@ -24,7 +24,7 @@ export function invoke(opts) {
     invokeHelper(opts)
   }
   catch (e) {
-    if (e instanceof UserError) {
+    if (typeof e === 'function' && e instanceof UserError) {
       // TODO: add some red stuff before it
       console.warn(e.message)
       process.exit(1)
@@ -65,29 +65,20 @@ function invokeHelper(opts) {
     })
   }
 
-  function initPlugin(operation) {
-    operation.next('build')
-
-    // TODO: wait for operation to resolve before calling watch
-    if (opts.watch)
-      operation.next('watch')
-  }
-
   pipelines = _.mapValues(pipelines, (pipeline, name) => {
-    function checkFinalOpIsSink(operation) {
-      if (operation.inputs !== undefined)
-        throw new UserError('pipeline ' + name + ' should end in sink')
-    }
-
-    pipeline.unshift(initPlugin)
-    var pipeline = _.reduceRight(pipeline, (nextFunc, opFunc) => {
+    return _.reduceRight(pipeline, (nextFunc, opFunc) => {
       return new Operation(opFunc, nextFunc)
-    }, new Operation(checkFinalOpIsSink))
-
-    return pipeline
+    }, new Operation(pipeline.pop()))
   })
 
-  _.forEach(pipelines, pipeline => pipeline.event())
+  _.forEach(pipelines, pipeline => {
+    pipeline.execute('build').catch(err => {
+      if (err instanceof UserError)
+        console.log(err)
+      else
+        console.log('Unexpected error:', err.stack ? err.stack : err)
+    })
+  })
 }
 
 function injectPlugin(module, pluginName) {
