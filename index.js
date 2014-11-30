@@ -1,3 +1,3 @@
 require('source-map-support').install()
-require('traceur-runtime')
+require('traceur')
 module.exports = require('./lib/api')

@@ -31,8 +31,7 @@
     "mercator": "^0.1.9",
     "rewire": "^2.1.3",
     "source-map-support": "^0.2.8",
-    "traceur": "0.0.78",
-    "traceur-runtime": "0.0.59"
+    "traceur": "0.0.78"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
