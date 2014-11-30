@@ -3,7 +3,7 @@ import _ from 'lodash'
 import rewire from 'rewire'
 import path from 'path'
 
-import { UserError } from './errors'
+import { UserError, rootErrorHandler } from './errors'
 import Resource from './Resource'
 import Operation from './Operation'
 
@@ -72,12 +72,7 @@ function invokeHelper(opts) {
   })
 
   _.forEach(pipelines, pipeline => {
-    pipeline.execute('build').catch(err => {
-      if (err instanceof UserError)
-        console.log(err)
-      else
-        console.log('Unexpected error:', err.stack ? err.stack : err)
-    })
+    pipeline.execute('build').catch(rootErrorHandler)
   })
 }
 

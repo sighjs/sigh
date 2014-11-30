@@ -28,9 +28,9 @@ module.exports = function(grunt) {
       // traceur doesn't use exit codes properly...
       // it also logs errors on both stdout and stderr
       if (result.stderr)
-        grunt.log.error('\007' + result.stderr)
+        grunt.log.error('\x07' + result.stderr)
       if (result.stdout)
-        grunt.log.error('\007' + result.stdout)
+        grunt.log.error('\x07' + result.stdout)
       done()
     })
     process.chdir('..')
