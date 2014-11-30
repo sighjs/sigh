@@ -7,7 +7,7 @@
     "lib": "./lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "grunt test",
     "install": "grunt build"
   },
   "repository": {
@@ -34,9 +34,12 @@
     "traceur": "0.0.78"
   },
   "devDependencies": {
+    "chai": "^1.10.0",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-watch": "^0.6.1",
-    "jit-grunt": "^0.9.0"
+    "grunt-mocha-test": "^0.12.4",
+    "jit-grunt": "^0.9.0",
+    "mocha": "^2.0.1"
   }
 }

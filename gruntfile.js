@@ -36,4 +36,6 @@ module.exports = function(grunt) {
     process.chdir('..')
   })
   grunt.registerTask('default', 'build')
+
+  grunt.registerTask('test', 'mochaTest')
 }
