@@ -15,12 +15,7 @@ function watch(latestResources, operation, childOps) {
 }
 
 export default function(...pipelines) {
-  var childOps = pipelines.map(pipeline => {
-    if (! (pipeline instanceof Array))
-      pipeline = [ pipeline ]
-
-    return pipelineToOperation(pipeline)
-  })
+  var childOps = pipelines.map(pipelineToOperation)
 
   return operation => {
     var latestResources = []
