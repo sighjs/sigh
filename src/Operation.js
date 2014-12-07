@@ -63,21 +63,23 @@ export default class {
   /// @param inputs Array of resources to pass down the pipeline, if not passed
   ///               then all resources created with this.resource() are passed.
   next(resources) {
-    if (! this._debounceNext)
-      this._debounceNext = _.debounce(this._next.bind(this), DEBOUNCE_MS)
-
-    Promise.try(this._debounceNext.bind(this, resources || this.resources())).catch(rootErrorHandler)
+    if (! this._debounceNext) {
+      this._debounceNext = _.debounce(resources => {
+        Promise.try(this._next.bind(this, resources)).catch(rootErrorHandler)
+      }, DEBOUNCE_MS)
+    }
+    this._debounceNext(resources || this.resources())
   }
 
-  _next(inputs) {
+  _next(resources) {
     if (this._nextOp) {
-      if (inputs === undefined)
+      if (resources === undefined)
         throw new UserError('sinks may only be at the end of a pipeline')
 
-      return this._nextOp.execute(inputs.map(input => input.clone()))
+      return this._nextOp.execute(resources.map(input => input.clone()))
     }
     else {
-      return inputs
+      return resources
     }
   }
 }
