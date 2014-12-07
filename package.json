@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Another tool for managing web asset pipelines",
   "main": "index",
   "directories": {
@@ -32,9 +32,7 @@
     "mercator": "git://github.com/chilon-net/mercator#d7fd7cf",
     "mkdirp": "^0.5.0",
     "rewire": "^2.1.3",
-    "source-map-support": "^0.2.8"
-  },
-  "peerDependencies": {
+    "source-map-support": "^0.2.8",
     "traceur": "^0.0.79"
   },
   "devDependencies": {
