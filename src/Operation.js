@@ -14,6 +14,14 @@ export default class {
     this._resources = {}
   }
 
+  // Append an operation after all subsequent operations.
+  append(appendOp) {
+    var op = this
+    while (op._nextOp)
+      op = op._nextOp
+    op._nextOp = appendOp
+  }
+
   get forWatch() {
     return this.inputs === 'watch'
   }
