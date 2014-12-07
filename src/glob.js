@@ -2,6 +2,7 @@ import Promise from 'bluebird'
 import _ from 'lodash'
 import _glob from 'glob'
 import gaze from 'gaze'
+import path from 'path'
 
 import { rootErrorHandler } from './errors'
 
@@ -25,8 +26,9 @@ function watch(operation, patterns) {
       return
     }
 
+    var cwd = process.cwd()
     watcher.on('all', (event, filePath) => {
-      // console.log('gaze event %s: %s', event, filePath)
+      console.log('%s: %s', path.relative(cwd, filePath), event)
 
       if (event === 'deleted') {
         operation.removeResource(filePath)
