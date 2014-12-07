@@ -11,7 +11,7 @@ function build(operation, patterns) {
     Promise
       .all(patterns.map(pattern => glob(pattern)))
       .then(_.flatten)
-      .map(filePath => operation.makeResource(filePath).loadFromFs())
+      .map(filePath => operation.resource(filePath).loadFromFs())
   )
 }
 
@@ -23,8 +23,10 @@ function watch(operation, patterns) {
       return
     }
 
-    watcher.on('all', (event, filepath) => {
-      console.log(event, filepath)
+    watcher.on('all', (event, filePath) => {
+      console.log(event, filePath)
+      operation.resource(filePath).loadFromFs()
+      operation.next() // send operation.resources() upstream
     })
   })
 }
