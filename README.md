@@ -118,4 +118,18 @@ Calls to operation.next() are debounced before resources are sent down the pipel
 
 ### Why is the traceur plugin built in?
 
-Sigh itself is written in EcmaScript 6 and given that the plugin is less than 20 lines of code it seems fair to include it for those who want to take advantage of the web now. Given the quality of source map support you don't even realise the browser doesn't natively support EcmaScript 6.
+Sigh itself is written in EcmaScript 6 and given that the plugin is less than 30 lines of code it seems fair to include it for those who want to take advantage of the web now. Given the quality of source map support you don't even realise the browser doesn't natively support EcmaScript 6.
+
+## Plugin options
+
+Some plugins accept an object as their only/final parameter to allow customisation, e.g.:
+
+```javascript
+traceur({ getModulePath: function(path) { return path.replace(/[^/]+/, '') })
+```
+This causes the traceur plugin to strip the first component from the file path to create the module path.
+
+### traceur
+
+* getModulePath - A function which turns the relative file path into the module path.
+* modules - A string denoting the type of modules traceur should output e.g. amd/commonjs.
