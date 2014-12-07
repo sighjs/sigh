@@ -52,7 +52,8 @@ Writing a plugin for sigh is really easy. First make a node module for your plug
 ```javascript
 module.exports = function() {
   return function(operation) {
-    // operation.inputs is an array of resources passed down the pipeline
+    // operation.inputs is an array of resources passed from the previous operation in
+    // the pipeline
 
     // this function should return an array of resources or a promise that resolves
     // to an array of resources
@@ -103,3 +104,4 @@ module.exports = function() {
   }
 }
 ```
+Calls to operation.next() are debounced before resources are sent down the pipeline.
