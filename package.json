@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Another tool for managing web asset pipelines",
   "main": "index",
   "directories": {
