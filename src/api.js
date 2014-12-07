@@ -45,7 +45,7 @@ function invokeHelper(opts) {
       return
 
     _.forEach(deps, function(version, pkg) {
-      if (/^sigh-/.test(pkg))
+      if (/^sigh-/.test(pkg) && pkg !== 'sigh-cli')
         plugins[pkg.substr(5)] = require(path.join(process.cwd(), 'node_modules', pkg))
     })
   })
