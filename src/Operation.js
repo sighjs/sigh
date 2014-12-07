@@ -90,7 +90,7 @@ export default class /* implements Chainable */ {
         return this._nextOp.execute()
       }
       else {
-        return this._nextOp.execute(resources.map(input => input.clone()))
+        return this._nextOp.execute(resources.map(resource => resource.clone()))
       }
     }
     else {

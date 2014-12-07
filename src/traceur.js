@@ -10,14 +10,14 @@ export default function(opts) {
   var cwd = process.cwd()
 
   return operation => {
-    return operation.inputs.map(input => {
-      var relPath = path.relative(cwd, input.filePath)
+    return operation.inputs.map(resource => {
+      var relPath = path.relative(cwd, resource.filePath)
       var base = path.basename(relPath)
 
-      input.data = compiler.compile(input.data, relPath, relPath, base)
-      input.applyMap(compiler.getSourceMap())
+      resource.data = compiler.compile(resource.data, relPath, relPath, base)
+      resource.applyMap(compiler.getSourceMap())
 
-      return input
+      return resource
     })
   }
 }

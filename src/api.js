@@ -90,7 +90,8 @@ function injectPlugin(module, pluginName) {
     throw new UserError("Non-existant plugin `" + pluginName + "'")
 
   try {
-    module.__set__(pluginName, plugin)
+    var varName = pluginName.replace(/-/g, '_')
+    module.__set__(varName, plugin)
   }
   catch (e) {
     throw new UserError("Sigh.js needs `var " + pluginName + "' statement")
