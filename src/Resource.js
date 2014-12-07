@@ -45,6 +45,8 @@ export default class Resource {
 
     map = SourceMap.fromMapObject(map)
     this.map = this.map.apply(map)
+
+    this.data = mercator.stripSourceMappingComment(this.data)
   }
 
   clone() {
