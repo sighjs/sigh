@@ -15,7 +15,7 @@ export default class Resource {
   constructor(filePath) {
     if (typeof filePath === 'object') {
       var other = filePath;
-      _.assign(this, _.pick(other, 'filePath', 'fileName', 'type', 'data', 'map'))
+      _.assign(this, _.pick(other, 'filePath', 'fileName', 'type', 'data', '_map'))
     }
     else {
       this.setFilePath(filePath)
@@ -33,7 +33,7 @@ export default class Resource {
     // TODO: also look for map
     return Promise.promisify(fs.readFile)(this.filePath).then(data => {
       this.data = data.toString()
-      this.map = SourceMap.forSource(this.data, path.resolve(this.filePath))
+      // this._map = SourceMap.forSource(this.data, path.resolve(this.filePath))
       return this
     })
   }
@@ -44,12 +44,27 @@ export default class Resource {
       map = JSON.parse(map)
 
     map = SourceMap.fromMapObject(map)
-    this.map = this.map.apply(map)
+
+    if (this._map)
+      this._map = this._map.apply(map)
+    else
+      this._map = map
+  }
+
+  get map() {
+    if (! this._map)
+      this._map = SourceMap.forSource(this.data, path.resolve(this.filePath))
 
     this.data = mercator.stripSourceMappingComment(this.data)
+    return this._map
+  }
+
+  set map(map) {
+    this._map = map
   }
 
   clone() {
+    // TODO: also clone source map?
     return new Resource(this)
   }
 
