@@ -29,15 +29,18 @@ var all, glob, concat, write, traceur
 module.exports = function(pipelines) {
   pipelines['js:all'] = [
     all(
-      glob('src/*.js'),
-      glob('vendor/*.js')
+      [ glob('src/*.js'), traceur() ],
+      glob('vendor/*.js', 'bootstrap.js')
     ),
-    traceur(),
     concat('combined'),
     write('dist/assets')
   ]
 }
 ```
+This pipeline would glob files matching src/\*.js and transpile them with traceur, then concatenate that output together with the files matching vendor/\*.js followed by 'bootstrap.js' as the "all" and "glob" plugins preserve order. Finally the concatenated resource is written to the directory dist/assets after creating each missing directory component.
+
+Running "sigh -w" would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
+
 sigh plugins are injected into the variables defined at the top of the file. "all", "glob", "concat" and "write" are built-in (for now) whereas traceur is found by scanning package.json for dependency and devDependency entries of the format "sigh-\*".
 
 ### Run sigh
@@ -82,8 +85,7 @@ module.exports = function() {
 }
 ```
 
-### Plugins can trigger the pipeline without receiving input
-
+### Plugin operations can trigger the pipeline without receiving input
 This plugin reloads a file whenever it changes then sends it down the pipeline.
 
 ```javascript
