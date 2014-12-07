@@ -4,6 +4,8 @@ import path from 'path'
 import Promise from 'bluebird'
 import mercator from 'mercator'
 
+var SourceMap = mercator.SourceMap
+
 /**
  * @param {String} path The absolute or relative path to the resource
  * @param {String} type The type of resource (javascript, css, etc)
@@ -31,9 +33,18 @@ export default class Resource {
     // TODO: also look for map
     return Promise.promisify(fs.readFile)(this.filePath).then(data => {
       this.data = data.toString()
-      this.map = mercator.SourceMap.forSource(this.data, path.resolve(this.filePath))
+      this.map = SourceMap.forSource(this.data, path.resolve(this.filePath))
       return this
     })
+  }
+
+  // apply source map
+  applyMap(map) {
+    if (typeof map === 'string')
+      map = JSON.parse(map)
+
+    map = SourceMap.fromMapObject(map)
+    this.map = this.map.apply(map)
   }
 
   clone() {
