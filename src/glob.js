@@ -27,11 +27,18 @@ function watch(operation, patterns) {
 
     watcher.on('all', (event, filePath) => {
       console.log(event, filePath)
-      operation.resource(filePath).loadFromFs().then(() => {
-        // send operation.resources() upstream
+
+      if (event === 'deleted') {
+        operation.removeResource(filePath)
         operation.next()
-      })
-      .catch(rootErrorHandler)
+      }
+      else {
+        return operation.resource(filePath).loadFromFs().then(() => {
+          // send operation.resources() upstream
+          operation.next()
+        })
+        .catch(rootErrorHandler)
+      }
     })
   })
 }
