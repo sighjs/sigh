@@ -31,7 +31,7 @@ npm install sigh
 
 Write a file called "Sigh.js" and put it in the root of your project:
 ```javascript
-var all, glob, concat, write, traceur
+var all, glob, concat, write, traceur, uglify
 
 module.exports = function(pipelines) {
   pipelines['js:all'] = [
@@ -40,15 +40,16 @@ module.exports = function(pipelines) {
       glob('vendor/*.js', 'bootstrap.js')
     ),
     concat('combined'),
+    uglify(),
     write('dist/assets')
   ]
 }
 ```
-This pipeline would glob files matching src/\*.js and transpile them with traceur, then concatenate that output together with the files matching vendor/\*.js followed by 'bootstrap.js' as the "all" and "glob" plugins preserve order. Finally the concatenated resource is written to the directory dist/assets after creating each missing directory component.
+This pipeline would glob files matching src/\*.js and transpile them with traceur, then concatenate that output together with the files matching vendor/\*.js followed by 'bootstrap.js' as the "all" and "glob" plugins preserve order. Finally the concatenated resource is uglified then written to the directory dist/assets after creating each missing directory component.
 
 Running "sigh -w" would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
-sigh plugins are injected into the variables defined at the top of the file. "all", "glob", "concat" and "write" are built-in (for now) whereas traceur is found by scanning package.json for dependency and devDependency entries of the format "sigh-\*".
+sigh plugins are injected into the variables defined at the top of the file. "all", "glob", "concat", "write" and "traceur" are built-in (for now) whereas uglify is found by scanning package.json for dependency and devDependency entries of the format "sigh-\*".
 
 ### Run sigh
 ```shell
@@ -114,3 +115,7 @@ module.exports = function() {
 }
 ```
 Calls to operation.next() are debounced before resources are sent down the pipeline.
+
+### Why is the traceur plugin built in?
+
+Sigh itself is written in EcmaScript 6 and given that the plugin is less than 20 lines of code it seems fair to include it for those who want to take advantage of the web now. Given the quality of source map support you don't even realise the browser doesn't natively support EcmaScript 6.

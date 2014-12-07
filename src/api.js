@@ -13,12 +13,13 @@ export { UserError, Resource, Operation }
 
 // should be in seperate directory :(
 // see: https://github.com/google/traceur-compiler/issues/1538
-import glob from './glob'
 import all from './all'
 import concat from './concat'
+import glob from './glob'
+import traceur from './traceur'
 import write from './write'
 
-var plugins = { glob, all, concat, write }
+var plugins = { all, concat, glob, traceur, write }
 
 // Run Sigh.js
 export function invoke(opts) {
