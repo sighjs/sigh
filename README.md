@@ -15,7 +15,7 @@
 gulp is really cool but some simple operations such as merging two streams together whilst retaining source maps is still not possible.
 Plumber is really great and the author has been great at fixing bugs I found with it but ultimately I couldn't get the semi-advanced pipelines I wanted to use to work with it.
 Gobble is really cool and inspired a bunch of this, but I thought the design could be simplified by using arrays of resources as the pipeline payload rather than having exceptions in the code for various plugins. Gobble has only recently added support for source maps whereas sigh has been built with them as a first class citizen.
-Broccoli is pretty cool but the lack of source maps makes it unusable for my needs. It also seemed simpler to represent the pipeline payload as an array of resources rather than using tree objects to represent directory hierarchies. Recursive glob patterns can be used to represent directory trees in sigh.
+Broccoli is pretty cool but the lack of source maps makes it unusable for my needs. It also seemed simpler to send an array of resources through the pipeline rather than using tree objects to represent directory hierarchies. Recursive glob patterns can be used to represent directory trees in sigh.
 
 ## Using sigh
 
