@@ -39,8 +39,6 @@ export function invoke(opts) {
 
 /// Run the Sigh.js file in the current directory with the given options.
 function invokeHelper(opts) {
-  var sighPkgs = []
-
   var packageJson = JSON.parse(fs.readFileSync('package.json'))
   ; [ packageJson.devDependencies, packageJson.dependencies ].forEach(deps => {
     if (! deps)
@@ -48,11 +46,10 @@ function invokeHelper(opts) {
 
     _.forEach(deps, function(version, pkg) {
       if (/^sigh-/.test(pkg))
-        sighPkgs.push(pkg)
+        plugins[pkg.substr(5)] = require(path.join(process.cwd(), 'node_modules', pkg))
     })
   })
 
-  // TODO: also inject package.json dependencies
   var sighModule = rewire(path.join(process.cwd(), 'Sigh'))
   _.forEach(plugins, (plugin, key) => injectPlugin(sighModule, key))
 
