@@ -29,11 +29,6 @@ export default function(...pipelines) {
     })
     .then(resources => {
       // console.log("all: %j => %j", operation.inputs, resources)
-
-      // TODO: embed a dummy operation at the end of each child operation
-      //       that will intercept next() events to propogate them forward
-      //       down the tree
-
       if (operation.forWatch)
         watch(latestResources, operation, childOps)
 
