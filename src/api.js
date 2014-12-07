@@ -4,6 +4,7 @@ import rewire from 'rewire'
 import path from 'path'
 
 import { UserError, rootErrorHandler } from './errors'
+
 import Resource from './Resource'
 import Operation from './Operation'
 import { pipelineToOperation } from './pipeline'
@@ -58,7 +59,6 @@ function invokeHelper(opts) {
   var pipelines = {}
   sighModule(pipelines)
 
-  // console.log("TODO: invoke sigh %j", opts)
   if (opts.pipelines.length) {
     Object.keys(pipelines).forEach(name => {
       if (opts.pipelines.indexOf(name) === -1)
@@ -66,15 +66,21 @@ function invokeHelper(opts) {
     })
   }
 
+  // operation by pipeline name
   var operations = _.mapValues(pipelines, pipelineToOperation)
 
-  _.forEach(operations, operation => {
+  _.forEach(operations, (operation, pipelineName) => {
+    operation.append({
+      type: 'void',
+      execute(inputs) {
+        console.log('Finished building pipeline %s', pipelineName)
+      }
+    })
+
     operation.execute(opts.watch ? 'watch' : 'build')
     .then(resources => {
-      if (resources === undefined)
-        console.log("reached end of pipeline")
-      else
-        throw new UserError("Pipeline leaked resources, should end in a sink")
+      if (resources !== undefined)
+        throw new UserError('Pipeline leaked resources, should end in a sink')
     })
     .catch(rootErrorHandler)
   })

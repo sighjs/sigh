@@ -8,7 +8,7 @@ import { rootErrorHandler } from './errors'
 var glob = Promise.promisify(_glob)
 
 function build(operation, patterns) {
-  console.log("glob build: => %j", patterns, operation.inputs)
+  // console.log("glob build: => %j", patterns, operation.inputs)
   return Promise.all(
     Promise
       .all(patterns.map(pattern => glob(pattern)))
@@ -26,7 +26,7 @@ function watch(operation, patterns) {
     }
 
     watcher.on('all', (event, filePath) => {
-      console.log(event, filePath)
+      // console.log('gaze event %s: %s', event, filePath)
 
       if (event === 'deleted') {
         operation.removeResource(filePath)

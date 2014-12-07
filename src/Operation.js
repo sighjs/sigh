@@ -7,8 +7,19 @@ import Resource from './Resource'
 
 var DEBOUNCE_MS = 200
 
-export default class {
+/// interface Chainable {
+///   execute(inputs),
+///   type: 'operation'
+/// }
+/// @detail type can be:
+///   operation - consumes and produces resources
+///   source - consumes nothing and produces resources
+///   sink - consumes resources and produces nothing
+///   void - consumes nothing and produces nothing
+
+export default class /* implements Chainable */ {
   constructor(func, nextOp) {
+    this.type = 'operation'
     this._func = func
     this._nextOp = nextOp
     this._resources = {}
@@ -73,10 +84,14 @@ export default class {
 
   _next(resources) {
     if (this._nextOp) {
-      if (resources === undefined)
-        throw new UserError('sinks may only be at the end of a pipeline')
-
-      return this._nextOp.execute(resources.map(input => input.clone()))
+      if (resources === undefined) {
+        if (this._nextOp.type !== 'void')
+          throw new UserError('only operations of type "void" or "sink" may end a pipeline')
+        return this._nextOp.execute()
+      }
+      else {
+        return this._nextOp.execute(resources.map(input => input.clone()))
+      }
     }
     else {
       return resources

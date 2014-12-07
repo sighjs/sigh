@@ -6,7 +6,7 @@ function lineCount(source) {
 
 export default function(outputFilePath) {
   return operation => {
-    console.log("concat: => %j", operation.inputs)
+    // console.log("concat: => %j", operation.inputs)
 
     if (! operation.inputs.length)
       return []

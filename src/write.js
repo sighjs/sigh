@@ -36,7 +36,7 @@ function writeResource(outputDir, resource) {
 
 export default function(outputDir) {
   return operation => {
-    console.log("write: => %j", operation.inputs)
+    // console.log("write: => %j", operation.inputs)
     return Promise.all(
       operation.inputs.map(writeResource.bind(this, outputDir))
     )

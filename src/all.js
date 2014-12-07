@@ -33,7 +33,7 @@ export default function(...pipelines) {
       return _.flatten(resources)
     })
     .then(resources => {
-      console.log("all: %j => %j", operation.inputs, resources)
+      // console.log("all: %j => %j", operation.inputs, resources)
 
       // TODO: embed a dummy operation at the end of each child operation
       //       that will intercept next() events to propogate them forward
