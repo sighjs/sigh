@@ -3,6 +3,8 @@ import _ from 'lodash'
 import _glob from 'glob'
 import gaze from 'gaze'
 
+import { rootErrorHandler } from './errors'
+
 var glob = Promise.promisify(_glob)
 
 function build(operation, patterns) {
@@ -25,8 +27,11 @@ function watch(operation, patterns) {
 
     watcher.on('all', (event, filePath) => {
       console.log(event, filePath)
-      operation.resource(filePath).loadFromFs()
-      operation.next() // send operation.resources() upstream
+      operation.resource(filePath).loadFromFs().then(() => {
+        // send operation.resources() upstream
+        operation.next()
+      })
+      .catch(rootErrorHandler)
     })
   })
 }
