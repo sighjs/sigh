@@ -133,3 +133,7 @@ This causes the traceur plugin to strip the first component from the file path t
 
 * getModulePath - A function which turns the relative file path into the module path.
 * modules - A string denoting the type of modules traceur should output e.g. amd/commonjs.
+
+## TODO
+
+* Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
