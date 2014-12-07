@@ -39,14 +39,15 @@ export default class Resource {
   }
 
   // apply source map
-  applyMap(map) {
+  // @param sourceIdx Optional index within map.sources of actual source path. This is
+  applyMap(map, sourceIdx) {
     if (typeof map === 'string')
       map = JSON.parse(map)
 
     map = SourceMap.fromMapObject(map)
 
     if (this._map)
-      this._map = this._map.apply(map)
+      this._map = this._map.apply(map, sourceIdx)
     else
       this._map = map
   }
