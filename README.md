@@ -116,10 +116,6 @@ module.exports = function() {
 ```
 Calls to operation.next() are debounced before resources are sent down the pipeline.
 
-### Why is the traceur plugin built in?
-
-Sigh itself is written in EcmaScript 6 and given that the plugin is less than 30 lines of code it seems fair to include it for those who want to take advantage of the web now. Given the quality of source map support you don't even realise the browser doesn't natively support EcmaScript 6.
-
 ## Plugin options
 
 Some plugins accept an object as their only/final parameter to allow customisation, e.g.:
