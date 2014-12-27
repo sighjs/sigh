@@ -12,10 +12,10 @@
 
 ## Why write another one
 
-* gulp is really cool but some simple operations such as merging two streams together whilst retaining source maps is still not possible.
-* Plumber: would be great if it did what it promised. But it [won't watch your files](https://github.com/plumberjs/plumber-glob/issues/12), [sometimes just freezes](https://github.com/plumberjs/plumber-all/issues/9) and [loses column information](https://github.com/plumberjs/mercator/pull/6).
-* Gobble is really cool and inspired a bunch of this, but I thought the design could be simplified by using arrays of resources as the pipeline payload rather than having exceptions in the code for various plugins. Gobble has only recently added support for source maps whereas sigh has been built with them as a first class citizen.
-* Broccoli is pretty cool but... no source maps. Unforgiveable! Also not convinced on the use of trees.
+* gulp is really cool but some simple operations such as merging two streams together whilst retaining source maps doesn't seem to be possible.
+* Plumber: could be great but it [won't watch your files](https://github.com/plumberjs/plumber-glob/issues/12), [sometimes just freezes](https://github.com/plumberjs/plumber-all/issues/9) and [loses column information](https://github.com/plumberjs/mercator/pull/6).
+* Gobble is really cool and inspired a bunch of this, but I thought the design could be simplified by using arrays of resources as the pipeline payload rather than having exceptions in the code for various plugins.
+* Broccoli is pretty cool but... no source maps.
 
 ## Using sigh
 
@@ -136,4 +136,5 @@ This causes the traceur plugin to strip the first component from the file path t
 
 ## TODO
 
+* sigh -w should watch Sigh.js file for changes and reload pipelines as necessary.
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
