@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Another tool for managing web asset pipelines",
   "main": "index",
   "directories": {
@@ -28,6 +28,11 @@
     "bluebird": "^2.3.11",
     "gaze": "0.5.1",
     "glob": "^4.2.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "^0.12.4",
+    "jit-grunt": "^0.9.0",
     "lodash": "^2.4.1",
     "mercator": "git://github.com/chilon-net/mercator#d7fd7cf",
     "mkdirp": "^0.5.0",
@@ -37,11 +42,6 @@
   },
   "devDependencies": {
     "chai": "^1.10.0",
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-mocha-test": "^0.12.4",
-    "jit-grunt": "^0.9.0",
     "mocha": "^2.0.1"
   }
 }
