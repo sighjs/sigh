@@ -121,7 +121,7 @@ Calls to operation.next() are debounced before resources are sent down the pipel
 Some plugins accept an object as their only/final parameter to allow customisation, e.g.:
 
 ```javascript
-traceur({ getModulePath: function(path) { return path.replace(/[^/]+/, '') })
+traceur({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 ```
 This causes the traceur plugin to strip the first component from the file path to create the module path.
 
@@ -133,4 +133,5 @@ This causes the traceur plugin to strip the first component from the file path t
 ## TODO
 
 * sigh -w should watch Sigh.js file for changes and reload pipelines as necessary.
+* Conditional pipeline operations e.g. "sigh -e dev" might avoid minification to reduce build times during development.
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
