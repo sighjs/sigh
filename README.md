@@ -1,5 +1,13 @@
 # sigh
 
+# Important note
+
+Don't use this yet. We're not gonna pretend to be a working asset pipeline only for you to get disappointed when things don't work, there's enough JavaScript projects out there that look working and fully functional only to blow up in your face when you actually try to use them.
+
+We're hoping gulp version 4 will fix things like watch support, depending on how long that takes to come out then hopefully we can abandon this project. If gulp 4 takes too long or doesn't work as well as we hope then this will definitely get more love.
+
+If you are adventurous though, we are using this project successfuly on our own projects.
+
 ## Another asset pipeline
 
 * Should support source maps at every stage of the pipeline like [plumber][plumber] and [gulp][gulp]
@@ -12,10 +20,10 @@
 
 ## Why write another one
 
-* gulp is really cool but some simple operations such as merging two streams together whilst retaining source maps doesn't seem to be possible.
-* Plumber: could be great but it [won't watch your files](https://github.com/plumberjs/plumber-glob/issues/12), [sometimes just freezes](https://github.com/plumberjs/plumber-all/issues/9) and [loses column information](https://github.com/plumberjs/mercator/pull/6).
+* gulp is really cool but some simple operations such as merging two streams together whilst retaining source maps doesn't seem to be possible and it doesn't have a "watch your files" mode.
 * Gobble is really cool and inspired a bunch of this, but I thought the design could be simplified by using arrays of resources as the pipeline payload rather than having exceptions in the code for various plugins.
-* Broccoli is pretty cool but... no source maps.
+* Broccoli is pretty cool but... no source maps. Writing plugins needs a lot of code also. Don't believe in the tree concept it uses.
+* Plumber is so buggy we don't consider it functional and we spent many many hours trying to get it to work.
 
 ## Using sigh
 
@@ -132,6 +140,7 @@ This causes the traceur plugin to strip the first component from the file path t
 
 ## TODO
 
-* sigh -w should watch Sigh.js file for changes and reload pipelines as necessary.
+* Source files content should be embedded in the source maps. Not having this is pretty annoying.
+* sigh -w should watch Sigh.js file for changes in addition to the source files.
 * Conditional pipeline operations e.g. "sigh -e dev" might avoid minification to reduce build times during development.
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
