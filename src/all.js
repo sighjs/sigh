@@ -7,7 +7,6 @@ function watch(latestResources, operation, childOps) {
     childOp.append({
       execute(inputs) {
         latestResources[childIdx] = inputs
-        var nextOn = _.flatten(latestResources)
         operation.next(_.flatten(latestResources))
       }
     })

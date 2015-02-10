@@ -7,9 +7,7 @@ import mkdirp from 'mkdirp'
 function writeResource(outputDir, resource) {
   var outputPath = path.join(outputDir, resource.filePath)
 
-  var promise = Promise.try(() => {
-    return Promise.promisify(mkdirp)(path.dirname(outputPath))
-  })
+  var promise = Promise.promisify(mkdirp)(path.dirname(outputPath))
   .then(() => {
     return Promise.promisify(fs.writeFile)(outputPath, resource.data)
   })
