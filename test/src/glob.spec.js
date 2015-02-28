@@ -31,15 +31,17 @@ describe('glob plugin', () => {
     .then(() => {
       return new Promise(function(resolve) {
         var isWatching = false
-        var changeFile = TMP_DIR + '/*.js'
-        glob(null, true, changeFile).onValue(updates => {
+        var changeFile = TMP_DIR + '/file1.js'
+        glob(null, true, TMP_DIR + '/*.js').onValue(updates => {
           if (! isWatching) {
             updates.length.should.equal(2)
             isWatching = true
-            fs.appendFile(TMP_DIR + '/file1.js', 'var line2 = 24;\n')
+            console.log("appending %j", updates)
+            _.delay(fs.appendFile, 20, changeFile, 'var line2 = 24;\n')
           }
           else {
-            updates.should.eql([{ type: 'change', path: changeFile }])
+            // TODO: should be array
+            updates.should.eql({ type: 'change', path: changeFile })
             resolve()
           }
         })

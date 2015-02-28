@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     watch: {
       sources: {
         files: 'src/**/*.js',
-        tasks: ['build']
+        tasks: ['build', 'test']
       },
       testSources: {
         files: 'test/src/**/*.js',
