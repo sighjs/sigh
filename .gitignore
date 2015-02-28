@@ -5,3 +5,4 @@
 !/lib/.keepdir
 /test/*.map
 /test/*.js
+/test/tmp
