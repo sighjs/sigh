@@ -3,3 +3,5 @@
 /api.map
 /lib/*
 !/lib/.keepdir
+/test/*.map
+/test/*.js

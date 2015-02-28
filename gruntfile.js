@@ -1,10 +1,19 @@
+var path = require('path')
+
 // TODO: eat dogfood
 module.exports = function(grunt) {
   grunt.initConfig({
+    mochaTest: {
+      test: { src: 'test/*.js' }
+    },
     watch: {
-      source: {
+      sources: {
         files: 'src/**/*.js',
         tasks: ['build']
+      },
+      testSources: {
+        files: 'test/src/**/*.js',
+        tasks: ['test']
       },
       options: {
         spawn: false
@@ -15,15 +24,15 @@ module.exports = function(grunt) {
 
   require('jit-grunt')(grunt)
 
-  grunt.registerTask('build', function() {
-    var done = this.async()
-
+  function traceurBuild(sourceDir, destDir, done) {
     // see https://github.com/google/traceur-compiler/issues/1777 traceur source map
     // file/sources entries are relative to the cwd
-    process.chdir('lib')
+    var prevCwd = process.cwd()
+    process.chdir(destDir)
+    sourceDir = path.relative(destDir, sourceDir)
     grunt.util.spawn({
       cmd: '../node_modules/.bin/traceur',
-      args: '--modules commonjs --source-maps --dir ../src .'.split(' ')
+      args: ('--modules commonjs --source-maps --dir ' + sourceDir + ' .').split(' ')
     },
     function(error, result, code) {
       // traceur doesn't use exit codes properly...
@@ -34,9 +43,16 @@ module.exports = function(grunt) {
         grunt.log.error('\x07' + result.stdout)
       done()
     })
-    process.chdir('..')
+    process.chdir(prevCwd)
+  }
+
+  grunt.registerTask('build', function() {
+    traceurBuild('src', 'lib', this.async())
+  })
+  grunt.registerTask('buildTests', function() {
+    traceurBuild('test/src', 'test', this.async())
   })
   grunt.registerTask('default', 'build')
 
-  grunt.registerTask('test', 'mochaTest')
+  grunt.registerTask('test', ['buildTests', 'mochaTest'])
 }

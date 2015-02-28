@@ -2,7 +2,7 @@
 
 # Important note
 
-Sigh is currently undergoing a rewrite to simplify the code further. It will be based on [bacon.js streams](https://baconjs.github.io/).
+Sigh is currently undergoing a rewrite to simplify the code further using [bacon.js streams](https://baconjs.github.io/).
 
 ## Another asset pipeline
 
