@@ -1,18 +1,49 @@
-var MOCK_PROJECT_DIR = 'test/fixtures/simple-project'
-
 import glob from '../lib/glob'
 import _ from 'lodash'
+import Promise from 'bluebird'
+import fs from 'fs'
+import fse from 'fs-extra'
+
+var copy = Promise.promisify(fse.copy)
+var rm = Promise.promisify(fse.remove)
+
 require('chai').should()
+
+var MOCK_PROJECT_DIR = 'test/fixtures/simple-project'
+var TMP_DIR = 'test/tmp'
 
 describe('glob plugin', () => {
   it('globs a wildcard', () => {
-    return glob(null, false, MOCK_PROJECT_DIR + '/*.js').toPromise().then(files => {
-      files.length.should.equal(2)
-      _.pluck(files, 'path').sort().should.eql([
+    return glob(null, false, MOCK_PROJECT_DIR + '/*.js').toPromise().then(updates => {
+      updates.length.should.equal(2)
+      _.pluck(updates, 'path').sort().should.eql([
         MOCK_PROJECT_DIR + '/file1.js',
         MOCK_PROJECT_DIR + '/file2.js'
       ])
-      files.forEach(file => { file.type.should.equal('add') })
+      updates.forEach(file => { file.type.should.equal('add') })
+    })
+  })
+
+  it('globs a wildcard and detects a file update', () => {
+    return rm(TMP_DIR).then(() => {
+      return copy(MOCK_PROJECT_DIR, TMP_DIR)
+    })
+    .then(() => {
+      return new Promise(function(resolve) {
+        var isWatching = false
+        var changeFile = TMP_DIR + '/*.js'
+        glob(null, true, changeFile).onValue(updates => {
+          if (! isWatching) {
+            updates.length.should.equal(2)
+            isWatching = true
+            fs.appendFile(TMP_DIR + '/file1.js', 'var line2 = 24;\n')
+          }
+          else {
+            updates.should.eql([{ type: 'change', path: changeFile }])
+            resolve()
+          }
+        })
+      })
     })
   })
 

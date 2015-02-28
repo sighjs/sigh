@@ -1,7 +1,7 @@
 import path from 'path'
 import Promise from 'bluebird'
 import fs from 'fs'
-import mkdirp from 'mkdirp'
+import fse from 'fs-extra'
 // TODO: import mozilla source map library
 
 function generateJsSourceMappingComment(mapPath) {
@@ -15,7 +15,7 @@ function generateCssSourceMappingComment(mapPath) {
 function writeResource(outputDir, resource) {
   var outputPath = path.join(outputDir, resource.filePath)
 
-  var promise = Promise.promisify(mkdirp)(path.dirname(outputPath))
+  var promise = Promise.promisify(fse.ensureDir)(path.dirname(outputPath))
   .then(() => {
     return Promise.promisify(fs.writeFile)(outputPath, resource.data)
   })
