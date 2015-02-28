@@ -24,6 +24,19 @@ describe('glob plugin', () => {
     })
   })
 
+  it('globs two wildcards', () => {
+    return glob(null, false, MOCK_PROJECT_DIR + '/*1.js', MOCK_PROJECT_DIR + '/*2.js')
+    .toPromise()
+    .then(updates => {
+      updates.length.should.equal(2)
+      _.pluck(updates, 'path').sort().should.eql([
+        MOCK_PROJECT_DIR + '/file1.js',
+        MOCK_PROJECT_DIR + '/file2.js'
+      ])
+      updates.forEach(file => { file.type.should.equal('add') })
+    })
+  })
+
   it('globs a wildcard and detects a file update', () => {
     return rm(TMP_DIR).then(() => {
       return copy(MOCK_PROJECT_DIR, TMP_DIR)
