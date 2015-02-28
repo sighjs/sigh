@@ -4,7 +4,11 @@ var path = require('path')
 module.exports = function(grunt) {
   grunt.initConfig({
     mochaTest: {
-      test: { src: 'test/*.js' }
+      test: { src: 'test/*.js' },
+      options: {
+        reporter: 'spec',
+        clearRequireCache: true
+      },
     },
     watch: {
       sources: {
