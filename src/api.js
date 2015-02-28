@@ -20,7 +20,7 @@ export function invoke(opts) {
     invokeHelper(opts)
   }
   catch (e) {
-    if (typeof e === 'function' && e instanceof UserError) {
+    if (typeof e === 'function' && e instanceof Error) {
       // TODO: add some red stuff before it
       console.warn(e.message)
       process.exit(1)

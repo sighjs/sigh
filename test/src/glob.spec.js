@@ -37,7 +37,7 @@ describe('glob plugin', () => {
     })
   })
 
-  it('globs a wildcard and detects a file update', () => {
+  it('detects change to file matching globbed pattern', () => {
     return rm(TMP_DIR).then(() => {
       return copy(MOCK_PROJECT_DIR, TMP_DIR)
     })
@@ -49,7 +49,6 @@ describe('glob plugin', () => {
           if (! isWatching) {
             updates.length.should.equal(2)
             isWatching = true
-            console.log("appending %j", updates)
             _.delay(fs.appendFile, 20, changeFile, 'var line2 = 24;\n')
           }
           else {
