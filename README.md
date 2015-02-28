@@ -2,11 +2,7 @@
 
 # Important note
 
-Don't use this yet. We're not gonna pretend to be a working asset pipeline only for you to get disappointed when things don't work, there's enough JavaScript projects out there that look working and fully functional only to blow up in your face when you actually try to use them.
-
-We're hoping gulp version 4 will fix things like watch support, depending on how long that takes to come out then hopefully we can abandon this project. If gulp 4 takes too long or doesn't work as well as we hope then this will definitely get more love.
-
-If you are adventurous though, we are using this project successfuly on our own projects.
+Sigh is currently undergoing a rewrite to simplify the code further. It will be based on [bacon.js streams](https://baconjs.github.io/).
 
 ## Another asset pipeline
 
@@ -20,10 +16,10 @@ If you are adventurous though, we are using this project successfuly on our own 
 
 ## Why write another one
 
-* gulp is really cool but some simple operations such as merging two streams together whilst retaining source maps doesn't seem to be possible and it doesn't have a "watch your files" mode.
+* gulp is really cool but some simple operations such as merging two streams together whilst retaining source maps doesn't seem to be possible and watching files for changes involves use of multiple extra modules.
 * Gobble is really cool and inspired a bunch of this, but I thought the design could be simplified by using arrays of resources as the pipeline payload rather than having exceptions in the code for various plugins.
-* Broccoli is pretty cool but... no source maps. Writing plugins needs a lot of code also. Don't believe in the tree concept it uses.
-* Plumber is so buggy we don't consider it functional and we spent many many hours trying to get it to work.
+* Broccoli is pretty cool but... no source maps. Writing plugins needs a lot of code.
+* Plumber uses a version of gaze that doesn't work on linux.
 
 ## Using sigh
 
@@ -69,60 +65,17 @@ sigh plugins are injected into the variables defined at the top of the file. "al
 Writing a plugin for sigh is really easy. First make a node module for your plugin and in the main library file as indicated by package.json (defaulting to index.js) put something like this:
 
 ```javascript
-module.exports = function() {
-  return function(operation) {
-    // operation.inputs is an array of resources passed from the previous operation in
-    // the pipeline
-
-    // this function should return an array of resources or a promise that resolves
-    // to an array of resources
-    return []
-  }
+module.exports = function(stream, options) {
+  // TODO: adapt the stream here, see https://baconjs.github.io/
+  return stream
 }
 ```
 
-### Plugins can cache many resources
-
-```javascript
-var Promise = require('bluebird')
-
-module.exports = function() {
-  return function(operation) {
-    return Promise.all([
-      operation.resource('directory/filename.js').loadFromFs(),
-      operation.resource('directory2/filename2.js').loadFromFs(),
-    ])
-    .then(function() {
-      // returns all resources created by this operation so far.
-      // operation.removeResource() can be used to remove a resource.
-      return operation.resources()
-    })
-  }
-}
-```
-
-### Plugin operations can trigger the pipeline without receiving input
-This plugin reloads a file whenever it changes then sends it down the pipeline.
-
-```javascript
-var gaze = require('gaze')
-
-module.exports = function() {
-  return function(operation) {
-    gaze('file.js', function(err, watcher) {
-      watcher.on('all', function(event, filePath) {
-        operation.resource(filePath).loadFromFs().then(function() {
-          // can pass an array of resources, otherwise operation.resources() is used.
-          operation.next()
-        })
-      })
-    })
-
-    return []
-  }
-}
-```
-Calls to operation.next() are debounced before resources are sent down the pipeline.
+The stream payload is a json object containing:
+  * type: "add", "change", "rename"
+  * path: path to source file.
+  * map: source map content.
+  * content: file content as string.
 
 ## Plugin options
 

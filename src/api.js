@@ -3,16 +3,9 @@ import _ from 'lodash'
 import rewire from 'rewire'
 import path from 'path'
 
-import { UserError, rootErrorHandler } from './errors'
-
-import Resource from './Resource'
-import Operation from './Operation'
-import { pipelineToOperation } from './pipeline'
-
-export { UserError, Resource, Operation }
-
 // should be in seperate directory :(
 // see: https://github.com/google/traceur-compiler/issues/1538
+// TODO: this is fixed now, can it be changed?
 import all from './all'
 import concat from './concat'
 import glob from './glob'
@@ -65,23 +58,15 @@ function invokeHelper(opts) {
   }
 
   // operation by pipeline name
-  var operations = _.mapValues(pipelines, pipelineToOperation)
+  var streams = _.mapValues(pipelines, pipelineToStream)
 
-  _.forEach(operations, (operation, pipelineName) => {
-    operation.append({
-      type: 'void',
-      execute(inputs) {
-        console.log('Finished building pipeline %s', pipelineName)
-      }
-    })
-
-    operation.execute(opts.watch ? 'watch' : 'build')
-    .then(resources => {
-      if (resources !== undefined)
-        throw new UserError('Pipeline leaked resources, should end in a sink')
-    })
-    .catch(rootErrorHandler)
+  _.forEach(streams, (stream, pipelineName) => {
+    // TODO: start stream
   })
+}
+
+function pipelineToStream(pipeline) {
+  console.log('TODO: convert pipeline to bacon stream', pipeline)
 }
 
 function injectPlugin(module, pluginName) {
@@ -91,7 +76,7 @@ function injectPlugin(module, pluginName) {
 
   try {
     var varName = pluginName.replace(/-/g, '_')
-    module.__set__(varName, plugin)
+    module.__set__(varName, (...args) => ({ plugin: pluginName, args }))
   }
   catch (e) {
     throw new UserError("Sigh.js needs `var " + pluginName + "' statement")

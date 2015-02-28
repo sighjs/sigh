@@ -1,8 +1,16 @@
 import path from 'path'
-import mercator from 'mercator'
 import Promise from 'bluebird'
 import fs from 'fs'
 import mkdirp from 'mkdirp'
+// TODO: import mozilla source map library
+
+function generateJsSourceMappingComment(mapPath) {
+  // TODO:
+}
+
+function generateCssSourceMappingComment(mapPath) {
+  // TODO:
+}
 
 function writeResource(outputDir, resource) {
   var outputPath = path.join(outputDir, resource.filePath)
@@ -16,9 +24,9 @@ function writeResource(outputDir, resource) {
     var mapPath = resource.sourceMapFileName
     var suffix
     if (resource.type === 'js')
-      suffix = mercator.generateJsSourceMappingComment(mapPath)
+      suffix = generateJsSourceMappingComment(mapPath)
     else if (resource.type === 'css')
-      suffix = mercator.generateCssSourceMappingComment(mapPath)
+      suffix = generateCssSourceMappingComment(mapPath)
 
     if (suffix)
       resource.data += '\n' + suffix
@@ -32,12 +40,5 @@ function writeResource(outputDir, resource) {
   return promise
 }
 
-export default function(outputDir) {
-  return operation => {
-    // console.log("write: => %j", operation.inputs)
-    return Promise.all(
-      operation.inputs.map(writeResource.bind(this, outputDir))
-    )
-    .then(() => undefined)
-  }
+export default function(stream, outputDir) {
 }

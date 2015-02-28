@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "description": "Another tool for managing web asset pipelines",
   "main": "index",
   "directories": {
@@ -25,20 +25,20 @@
     "url": "https://github.com/sighjs/sigh/issues"
   },
   "dependencies": {
-    "bluebird": "^2.3.11",
-    "gaze": "0.5.1",
-    "glob": "^4.2.1",
-    "grunt": "^0.4.5",
+    "baconjs": "^0.7.52",
+    "bluebird": "2.9.13",
+    "chokidar": "^1.0.0-rc3",
+    "glob": "4.4.1",
+    "grunt": "0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-test": "^0.12.4",
-    "jit-grunt": "^0.9.0",
-    "lodash": "^2.4.1",
-    "mercator": "git://github.com/chilon-net/mercator#d7fd7cf",
-    "mkdirp": "^0.5.0",
-    "rewire": "^2.1.3",
-    "source-map-support": "^0.2.8",
-    "traceur": "0.0.84"
+    "jit-grunt": "0.9.1",
+    "lodash": "3.3.1",
+    "mkdirp": "0.5.0",
+    "rewire": "2.1.3",
+    "source-map-support": "0.2.9",
+    "traceur": "0.0.85"
   },
   "devDependencies": {
     "chai": "^1.10.0",

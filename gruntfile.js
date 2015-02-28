@@ -18,7 +18,8 @@ module.exports = function(grunt) {
   grunt.registerTask('build', function() {
     var done = this.async()
 
-    // because traceur places source-maps in the cwd
+    // see https://github.com/google/traceur-compiler/issues/1777 traceur source map
+    // file/sources entries are relative to the cwd
     process.chdir('lib')
     grunt.util.spawn({
       cmd: '../node_modules/.bin/traceur',
