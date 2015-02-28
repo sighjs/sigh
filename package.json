@@ -20,7 +20,7 @@
     "pipeline"
   ],
   "author": "James Pike <github@chilon.net>",
-  "license": "GPL",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/sighjs/sigh/issues"
   },
