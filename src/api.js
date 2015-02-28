@@ -58,25 +58,33 @@ function invokeHelper(opts) {
   }
 
   // operation by pipeline name
-  var streams = _.mapValues(pipelines, pipelineToStream)
+  var streams = _.mapValues(pipelines, pipelineToStream.bind(this, opts.watch))
 
   _.forEach(streams, (stream, pipelineName) => {
-    // TODO: start stream
+    stream.onValue(value => {
+      console.log('pipeline %s - %j', pipelineName, value)
+    })
   })
 }
 
-function pipelineToStream(pipeline) {
-  console.log('TODO: convert pipeline to bacon stream', pipeline)
+function pipelineToStream(watch, pipeline) {
+  var firstOp = pipeline.shift()
+  var plugin = plugins[firstOp.pluginName]
+  var sourceStream = plugin.apply(this, [null, watch].concat(firstOp.args))
+
+  return _.reduce(pipeline, (stream, operation) => {
+    plugin = plugins[operation.pluginName]
+    return plugin.apply(this, [ stream ].concat(operation.args))
+  }, sourceStream)
 }
 
 function injectPlugin(module, pluginName) {
-  var plugin = plugins[pluginName]
-  if (! plugin)
-    throw new UserError("Non-existant plugin `" + pluginName + "'")
+  if (! (pluginName in plugins))
+    throw new UserError("Nonexistent plugin `" + pluginName + "'")
 
   try {
     var varName = pluginName.replace(/-/g, '_')
-    module.__set__(varName, (...args) => ({ plugin: pluginName, args }))
+    module.__set__(varName, (...args) => ({ pluginName, args }))
   }
   catch (e) {
     throw new UserError("Sigh.js needs `var " + pluginName + "' statement")

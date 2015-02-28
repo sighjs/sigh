@@ -41,4 +41,6 @@ function writeResource(outputDir, resource) {
 }
 
 export default function(stream, outputDir) {
+  // TODO: adapt stream
+  return stream
 }
