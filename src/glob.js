@@ -5,7 +5,7 @@ var { Bacon } = require('baconjs'); // traceur :(
 
 export default function(stream, watch, ...files) {
   if (stream !== null) {
-    throw Error('glob must be the first element in a pipeline')
+    throw Error('glob must be the first operation in a pipeline')
   }
 
   stream = Bacon.combineAsArray(
