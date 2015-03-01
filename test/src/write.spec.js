@@ -53,7 +53,7 @@ describe('write plugin', () => {
           resolve()
         }
       })
-      writeStream.onError(e => { console.warn(e) })
+      writeStream.onError(reject)
     })
   })
 })
