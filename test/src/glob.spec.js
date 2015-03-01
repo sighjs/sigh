@@ -35,23 +35,25 @@ describe('glob plugin', () => {
     })
   })
 
-  it('detects change to file matching globbed pattern', () => {
+  it('detects changes to two files matching globbed pattern', () => {
     return rm(TMP_PATH).then(() => {
       return copy(FIXTURE_PATH, TMP_PATH)
     })
     .then(() => {
       return new Promise(function(resolve) {
-        var isWatching = false
-        var changeFile = TMP_PATH + '/file1.js'
+        var nUpdates = 0
+        var files = [ TMP_PATH + '/file1.js', TMP_PATH + '/file2.js' ]
         glob(null, true, TMP_PATH + '/*.js').onValue(updates => {
-          if (! isWatching) {
+          if (++nUpdates === 1) {
             updates.length.should.equal(2)
-            isWatching = true
-            _.delay(fs.appendFile, 20, changeFile, 'var line2 = 24;\n')
+            _.delay(fs.appendFile, 20, files[0], 'var file1line2 = 24;\n')
+            _.delay(fs.appendFile, 100, files[1], 'var file2line2 = 25;\n')
           }
           else {
-            // TODO: should be array
-            updates.should.eql({ type: 'change', path: changeFile })
+            updates.should.eql([
+              { type: 'change', path: files[0] },
+              { type: 'change', path: files[1] }
+            ])
             resolve()
           }
         })
