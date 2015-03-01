@@ -1,18 +1,26 @@
 import traceur from 'traceur'
 import path from 'path'
 import Promise from 'bluebird'
+import esprima from 'esprima'
 var { Bacon } = require('baconjs')
-// TODO: import mozilla source map library
+var { SourceMapGenerator, SourceMapConsumer }  = require('source-map')
 
 var writeFile = Promise.promisify(require('fs').writeFile)
 var ensureDir = Promise.promisify(require('fs-extra').ensureDir)
 
-function generateJsSourceMappingComment(mapPath) {
-  // TODO:
+function generateIdentitySourceMap(sourcePath, data) {
+  var generator = new SourceMapGenerator({ file: path.basename(sourcePath) })
+  var tokens = esprima.tokenize(data, { loc: true })
+  tokens.forEach(function(token) {
+    var loc = token.loc.start
+    generator.addMapping({ generated: loc, original: loc, source: sourcePath })
+  })
+  return JSON.stringify(generator.toJSON())
 }
 
-function generateCssSourceMappingComment(mapPath) {
+function rebaseSourcePaths(map) {
   // TODO:
+  return map
 }
 
 export function writeEvent(outputDir, event) {
@@ -27,19 +35,24 @@ export function writeEvent(outputDir, event) {
     return writeFile(outputPath, event.data)
   })
 
+  if (! event.map) {
+    event.map = generateIdentitySourceMap(event.path, event.data)
+  }
+
   if (event.map) {
-    var mapPath = event.sourceMapFileName
+    var mapPath = event.path + '.map'
     var suffix
-    if (event.fileType === 'js')
-      suffix = generateJsSourceMappingComment(mapPath)
-    else if (event.fileType === 'css')
-      suffix = generateCssSourceMappingComment(mapPath)
+    var { fileType } = event
+    if (fileType === 'js')
+      suffix = '//# sourceMappingURL=' + mapPath
+    else if (fileType === 'css')
+      suffix = '/*# sourceMappingURL=' + mapPath + ' */'
 
     if (suffix)
       event.data += '\n' + suffix
 
     promise = promise.then(() => {
-      var map = event.map.rebaseSourcePaths(outputDir)
+      var map = rebaseSourcePaths(event.map)
       return writeFile(path.join(outputDir, mapPath), map)
     })
   }

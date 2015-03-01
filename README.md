@@ -80,7 +80,7 @@ The stream payload is an object containing:
   * type: "add", "change", "rename"
   * path: path to source file.
   * map: source map content.
-  * content: file content as buffer.
+  * data: file content as string.
   * fileType: the filename extension.
 
 ## Plugin options

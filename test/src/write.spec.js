@@ -21,9 +21,12 @@ describe('write plugin', () => {
     var stream = Bacon.once(new Event({ path: 'file1.js', type: 'add', data }))
 
     return write(stream, TMP_PATH).toPromise().then(event => {
-      // TODO: test for identity source map
       // console.log('write event', event)
-      readFileSync(TMP_PATH + '/file1.js').toString().should.equal(data)
+      readFileSync(TMP_PATH + '/file1.js').toString()
+      .should.equal(data + '\n//# sourceMappingURL=file1.js.map')
+
+      readFileSync(TMP_PATH + '/file1.js.map').toString()
+      .should.equal('{"version":3,"sources":["file1.js"],"names":[],"mappings":"AAAA,IAAI","file":"file1.js"}')
     })
   })
 })
