@@ -1,8 +1,9 @@
 import path from 'path'
 import Promise from 'bluebird'
-import fs from 'fs'
-import fse from 'fs-extra'
 // TODO: import mozilla source map library
+
+var writeFile = Promise.promisify(require('fs').writeFile)
+var ensureDir = Promise.promisify(require('fs-extra').ensureDir)
 
 function generateJsSourceMappingComment(mapPath) {
   // TODO:
@@ -15,9 +16,8 @@ function generateCssSourceMappingComment(mapPath) {
 function writeResource(outputDir, resource) {
   var outputPath = path.join(outputDir, resource.filePath)
 
-  var promise = Promise.promisify(fse.ensureDir)(path.dirname(outputPath))
-  .then(() => {
-    return Promise.promisify(fs.writeFile)(outputPath, resource.data)
+  var promise = ensureDir(path.dirname(outputPath)).then(() => {
+    return writeFile(outputPath, resource.data)
   })
 
   if (resource.map) {
@@ -33,7 +33,7 @@ function writeResource(outputDir, resource) {
 
     promise = promise.then(() => {
       var map = resource.map.rebaseSourcePaths(outputDir)
-      return Promise.promisify(fs.writeFile)(path.join(outputDir, mapPath), map)
+      return writeFile(path.join(outputDir, mapPath), map)
     })
   }
 
