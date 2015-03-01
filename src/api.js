@@ -64,6 +64,9 @@ function invokeHelper(opts) {
     stream.onValue(value => {
       console.log('pipeline %s - %j', pipelineName, value)
     })
+    stream.onError(error => {
+      console.warn('\x07error: pipeline %s - %j', pipelineName, error)
+    })
   })
 }
 
