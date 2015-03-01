@@ -70,7 +70,9 @@ function invokeHelper(opts) {
 function pipelineToStream(watch, pipeline) {
   var firstOp = pipeline.shift()
   var plugin = plugins[firstOp.pluginName]
-  var sourceStream = plugin.apply(this, [null, watch].concat(firstOp.args))
+  var globOpts = typeof firstOp.args[0] === 'object' ? firstOp.args.shift() : {}
+  globOpts.watch = watch
+  var sourceStream = plugin.apply(this, [null, globOpts].concat(firstOp.args))
 
   return _.reduce(pipeline, (stream, operation) => {
     plugin = plugins[operation.pluginName]

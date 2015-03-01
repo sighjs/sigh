@@ -10,7 +10,7 @@ function bufferingDebounce(stream, delay) {
   var buffer = []
   return stream.flatMapLatest(value => {
     buffer.push(value)
-    return Bacon.later(DEFAULT_DEBOUNCE, buffer)
+    return Bacon.later(delay, buffer)
   })
   .map(buffer => {
     var copy = buffer.slice(0)
@@ -19,7 +19,7 @@ function bufferingDebounce(stream, delay) {
   })
 }
 
-export default function(stream, watch, ...patterns) {
+export default function(stream, opts, ...patterns) {
   if (stream !== null) {
     throw Error('glob must be the first operation in a pipeline')
   }
@@ -31,7 +31,7 @@ export default function(stream, watch, ...patterns) {
   .map(files => files.map(file => ({ type: 'add', path: file })))
   .take(1)
 
-  if (! watch)
+  if (! opts.watch)
     return stream
 
   var watcher = chokidar.watch(patterns, { ignoreInitial: true })
@@ -40,5 +40,5 @@ export default function(stream, watch, ...patterns) {
     Bacon.fromEvent(watcher, 'add').map(path => ({ type: 'add', path })),
     Bacon.fromEvent(watcher, 'change').map(path => ({ type: 'change', path }))
   )
-  return stream.changes().concat(bufferingDebounce(updates, DEFAULT_DEBOUNCE))
+  return stream.changes().concat(bufferingDebounce(updates, opts.debounce || DEFAULT_DEBOUNCE))
 }

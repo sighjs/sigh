@@ -91,6 +91,16 @@ This causes the traceur plugin to strip the first component from the file path t
 * getModulePath - A function which turns the relative file path into the module path.
 * modules - A string denoting the type of modules traceur should output e.g. amd/commonjs.
 
+### glob
+
+The glob plugin takes a list of files as arguments but the first argument can be an object containing the option "debounce" which controls buffering of file changes.
+
+```javascript
+// Changes to files matching lib/*.js less than 200ms apart will be buffered
+// together, the default is 500ms
+glob({ debounce: 200 }, 'lib/*.js')
+```
+
 ## TODO
 
 * Source files content should be embedded in the source maps. Not having this is pretty annoying.
