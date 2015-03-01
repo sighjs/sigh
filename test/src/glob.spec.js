@@ -1,4 +1,4 @@
-import glob from '../lib/glob'
+import traceur from 'traceur'
 import _ from 'lodash'
 import Promise from 'bluebird'
 import fs from 'fs'
@@ -9,8 +9,11 @@ var rm = Promise.promisify(fse.remove)
 
 require('chai').should()
 
+import glob from '../lib/glob'
+import Event from '../lib/event'
+
 var FIXTURE_PATH = 'test/fixtures/simple-project'
-var TMP_PATH = 'test/tmp'
+var TMP_PATH = 'test/tmp/glob'
 var FIXTURE_FILES = [
   FIXTURE_PATH + '/file1.js',
   FIXTURE_PATH + '/file2.js'
@@ -51,8 +54,8 @@ describe('glob plugin', () => {
           }
           else {
             updates.should.eql([
-              { type: 'change', path: files[0] },
-              { type: 'change', path: files[1] }
+              new Event({ type: 'change', path: files[0] }),
+              new Event({ type: 'change', path: files[1] })
             ])
             resolve()
           }

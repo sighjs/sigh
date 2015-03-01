@@ -3,6 +3,8 @@ import glob from 'glob'
 import _ from 'lodash'
 var { Bacon } = require('baconjs'); // traceur :(
 
+import Event from './event'
+
 var DEFAULT_DEBOUNCE = 500
 
 function bufferingDebounce(stream, delay) {
@@ -20,15 +22,14 @@ function bufferingDebounce(stream, delay) {
 }
 
 export default function(stream, opts, ...patterns) {
-  if (stream !== null) {
+  if (stream !== null)
     throw Error('glob must be the first operation in a pipeline')
-  }
 
   stream = Bacon.combineAsArray(
     patterns.map(pattern => Bacon.fromNodeCallback(glob, pattern))
   )
   .map(_.flatten)
-  .map(files => files.map(file => ({ type: 'add', path: file })))
+  .map(files => files.map(file => new Event({ type: 'add', path: file })))
   .take(1)
 
   if (! opts.watch)
@@ -37,8 +38,8 @@ export default function(stream, opts, ...patterns) {
   var watcher = chokidar.watch(patterns, { ignoreInitial: true })
 
   var updates = Bacon.mergeAll(
-    Bacon.fromEvent(watcher, 'add').map(path => ({ type: 'add', path })),
-    Bacon.fromEvent(watcher, 'change').map(path => ({ type: 'change', path }))
+    Bacon.fromEvent(watcher, 'add').map(path => new Event({ type: 'add', path })),
+    Bacon.fromEvent(watcher, 'change').map(path => new Event({ type: 'change', path }))
   )
   return stream.changes().concat(bufferingDebounce(updates, opts.debounce || DEFAULT_DEBOUNCE))
 }

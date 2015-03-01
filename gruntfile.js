@@ -56,7 +56,7 @@ module.exports = function(grunt) {
   grunt.registerTask('buildTests', function() {
     traceurBuild('test/src', 'test', this.async())
   })
-  grunt.registerTask('default', 'build')
+  grunt.registerTask('default', ['build', 'test', 'watch'])
 
   grunt.registerTask('test', ['buildTests', 'mochaTest'])
 }

@@ -76,11 +76,12 @@ module.exports = function(stream, options) {
 }
 ```
 
-The stream payload is a json object containing:
+The stream payload is an object containing:
   * type: "add", "change", "rename"
   * path: path to source file.
   * map: source map content.
-  * content: file content as string.
+  * content: file content as buffer.
+  * fileType: the filename extension.
 
 ## Plugin options
 

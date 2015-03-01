@@ -1,5 +1,7 @@
+import traceur from 'traceur'
 import path from 'path'
 import Promise from 'bluebird'
+var { Bacon } = require('baconjs')
 // TODO: import mozilla source map library
 
 var writeFile = Promise.promisify(require('fs').writeFile)
@@ -13,34 +15,40 @@ function generateCssSourceMappingComment(mapPath) {
   // TODO:
 }
 
-function writeResource(outputDir, resource) {
-  var outputPath = path.join(outputDir, resource.filePath)
+export function writeEvent(outputDir, event) {
+  if (event.type === 'remove') {
+    // TODO: remove path
+    return
+  }
+
+  var outputPath = path.join(outputDir, event.path)
 
   var promise = ensureDir(path.dirname(outputPath)).then(() => {
-    return writeFile(outputPath, resource.data)
+    return writeFile(outputPath, event.data)
   })
 
-  if (resource.map) {
-    var mapPath = resource.sourceMapFileName
+  if (event.map) {
+    var mapPath = event.sourceMapFileName
     var suffix
-    if (resource.type === 'js')
+    if (event.fileType === 'js')
       suffix = generateJsSourceMappingComment(mapPath)
-    else if (resource.type === 'css')
+    else if (event.fileType === 'css')
       suffix = generateCssSourceMappingComment(mapPath)
 
     if (suffix)
-      resource.data += '\n' + suffix
+      event.data += '\n' + suffix
 
     promise = promise.then(() => {
-      var map = resource.map.rebaseSourcePaths(outputDir)
+      var map = event.map.rebaseSourcePaths(outputDir)
       return writeFile(path.join(outputDir, mapPath), map)
     })
   }
 
-  return promise
+  return promise.then(() => event)
 }
 
 export default function(stream, outputDir) {
-  // TODO: adapt stream
-  return stream
+  return stream.flatMap(event => {
+    return Bacon.fromPromise(writeEvent(outputDir, event))
+  })
 }

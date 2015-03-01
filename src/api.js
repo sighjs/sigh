@@ -3,9 +3,6 @@ import _ from 'lodash'
 import rewire from 'rewire'
 import path from 'path'
 
-// should be in seperate directory :(
-// see: https://github.com/google/traceur-compiler/issues/1538
-// TODO: this is fixed now, can it be changed?
 import all from './all'
 import concat from './concat'
 import glob from './glob'
