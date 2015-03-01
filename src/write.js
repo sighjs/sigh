@@ -22,6 +22,7 @@ function generateIdentitySourceMap(sourcePath, data) {
 
 export function writeEvent(baseDir, event) {
   // TODO: strip basedirs off of head of event.path when determining projectPath
+  var projectFile = path.basename(event.path)
   var projectPath = event.path
   var outputPath = path.join(baseDir, projectPath)
 
@@ -41,7 +42,7 @@ export function writeEvent(baseDir, event) {
   }
 
   if (event.sourceMap) {
-    var mapPath = projectPath + '.map'
+    var mapPath = projectFile + '.map'
     var suffix
     if (fileType === 'js')
       suffix = '//# sourceMappingURL=' + mapPath
