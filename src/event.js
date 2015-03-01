@@ -11,4 +11,9 @@ export default class {
   get fileType() {
     return this.path.substring(this.path.lastIndexOf('.') + 1)
   }
+
+  get supportsSourceMap() {
+    var { fileType } = this
+    return fileType === 'js' || fileType === 'css'
+  }
 }

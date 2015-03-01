@@ -2,7 +2,7 @@ import traceur from 'traceur'
 import path from 'path'
 import Promise from 'bluebird'
 import esprima from 'esprima'
-var { SourceMapGenerator, SourceMapConsumer }  = require('source-map')
+var { SourceMapGenerator }  = require('source-map')
 import fs from 'fs'
 var writeFile = Promise.promisify(fs.writeFile)
 var unlink = Promise.promisify(fs.unlink)
@@ -10,24 +10,33 @@ var ensureDir = Promise.promisify(require('fs-extra').ensureDir)
 
 import { mapEvents } from './stream'
 
-function generateIdentitySourceMap(sourcePath, data) {
-  var generator = new SourceMapGenerator({ file: path.basename(sourcePath) })
-  var tokens = esprima.tokenize(data, { loc: true })
-  tokens.forEach(function(token) {
-    var loc = token.loc.start
-    generator.addMapping({ generated: loc, original: loc, source: sourcePath })
-  })
-  return generator.toJSON()
+function generateIdentitySourceMap(sourceType, sourcePath, data) {
+  if (sourceType === 'js') {
+    var generator = new SourceMapGenerator({ file: path.basename(sourcePath) })
+    var tokens = esprima.tokenize(data, { loc: true })
+    tokens.forEach(function(token) {
+      var loc = token.loc.start
+      generator.addMapping({ generated: loc, original: loc, source: sourcePath })
+    })
+    return generator.toJSON()
+  }
+  else if (sourceType === 'css') {
+    // TODO:
+    return {}
+  }
 }
 
 export function writeEvent(baseDir, event) {
   // TODO: strip basedirs off of head of event.path when determining projectPath
+  var { fileType } = event
   var projectFile = path.basename(event.path)
   var projectPath = event.path
   var outputPath = path.join(baseDir, projectPath)
 
   if (event.type === 'remove') {
-    return unlink(outputPath).then(() => event)
+    return unlink(outputPath).then(() => {
+      return event.supportsSourceMap ?  unlink(outputPath + '.map').then(() => event) : event
+    })
   }
 
   var outputDir = path.dirname(outputPath)
@@ -36,9 +45,8 @@ export function writeEvent(baseDir, event) {
     return writeFile(outputPath, event.data)
   })
 
-  var { fileType } = event
-  if (fileType === 'js' && ! event.sourceMap) {
-    event.sourceMap = generateIdentitySourceMap(event.path, event.data)
+  if (! event.sourceMap && event.supportsSourceMap) {
+    event.sourceMap = generateIdentitySourceMap(event.fileType, event.path, event.data)
   }
 
   if (event.sourceMap) {

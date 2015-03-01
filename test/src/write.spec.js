@@ -50,6 +50,7 @@ describe('write plugin', () => {
         }
         else {
           existsSync(TMP_FILE).should.not.be.ok
+          existsSync(TMP_FILE + '.map').should.not.be.ok
           resolve()
         }
       })
