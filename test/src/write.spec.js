@@ -26,7 +26,7 @@ describe('write plugin', () => {
       .should.equal(data + '\n//# sourceMappingURL=file1.js.map')
 
       readFileSync(TMP_PATH + '/file1.js.map').toString()
-      .should.equal('{"version":3,"sources":["file1.js"],"names":[],"mappings":"AAAA,IAAI","file":"file1.js"}')
+      .should.equal('{"version":3,"sources":["../../../file1.js"],"names":[],"mappings":"AAAA,IAAI","file":"file1.js"}')
     })
   })
 })

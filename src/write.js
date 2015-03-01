@@ -15,33 +15,31 @@ function generateIdentitySourceMap(sourcePath, data) {
     var loc = token.loc.start
     generator.addMapping({ generated: loc, original: loc, source: sourcePath })
   })
-  return JSON.stringify(generator.toJSON())
+  return generator.toJSON()
 }
 
-function rebaseSourcePaths(map) {
-  // TODO:
-  return map
-}
-
-export function writeEvent(outputDir, event) {
+export function writeEvent(baseDir, event) {
   if (event.type === 'remove') {
     // TODO: remove path
     return event
   }
 
-  var outputPath = path.join(outputDir, event.path)
+  // TODO: strip basedirs off of head of event.path when determining projectPath
+  var projectPath = event.path
+  var outputPath = path.join(baseDir, projectPath)
+  var outputDir = path.dirname(outputPath)
 
   var promise = ensureDir(path.dirname(outputPath)).then(() => {
     return writeFile(outputPath, event.data)
   })
 
   var { fileType } = event
-  if (fileType === 'js' && ! event.map) {
-    event.map = generateIdentitySourceMap(event.path, event.data)
+  if (fileType === 'js' && ! event.sourceMap) {
+    event.sourceMap = generateIdentitySourceMap(event.path, event.data)
   }
 
-  if (event.map) {
-    var mapPath = event.path + '.map'
+  if (event.sourceMap) {
+    var mapPath = projectPath + '.map'
     var suffix
     if (fileType === 'js')
       suffix = '//# sourceMappingURL=' + mapPath
@@ -52,14 +50,16 @@ export function writeEvent(outputDir, event) {
       event.data += '\n' + suffix
 
     promise = promise.then(() => {
-      var map = rebaseSourcePaths(event.map)
-      return writeFile(path.join(outputDir, mapPath), map)
+      var { sourceMap } = event
+      sourceMap.sources = sourceMap.sources.map(source => path.relative(outputDir, source))
+      return writeFile(path.join(outputDir, mapPath), JSON.stringify(sourceMap))
     })
   }
 
   return promise.then(() => event)
 }
 
-export default function(stream, outputDir) {
-  return stream.flatMap(events => Promise.all(events.map(writeEvent.bind(this, outputDir))))
+// baseDir = base directory in which to write output files
+export default function(stream, baseDir) {
+  return stream.flatMap(events => Promise.all(events.map(writeEvent.bind(this, baseDir))))
 }

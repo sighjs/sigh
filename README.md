@@ -90,10 +90,10 @@ module.exports = function(pipelines) {
 }
 ```
 
-The stream payload is an array of event objects containing:
+The stream payload is an array of event objects, each event object contains the following fields:
   * type: "add", "change", "rename"
   * path: path to source file.
-  * map: source map content.
+  * sourceMap: source map as javascript object (can be empty if no transformations have taken place).
   * data: file content as string.
   * fileType: the filename extension.
 
