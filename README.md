@@ -91,13 +91,13 @@ module.exports = function(pipelines) {
 ```
 
 The stream payload is an array of event objects, each event object contains the following fields:
-  * type: "add", "change", "rename"
+  * type: "add", "change", or "remove"
   * path: path to source file.
   * sourceMap: source map as javascript object (can be empty if no transformations have taken place).
   * data: file content as string.
-  * fileType: the filename extension.
+  * fileType: filename extension.
 
-The first event will contain all source files, subsequent events will contain changes buffered together within a debounce interval.
+The first stream value will contain all source files, subsequent values will contain change events will be debounced and buffered.
 
 ## Plugin options
 
@@ -118,9 +118,12 @@ This causes the traceur plugin to strip the first component from the file path t
 The glob plugin takes a list of files as arguments but the first argument can be an object containing the option "debounce" which controls buffering of file changes.
 
 ```javascript
-// Changes to files matching lib/*.js less than 200ms apart will be buffered
-// together, the default is 500ms
-glob({ debounce: 200 }, 'lib/*.js')
+all(
+  // Changes to files matching lib/*.js less than 200ms apart will be buffered together
+  glob({ debounce: 200 }, 'lib/*.js'),
+  // Use the default debounce interval of 500ms
+  glob('test/*.js')
+)
 ```
 
 ## TODO
