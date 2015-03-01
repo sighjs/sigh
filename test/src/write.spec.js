@@ -18,10 +18,10 @@ describe('write plugin', () => {
 
   it('writes a single file with no map to output directory with identity map', () => {
     var data = 'var pump\n'
-    var stream = Bacon.once(new Event({ path: 'file1.js', type: 'add', data }))
+    var stream = Bacon.once([ new Event({ path: 'file1.js', type: 'add', data }) ])
 
-    return write(stream, TMP_PATH).toPromise().then(event => {
-      // console.log('write event', event)
+    return write(stream, TMP_PATH).toPromise().then(events => {
+      // console.log('write events', events)
       readFileSync(TMP_PATH + '/file1.js').toString()
       .should.equal(data + '\n//# sourceMappingURL=file1.js.map')
 

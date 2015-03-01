@@ -75,10 +75,7 @@ module.exports = function(stream, text) {
   // do whatever you want with the stream here, see https://baconjs.github.io/
   return stream.map(function(events) {
     return events.map(function(event) {
-      if (event.type === 'remove')
-        return // don't need to do anything for remove events
-
-      if (event.fileType === 'js')
+      if (event.type !== 'remove' && event.fileType === 'js')
         event.data += '\nvar variable = "' + (text || "stuff") + '"'
       return event
     })

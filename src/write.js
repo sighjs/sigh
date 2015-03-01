@@ -26,7 +26,7 @@ function rebaseSourcePaths(map) {
 export function writeEvent(outputDir, event) {
   if (event.type === 'remove') {
     // TODO: remove path
-    return
+    return event
   }
 
   var outputPath = path.join(outputDir, event.path)
@@ -35,14 +35,14 @@ export function writeEvent(outputDir, event) {
     return writeFile(outputPath, event.data)
   })
 
-  if (! event.map) {
+  var { fileType } = event
+  if (fileType === 'js' && ! event.map) {
     event.map = generateIdentitySourceMap(event.path, event.data)
   }
 
   if (event.map) {
     var mapPath = event.path + '.map'
     var suffix
-    var { fileType } = event
     if (fileType === 'js')
       suffix = '//# sourceMappingURL=' + mapPath
     else if (fileType === 'css')
@@ -61,7 +61,5 @@ export function writeEvent(outputDir, event) {
 }
 
 export default function(stream, outputDir) {
-  return stream.flatMap(event => {
-    return Bacon.fromPromise(writeEvent(outputDir, event))
-  })
+  return stream.flatMap(events => Promise.all(events.map(writeEvent.bind(this, outputDir))))
 }
