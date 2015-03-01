@@ -70,18 +70,37 @@ sigh plugins are injected into the variables defined at the top of the file. "al
 Writing a plugin for sigh is really easy. First make a node module for your plugin and in the main library file as indicated by package.json (defaulting to index.js) put something like this:
 
 ```javascript
-module.exports = function(stream, options) {
-  // TODO: adapt the stream here, see https://baconjs.github.io/
-  return stream
+// this plugin adds a redundant variable statement at the end of each javascript file
+module.exports = function(stream, text) {
+  // do whatever you want with the stream here, see https://baconjs.github.io/
+  return stream.map(function(events) {
+    return events.map(function(event) {
+      if (event.type === 'remove')
+        return // don't need to do anything for remove events
+
+      if (event.fileType === 'js')
+        event.data += '\nvar variable = "' + (text || "stuff") + '"'
+      return event
+    })
+  })
 }
 ```
 
-The stream payload is an object containing:
+Assuming the plugin above is called "suffixer" it could be used in a Sighfile like:
+```javascript
+module.exports = function(pipelines) {
+  pipelines['js:all'] = [ glob('*.js'), suffixer('kittens') ]
+}
+```
+
+The stream payload is an array of event objects containing:
   * type: "add", "change", "rename"
   * path: path to source file.
   * map: source map content.
   * data: file content as string.
   * fileType: the filename extension.
+
+The first event will contain all source files, subsequent events will contain changes buffered together within a debounce interval.
 
 ## Plugin options
 
