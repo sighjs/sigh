@@ -96,6 +96,8 @@ The stream payload is an array of event objects, each event object contains the 
   * sourceMap: source map as javascript object (can be empty if no transformations have taken place).
   * data: file content as string.
   * fileType: filename extension.
+  * baseDir: optional base directory containing resource.
+  * projectPath: path with baseDir stripped off.
 
 The first stream value will contain all source files, subsequent values will contain change events will be debounced and buffered.
 
@@ -115,14 +117,18 @@ This causes the traceur plugin to strip the first component from the file path t
 
 ### glob
 
-The glob plugin takes a list of files as arguments but the first argument can be an object containing the option "debounce" which controls buffering of file changes.
+The glob plugin takes a list of files as arguments but the first argument can be an object containing the following options:
+  * debounce: file changes are batched until they have settled for more than "debounce" milliseconds, this defaults to 500ms.
+  * baseDir: restricts the glob to operate within baseDir and also attaches the property to all resources (affecting their projectPath field).
 
 ```javascript
 all(
-  // Changes to files matching lib/*.js less than 200ms apart will be buffered together
-  glob({ debounce: 200 }, 'lib/*.js'),
   // Use the default debounce interval of 500ms
-  glob('test/*.js')
+  glob('test/*.js'),
+  // Like glob('src/*.js') but adds baseDir to resources
+  glob({ baseDir: 'src' }, '*.js'),
+  // Changes to files matching lib/*.js less than 200ms apart will be buffered together
+  glob({ debounce: 200 }, 'lib/*.js')
 )
 ```
 

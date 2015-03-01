@@ -23,8 +23,18 @@ describe('glob plugin', () => {
   it('globs a wildcard', () => {
     return glob(null, {}, FIXTURE_PATH + '/*.js').toPromise().then(updates => {
       updates.length.should.equal(2)
-      _.pluck(updates, 'path').sort().should.eql(FIXTURE_FILES)
+      _.pluck(updates, 'projectPath').sort().should.eql(FIXTURE_FILES)
       updates.forEach(file => { file.type.should.equal('add') })
+    })
+  })
+
+  it('globs a wildcard using the baseDir option', () => {
+    return glob(null, { baseDir: 'test/fixtures/simple-project' }, '*.js')
+    .toPromise()
+    .then(updates => {
+      updates.length.should.equal(2)
+      updates[0].projectPath.should.equal('file1.js')
+      updates[1].projectPath.should.equal('file2.js')
     })
   })
 

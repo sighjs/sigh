@@ -32,6 +32,24 @@ describe('write plugin', () => {
     })
   })
 
+  it('write a single file containing a baseDir', () => {
+    var data = 'var  pumpbaby\n'
+    var stream = Bacon.once([
+      new Event({ baseDir: 'subdir', path: PROJ_PATH, type: 'add', data })
+    ])
+
+    return write(stream, TMP_PATH).toPromise().then(events => {
+      // subdir stripped from the output path due to baseDir
+      var tmpFile = TMP_PATH + '/file1.js'
+
+      readFileSync(tmpFile).toString()
+      .should.equal(data + '\n//# sourceMappingURL=file1.js.map')
+
+      readFileSync(tmpFile + '.map').toString()
+      .should.equal('{"version":3,"sources":["../../../subdir/file1.js"],"names":[],"mappings":"AAAA,KAAK","file":"file1.js"}')
+    })
+  })
+
   it('write a single file then remove it', () => {
     var data = 'var mew\n'
     var stream = Bacon.fromArray([
@@ -47,6 +65,7 @@ describe('write plugin', () => {
         // console.log('write events %j', events)
         if (++nValues === 1) {
           existsSync(TMP_FILE).should.be.ok
+          existsSync(TMP_FILE + '.map').should.be.ok
         }
         else {
           existsSync(TMP_FILE).should.not.be.ok

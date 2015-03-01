@@ -30,12 +30,12 @@ export function writeEvent(baseDir, event) {
   // TODO: strip basedirs off of head of event.path when determining projectPath
   var { fileType } = event
   var projectFile = path.basename(event.path)
-  var projectPath = event.path
+  var { projectPath } = event
   var outputPath = path.join(baseDir, projectPath)
 
   if (event.type === 'remove') {
     return unlink(outputPath).then(() => {
-      return event.supportsSourceMap ?  unlink(outputPath + '.map').then(() => event) : event
+      return event.supportsSourceMap ? unlink(outputPath + '.map').then(() => event) : event
     })
   }
 
