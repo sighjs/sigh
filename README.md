@@ -1,8 +1,13 @@
 # sigh
 
-# Important note
+Sigh is currently being rewritten but will be ready again soon with better code and testing of every feature.
 
-Sigh is currently undergoing a rewrite to simplify the code further using [bacon.js streams](https://baconjs.github.io/).
+Sigh will be the best JavaScript asset pipeline!
+
+* Inputs are based on simple glob expressions and the pipeline uses a simple tree structure, no more 500 line grunt files or verbose gulp files.
+* It uses Functional Reactive Programming via [bacon.js](https://baconjs.github.io/), your asset pipelines are bacon streams!
+* Writing plugins is simple, especially when you can reuse the good bacon.js stuff!
+* Sigh can watch files for changes using the -w flag, caching results is made easy.
 
 ## Another asset pipeline
 
@@ -16,7 +21,7 @@ Sigh is currently undergoing a rewrite to simplify the code further using [bacon
 
 ## Why write another one
 
-* gulp is really cool but some simple operations such as merging two streams together whilst retaining source maps doesn't seem to be possible and watching files for changes involves use of multiple extra modules.
+* gulp is really cool but some simple operations such as merging two streams together whilst retaining source maps doesn't seem to be possible, the syntax is also a little verbose, especially when watching files is needed.
 * Gobble is really cool and inspired a bunch of this, but I thought the design could be simplified by using arrays of resources as the pipeline payload rather than having exceptions in the code for various plugins.
 * Broccoli is pretty cool but... no source maps. Writing plugins needs a lot of code.
 * Plumber uses a version of gaze that doesn't work on linux.
