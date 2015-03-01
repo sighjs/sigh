@@ -8,6 +8,8 @@ var { SourceMapGenerator, SourceMapConsumer }  = require('source-map')
 var writeFile = Promise.promisify(require('fs').writeFile)
 var ensureDir = Promise.promisify(require('fs-extra').ensureDir)
 
+import { mapEvents } from './stream'
+
 function generateIdentitySourceMap(sourcePath, data) {
   var generator = new SourceMapGenerator({ file: path.basename(sourcePath) })
   var tokens = esprima.tokenize(data, { loc: true })
@@ -20,7 +22,7 @@ function generateIdentitySourceMap(sourcePath, data) {
 
 export function writeEvent(baseDir, event) {
   if (event.type === 'remove') {
-    // TODO: remove path
+    // TODO: remove path from output directory
     return event
   }
 
@@ -61,5 +63,5 @@ export function writeEvent(baseDir, event) {
 
 // baseDir = base directory in which to write output files
 export default function(stream, baseDir) {
-  return stream.flatMap(events => Promise.all(events.map(writeEvent.bind(this, baseDir))))
+  return mapEvents(stream, writeEvent.bind(this, baseDir))
 }

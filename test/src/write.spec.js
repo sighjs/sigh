@@ -21,7 +21,7 @@ describe('write plugin', () => {
     var stream = Bacon.once([ new Event({ path: 'file1.js', type: 'add', data }) ])
 
     return write(stream, TMP_PATH).toPromise().then(events => {
-      // console.log('write events', events)
+      // console.log('write events %j', events)
       readFileSync(TMP_PATH + '/file1.js').toString()
       .should.equal(data + '\n//# sourceMappingURL=file1.js.map')
 
