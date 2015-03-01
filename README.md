@@ -86,7 +86,7 @@ module.exports = function(stream, text) {
 Assuming the plugin above is called "suffixer" it could be used in a Sighfile like:
 ```javascript
 module.exports = function(pipelines) {
-  pipelines['js:all'] = [ glob('*.js'), suffixer('kittens') ]
+  pipelines['js:all'] = [ glob('*.js'), suffixer('kittens'), write('build') ]
 }
 ```
 
@@ -101,7 +101,7 @@ The first stream value will contain all source files, subsequent values will con
 
 ## Plugin options
 
-Some plugins accept an object as their only/final parameter to allow customisation, e.g.:
+Some plugins accept an object as their only/first parameter to allow customisation, e.g.:
 
 ```javascript
 traceur({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
