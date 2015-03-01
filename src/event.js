@@ -4,7 +4,8 @@ export default class {
   constructor(fields) {
     this.type = fields.type
     this.path = fields.path
-    this.data = fields.data || readFileSync(this.path).toString()
+    if (this.type !== 'remove')
+      this.data = fields.data || readFileSync(this.path).toString()
   }
 
   get fileType() {

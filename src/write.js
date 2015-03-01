@@ -2,10 +2,10 @@ import traceur from 'traceur'
 import path from 'path'
 import Promise from 'bluebird'
 import esprima from 'esprima'
-var { Bacon } = require('baconjs')
 var { SourceMapGenerator, SourceMapConsumer }  = require('source-map')
-
-var writeFile = Promise.promisify(require('fs').writeFile)
+import fs from 'fs'
+var writeFile = Promise.promisify(fs.writeFile)
+var unlink = Promise.promisify(fs.unlink)
 var ensureDir = Promise.promisify(require('fs-extra').ensureDir)
 
 import { mapEvents } from './stream'
@@ -21,14 +21,14 @@ function generateIdentitySourceMap(sourcePath, data) {
 }
 
 export function writeEvent(baseDir, event) {
-  if (event.type === 'remove') {
-    // TODO: remove path from output directory
-    return event
-  }
-
   // TODO: strip basedirs off of head of event.path when determining projectPath
   var projectPath = event.path
   var outputPath = path.join(baseDir, projectPath)
+
+  if (event.type === 'remove') {
+    return unlink(outputPath).then(() => event)
+  }
+
   var outputDir = path.dirname(outputPath)
 
   var promise = ensureDir(path.dirname(outputPath)).then(() => {
