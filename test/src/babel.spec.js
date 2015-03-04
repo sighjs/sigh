@@ -12,7 +12,10 @@ describe('babel plugin', () => {
 
     return babel(stream).toPromise().then(events => {
       events.length.should.equal(1)
-      events[0].data.should.equal('define("subdir/file", ["exports"], function (exports) {\n  "use strict";\n\n  var pump = function () {\n    return "pumper";\n  };\n});')
+
+      var event = events[0]
+      event.data.should.equal('define("subdir/file", ["exports"], function (exports) {\n  "use strict";\n\n  var pump = function () {\n    return "pumper";\n  };\n});')
+      event.sourceMap.mappings.should.equal(';;;AAAA,MAAI,IAAI,GAAG;WAAM,QAAQ;GAAA,CAAA')
     })
   })
 

@@ -33,7 +33,7 @@ function compileEvent(opts, event) {
   var result = babel.transform(event.data, babelOpts)
 
   event.data = result.code
-  event.applySourceMap(event.map)
+  event.applySourceMap(result.map)
   return event
 }
 
