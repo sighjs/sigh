@@ -27,7 +27,6 @@ function generateIdentitySourceMap(sourceType, sourcePath, data) {
 }
 
 export function writeEvent(baseDir, event) {
-  // TODO: strip basedirs off of head of event.path when determining projectPath
   var { fileType } = event
   var projectFile = path.basename(event.path)
   var { projectPath } = event
@@ -45,6 +44,7 @@ export function writeEvent(baseDir, event) {
     return writeFile(outputPath, event.data)
   })
 
+  // TODO: attach this in glob plugin
   if (! event.sourceMap && event.supportsSourceMap) {
     event.sourceMap = generateIdentitySourceMap(event.fileType, event.path, event.data)
   }

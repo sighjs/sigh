@@ -1,5 +1,10 @@
 var { readFileSync } = require('fs')
 
+/**
+ * Event passed through pipeline (which can be modified, concatenated, witheld etc. by any
+ * pipeline operation), containing the following parameters:
+ *   type: add/remove/change: Represents how the file has changed since it was last seen, the first event will always be an array containing an "add" of all files in the project.
+ */
 export default class {
   constructor(fields) {
     this.type = fields.type
@@ -12,6 +17,15 @@ export default class {
 
   get fileType() {
     return this.path.substring(this.path.lastIndexOf('.') + 1)
+  }
+
+  applySourceMap(sourceMap) {
+    if (this.sourceMap) {
+      // TODO: apply source map
+    }
+    // else {
+    this.sourceMap = sourceMap
+    // }
   }
 
   get supportsSourceMap() {

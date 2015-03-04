@@ -4,22 +4,9 @@ import _ from 'lodash'
 var { Bacon } = require('baconjs'); // traceur :(
 
 import Event from './event'
+import { bufferingDebounce } from './stream'
 
 var DEFAULT_DEBOUNCE = 500
-
-function bufferingDebounce(stream, delay) {
-  // I feel like there's a better way to do this...
-  var buffer = []
-  return stream.flatMapLatest(value => {
-    buffer.push(value)
-    return Bacon.later(delay, buffer)
-  })
-  .map(buffer => {
-    var copy = buffer.slice(0)
-    buffer.length = 0
-    return copy
-  })
-}
 
 export default function(stream, opts, ...patterns) {
   if (stream !== null)

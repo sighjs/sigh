@@ -8,8 +8,8 @@ var rm = Promise.promisify(fse.remove)
 
 require('chai').should()
 
-import write from '../lib/write'
 import Event from '../lib/event'
+import write from '../lib/write'
 
 var TMP_PATH = 'test/tmp/write'
 var PROJ_PATH = 'subdir/file1.js'
