@@ -20,15 +20,11 @@ function compileEvent(opts, event) {
     var modulePath = event.projectPath.replace(/\.js$/, '')
     if (opts.getModulePath)
       modulePath = opts.getModulePath(modulePath)
-
-    // TODO: only necessary if getModulePath is defined?
     babelOpts.moduleId = modulePath
   }
 
-  if (event.basePath) {
-    babelOpts.sourceRoot = event.basePath
+  if (event.basePath)
     babelOpts.filenameRelative = event.projectDir
-  }
 
   var result = babel.transform(event.data, babelOpts)
 
