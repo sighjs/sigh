@@ -1,4 +1,3 @@
-import traceur from 'traceur'
 import path from 'path'
 import Promise from 'bluebird'
 import esprima from 'esprima'

@@ -6,10 +6,10 @@ import path from 'path'
 import all from './all'
 import concat from './concat'
 import glob from './glob'
-import traceur from './traceur'
+import babel from './babel'
 import write from './write'
 
-var plugins = { all, concat, glob, traceur, write }
+var plugins = { all, concat, glob, babel, write }
 
 // Run Sigh.js
 export function invoke(opts) {

@@ -28,33 +28,26 @@ module.exports = function(grunt) {
 
   require('jit-grunt')(grunt)
 
-  function traceurBuild(sourceDir, destDir, done) {
-    // see https://github.com/google/traceur-compiler/issues/1777 traceur source map
-    // file/sources entries are relative to the cwd
-    var prevCwd = process.cwd()
-    process.chdir(destDir)
-    sourceDir = path.relative(destDir, sourceDir)
+  function transpileEs6(sourceDir, destDir, done) {
+    // TODO: do this with grunt-babel... need to work out how to use directory mode
     grunt.util.spawn({
-      cmd: '../node_modules/.bin/traceur',
-      args: ('--modules commonjs --source-maps --dir ' + sourceDir + ' .').split(' ')
+      cmd: './node_modules/.bin/babel',
+      args: ('--modules common --source-maps --out-dir ' + destDir + ' ' + sourceDir).split(' ')
     },
     function(error, result, code) {
-      // traceur doesn't use exit codes properly...
-      // it also logs errors on both stdout and stderr
       if (result.stderr)
         grunt.log.error('\x07' + result.stderr)
-      if (result.stdout)
-        grunt.log.error('\x07' + result.stdout)
+      else if (code)
+        grunt.log.error('\x07unknown error compiling sigh')
       done()
     })
-    process.chdir(prevCwd)
   }
 
   grunt.registerTask('build', function() {
-    traceurBuild('src', 'lib', this.async())
+    transpileEs6('src', 'lib', this.async())
   })
   grunt.registerTask('buildTests', function() {
-    traceurBuild('test/src', 'test', this.async())
+    transpileEs6('test/src', 'test', this.async())
   })
   grunt.registerTask('default', ['build', 'test', 'watch'])
 

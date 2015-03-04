@@ -25,6 +25,7 @@
     "url": "https://github.com/sighjs/sigh/issues"
   },
   "dependencies": {
+    "babel": "^4.6.6",
     "baconjs": "^0.7.52",
     "bluebird": "2.9.13",
     "chokidar": "^1.0.0-rc3",
@@ -39,8 +40,7 @@
     "lodash": "3.3.1",
     "rewire": "2.1.3",
     "source-map": "^0.4.0",
-    "source-map-support": "0.2.9",
-    "traceur": "0.0.86"
+    "source-map-support": "0.2.9"
   },
   "devDependencies": {
     "chai": "^1.10.0",

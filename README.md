@@ -40,12 +40,12 @@ npm install sigh
 
 Write a file called "Sigh.js" and put it in the root of your project:
 ```javascript
-var all, glob, concat, write, traceur, uglify
+var all, glob, concat, write, babel, uglify
 
 module.exports = function(pipelines) {
   pipelines['js:all'] = [
     all(
-      [ glob('src/*.js'), traceur() ],
+      [ glob('src/*.js'), babel() ],
       glob('vendor/*.js', 'bootstrap.js')
     ),
     concat('combined'),
@@ -54,11 +54,11 @@ module.exports = function(pipelines) {
   ]
 }
 ```
-This pipeline would glob files matching src/\*.js and transpile them with traceur, then concatenate that output together with the files matching vendor/\*.js followed by 'bootstrap.js' as the "all" and "glob" plugins preserve order. Finally the concatenated resource is uglified and written to the directory dist/assets.
+This pipeline would glob files matching src/\*.js and transpile them with babel, then concatenate that output together with the files matching vendor/\*.js followed by 'bootstrap.js' as the "all" and "glob" plugins preserve order. Finally the concatenated resource is uglified and written to the directory dist/assets.
 
 Running "sigh -w" would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
-sigh plugins are injected into the variables defined at the top of the file. "all", "glob", "concat", "write" and "traceur" are built-in (for now) whereas uglify is found by scanning package.json for dependency and devDependency entries of the format "sigh-\*".
+sigh plugins are injected into the variables defined at the top of the file. "all", "glob", "concat", "write" and "babel" are built-in (for now) whereas uglify is found by scanning package.json for dependency and devDependency entries of the format "sigh-\*".
 
 ### Run sigh
 ```shell
@@ -106,14 +106,14 @@ The first stream value will contain all source files, subsequent values will con
 Some plugins accept an object as their only/first parameter to allow customisation, e.g.:
 
 ```javascript
-traceur({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
+babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 ```
-This causes the traceur plugin to strip the first component from the file path to create the module path.
+This causes the babel plugin to strip the first component from the file path to create the module path.
 
-### traceur
+### babel
 
 * getModulePath - A function which turns the relative file path into the module path.
-* modules - A string denoting the type of modules traceur should output e.g. amd/commonjs.
+* modules - A string denoting the type of modules babel should output e.g. amd/common, see [the babel API](https://babeljs.io/docs/usage/options/).
 
 ### glob
 

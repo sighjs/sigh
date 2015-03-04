@@ -1,4 +1,3 @@
-import traceur from 'traceur'
 import _ from 'lodash'
 import Promise from 'bluebird'
 import fs from 'fs'
