@@ -13,8 +13,8 @@ export default function(stream, opts, ...patterns) {
     throw Error('glob must be the first operation in a pipeline')
 
   var newEvent = props => {
-    if (opts.baseDir)
-      props.baseDir = opts.baseDir
+    if (opts.basePath)
+      props.basePath = opts.basePath
     return new Event(props)
   }
 
@@ -22,7 +22,7 @@ export default function(stream, opts, ...patterns) {
     patterns.map(
       pattern => Bacon.fromNodeCallback(
         glob,
-        opts.baseDir ? opts.baseDir + '/' + pattern : pattern
+        opts.basePath ? opts.basePath + '/' + pattern : pattern
       )
     )
   )

@@ -32,14 +32,14 @@ describe('write plugin', () => {
     })
   })
 
-  it('write a single file containing a baseDir', () => {
+  it('write a single file containing a basePath', () => {
     var data = 'var  pumpbaby\n'
     var stream = Bacon.once([
-      new Event({ baseDir: 'subdir', path: PROJ_PATH, type: 'add', data })
+      new Event({ basePath: 'subdir', path: PROJ_PATH, type: 'add', data })
     ])
 
     return write(stream, TMP_PATH).toPromise().then(events => {
-      // subdir stripped from the output path due to baseDir
+      // subdir stripped from the output path due to basePath
       var tmpFile = TMP_PATH + '/file1.js'
 
       readFileSync(tmpFile).toString()

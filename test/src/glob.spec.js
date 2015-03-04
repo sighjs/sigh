@@ -27,8 +27,8 @@ describe('glob plugin', () => {
     })
   })
 
-  it('globs a wildcard using the baseDir option', () => {
-    return glob(null, { baseDir: 'test/fixtures/simple-project' }, '*.js')
+  it('globs a wildcard using the basePath option', () => {
+    return glob(null, { basePath: 'test/fixtures/simple-project' }, '*.js')
     .toPromise()
     .then(updates => {
       updates.length.should.equal(2)

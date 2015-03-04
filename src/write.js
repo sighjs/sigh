@@ -25,11 +25,11 @@ function generateIdentitySourceMap(sourceType, sourcePath, data) {
   }
 }
 
-export function writeEvent(baseDir, event) {
+export function writeEvent(basePath, event) {
   var { fileType } = event
   var projectFile = path.basename(event.path)
   var { projectPath } = event
-  var outputPath = path.join(baseDir, projectPath)
+  var outputPath = path.join(basePath, projectPath)
 
   if (event.type === 'remove') {
     return unlink(outputPath).then(() => {
@@ -69,7 +69,7 @@ export function writeEvent(baseDir, event) {
   return promise.then(() => event)
 }
 
-// baseDir = base directory in which to write output files
-export default function(stream, baseDir) {
-  return mapEvents(stream, writeEvent.bind(this, baseDir))
+// basePath = base directory in which to write output files
+export default function(stream, basePath) {
+  return mapEvents(stream, writeEvent.bind(this, basePath))
 }

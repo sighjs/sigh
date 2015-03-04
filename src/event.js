@@ -11,8 +11,8 @@ export default class {
     this.path = fields.path
     if (this.type !== 'remove')
       this.data = fields.data || readFileSync(this.path).toString()
-    if (fields.baseDir)
-      this.baseDir = fields.baseDir
+    if (fields.basePath)
+      this.basePath = fields.basePath
   }
 
   get fileType() {
@@ -34,10 +34,10 @@ export default class {
   }
 
   get projectPath() {
-    if (! this.baseDir)
+    if (! this.basePath)
       return this.path
 
-    return this.path.indexOf(this.baseDir) === 0 ?
-      this.path.substr(this.baseDir.length + 1) : this.path
+    return this.path.indexOf(this.basePath) === 0 ?
+      this.path.substr(this.basePath.length + 1) : this.path
   }
 }

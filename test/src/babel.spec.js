@@ -8,7 +8,13 @@ describe('babel plugin', () => {
 
   it('compiles a single add event', () => {
     var data = 'var pump = () => "pumper"'
-    var stream = Bacon.once([ new Event({ path: 'subdir/file.js', type: 'add', data }) ])
+    var stream = Bacon.once([
+      new Event({
+        basePath: 'root',
+        path: 'root/subdir/file.js',
+        type: 'add', data
+      })
+    ])
 
     return babel(stream).toPromise().then(events => {
       events.length.should.equal(1)

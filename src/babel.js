@@ -9,7 +9,7 @@ function compileEvent(opts, event) {
     return event
 
   var babelOpts = {
-    sourceRoot: event.baseDir || process.cwd(),
+    sourceRoot: event.basePath || process.cwd(),
     modules: opts.modules,
     filename: event.path,
     sourceMap: true,
@@ -25,8 +25,8 @@ function compileEvent(opts, event) {
     babelOpts.moduleId = modulePath
   }
 
-  if (event.baseDir) {
-    babelOpts.sourceRoot = event.baseDir
+  if (event.basePath) {
+    babelOpts.sourceRoot = event.basePath
     babelOpts.filenameRelative = event.projectDir
   }
 
