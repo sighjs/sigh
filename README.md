@@ -50,14 +50,26 @@ Running "sigh -w" would compile all the files then watch the directories and fil
 
 sigh plugins are injected into the variables defined at the top of the file. "all", "glob", "concat", "write" and "babel" are built-in (for now) whereas uglify is found by scanning package.json for dependency and devDependency entries of the format "sigh-\*".
 
-### Run sigh
+### Running sigh
+
+Compile all pipelines and exit:
 ```shell
 % sigh
 ```
 
+Compile all pipelines and then watch files for changes compiling those that have changed:
+```
+% sigh -w
+```
+
+Compile the single specified pipeline:
+```
+% sigh js:all
+```
+
 ## Writing sigh plugins
 
-Writing a plugin for sigh is really easy. First make a node module for your plugin and in the main library file as indicated by package.json (defaulting to index.js) put something like this:
+Writing a plugin for sigh is really easy. First make a node module for your plugin and in the main library file as indicated by package.json (which defaults to index.js) put something like this:
 
 ```javascript
 // this plugin adds a redundant variable statement at the end of each javascript file
