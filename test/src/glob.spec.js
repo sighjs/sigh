@@ -20,7 +20,7 @@ var FIXTURE_FILES = [
 
 describe('glob plugin', () => {
   it('globs a wildcard', () => {
-    return glob(null, {}, FIXTURE_PATH + '/*.js').toPromise().then(updates => {
+    return glob({}, {}, FIXTURE_PATH + '/*.js').toPromise().then(updates => {
       updates.length.should.equal(2)
       _.pluck(updates, 'projectPath').sort().should.eql(FIXTURE_FILES)
       updates.forEach(file => { file.type.should.equal('add') })
@@ -28,7 +28,7 @@ describe('glob plugin', () => {
   })
 
   it('globs a wildcard using the basePath option', () => {
-    return glob(null, { basePath: 'test/fixtures/simple-project' }, '*.js')
+    return glob({}, { basePath: 'test/fixtures/simple-project' }, '*.js')
     .toPromise()
     .then(updates => {
       updates.length.should.equal(2)
@@ -38,7 +38,7 @@ describe('glob plugin', () => {
   })
 
   it('globs two wildcards', () => {
-    return glob(null, {}, FIXTURE_PATH + '/*1.js', FIXTURE_PATH + '/*2.js')
+    return glob({}, {}, FIXTURE_PATH + '/*1.js', FIXTURE_PATH + '/*2.js')
     .toPromise()
     .then(updates => {
       updates.length.should.equal(2)
@@ -55,7 +55,7 @@ describe('glob plugin', () => {
       return new Promise(function(resolve) {
         var nUpdates = 0
         var files = [ TMP_PATH + '/file1.js', TMP_PATH + '/file2.js' ]
-        glob(null, { watch: true, debounce: 200 }, TMP_PATH + '/*.js').onValue(updates => {
+        glob({ watch: true }, { debounce: 200 }, TMP_PATH + '/*.js').onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
             _.delay(fs.appendFile, 20, files[0], 'var file1line2 = 24;\n')
@@ -77,7 +77,7 @@ describe('glob plugin', () => {
     (() => {
       // the first argument is the stream and must be null for the glob operation,
       // this is a special value passed during the stream construction in src/api.js
-      glob('some stream', {}, FIXTURE_PATH + '/*.js')
+      glob({ stream: 'some stream' }, {}, FIXTURE_PATH + '/*.js')
     }).should.throw()
   })
 })

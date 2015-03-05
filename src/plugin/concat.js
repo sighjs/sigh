@@ -3,7 +3,8 @@ import { coalesceEvents } from '../stream'
 import { concatenate as concatSourceMaps } from '../sourceMap'
 import Event from '../event'
 
-export default function(stream, outputPath, debounceDelay) {
+export default function(op, outputPath, debounceDelay) {
+  var { stream } = op
   var fileExists = false
 
   return coalesceEvents(stream)

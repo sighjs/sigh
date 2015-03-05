@@ -8,9 +8,13 @@ import { bufferingDebounce } from '../stream'
 
 var DEFAULT_DEBOUNCE = 500
 
-export default function(stream, opts, ...patterns) {
-  if (stream !== null)
+export default function(op, ...patterns) {
+  var { stream } = op
+  if (stream)
     throw Error('glob must be the first operation in a pipeline')
+
+  // the first pattern could be an option object
+  var opts = typeof patterns[0] === 'object' ? patterns.shift() : {}
 
   var newEvent = props => {
     if (opts.basePath)
@@ -30,7 +34,7 @@ export default function(stream, opts, ...patterns) {
   .map(files => files.map(file => newEvent({ type: 'add', path: file })))
   .take(1)
 
-  if (! opts.watch)
+  if (! op.watch)
     return stream
 
   var watcher = chokidar.watch(patterns, { ignoreInitial: true })

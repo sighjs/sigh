@@ -76,9 +76,9 @@ Writing a plugin for sigh is really easy. First make a node module for your plug
 
 ```javascript
 // this plugin adds a redundant variable statement at the end of each javascript file
-module.exports = function(stream, text) {
+module.exports = function(operation, text) {
   // do whatever you want with the stream here, see https://baconjs.github.io/
-  return stream.map(function(events) {
+  return operation.stream.map(function(events) {
     return events.map(function(event) {
       if (event.type !== 'remove' && event.fileType === 'js')
         event.data += '\nvar variable = "' + (text || "stuff") + '"'

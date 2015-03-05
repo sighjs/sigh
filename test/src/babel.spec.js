@@ -17,7 +17,7 @@ describe('babel plugin', () => {
     })
     var stream = Bacon.once([ event ])
 
-    return babel(stream).toPromise().then(events => {
+    return babel({ stream }).toPromise().then(events => {
       events.length.should.equal(1)
 
       var { data, sourceMap } = events[0]

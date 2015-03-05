@@ -47,6 +47,6 @@ export function writeEvent(basePath, event) {
 }
 
 // basePath = base directory in which to write output files
-export default function(stream, basePath) {
-  return mapEvents(stream, writeEvent.bind(this, basePath))
+export default function(op, basePath) {
+  return mapEvents(op.stream, writeEvent.bind(this, basePath))
 }

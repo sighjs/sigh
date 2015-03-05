@@ -70,25 +70,23 @@ function invokeHelper(opts) {
 function pipelineToStream(watch, pipeline) {
   var firstOp = pipeline.shift()
   var plugin = plugins[firstOp.pluginName]
-  var globOpts = typeof firstOp.args[0] === 'object' ? firstOp.args.shift() : {}
-  globOpts.watch = watch
-  var sourceStream = plugin.apply(this, [null, globOpts].concat(firstOp.args))
+  var sourceStream = plugin.apply(this, [{ stream: null, watch }].concat(firstOp.args))
 
   return _.reduce(pipeline, (stream, operation) => {
     plugin = plugins[operation.pluginName]
-    return plugin.apply(this, [ stream ].concat(operation.args))
+    return plugin.apply(this, [ { stream, watch } ].concat(operation.args))
   }, sourceStream)
 }
 
 function injectPlugin(module, pluginName) {
   if (! (pluginName in plugins))
-    throw new UserError("Nonexistent plugin `" + pluginName + "'")
+    throw new Error("Nonexistent plugin `" + pluginName + "'")
 
   try {
     var varName = pluginName.replace(/-/g, '_')
     module.__set__(varName, (...args) => ({ pluginName, args }))
   }
   catch (e) {
-    throw new UserError("Sigh.js needs `var " + pluginName + "' statement")
+    throw new Error("Sigh.js needs `var " + pluginName + "' statement")
   }
 }

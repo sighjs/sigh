@@ -33,7 +33,7 @@ function compileEvent(opts, event) {
   return event
 }
 
-export default function(stream, opts) {
+export default function(op, opts) {
   opts = _.assign({ modules: 'amd' }, opts || {})
-  return mapEvents(stream, compileEvent.bind(this, opts))
+  return mapEvents(op.stream, compileEvent.bind(this, opts))
 }
