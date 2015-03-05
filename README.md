@@ -146,3 +146,4 @@ all(
 glob('src/*.js', traceur(), env('production', 'staging', uglify())
 ```
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
+* Investigate possiblity of writing an adapter so that grunt/gulp plugins can be used.
