@@ -6,7 +6,6 @@ var unlink = Promise.promisify(fs.unlink)
 var ensureDir = Promise.promisify(require('fs-extra').ensureDir)
 
 import { mapEvents } from '../stream'
-import { generateIdentitySourceMap } from '../sourceMap'
 
 export function writeEvent(basePath, event) {
   var { fileType } = event
@@ -25,11 +24,6 @@ export function writeEvent(basePath, event) {
   var promise = ensureDir(path.dirname(outputPath)).then(() => {
     return writeFile(outputPath, event.data)
   })
-
-  // TODO: attach this in glob plugin
-  if (! event.sourceMap && event.supportsSourceMap) {
-    event.sourceMap = generateIdentitySourceMap(event.fileType, event.path, event.data)
-  }
 
   if (event.sourceMap) {
     var mapPath = projectFile + '.map'
