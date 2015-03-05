@@ -1,21 +1,24 @@
 # sigh
 
+`Sigh isn't quite ready, check back in a few weeks`
+
 Sigh will be the best JavaScript asset pipeline! It combines the best features from all the best asset pipelines out there.
 
 * Inputs are based on simple glob expressions and the pipeline uses a simple tree structure, no more 500 line grunt files or verbose gulp files.
-* It uses Functional Reactive Programming via [bacon.js](https://baconjs.github.io/), your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs]).
 * Writing plugins is simple, especially when you can reuse the good bacon.js stuff.
-* Sigh can watch files for changes using the -w flag, caching results is made easy.
-* Support source maps at every stage of the pipeline like [plumber][plumber] and [gulp][gulp].
-* Caches all data in memory where possible rather than the filesystem like [gulp][gulp].
-* Easy to write plugins in a small number of lines of code like [gobble][gobble].
-* Support watching files and updating the pipeline as files change like [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins).
-* Most importantly, Sigh files have a really neat syntax like [plumber][plumber].
+* Uses Functional Reactive Programming via [bacon.js][bacon], your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs]).
+* Sigh can watch files for changes without a plugin, just use the `-w` flag. Due to the way Sigh's event stream work is never repeated, only work relating to the actual files changed is performed.
+* Support source maps at every stage of the pipeline: [plumber][plumber] and [gulp][gulp].
+* Caches all data in memory where possible rather than the filesystem: [gulp][gulp].
+* Easy to write plugins in a small number of lines of code: [gobble][gobble].
+* Support watching files and updating the pipeline as files change: [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins).
+* Most importantly, Sigh files have a really neat syntax: [plumber][plumber].
 
 [plumber]: https://github.com/plumberjs/plumber
 [gobble]: https://github.com/gobblejs/gobble
 [gulp]: https://github.com/gulpjs/gulp
 [rxjs]: https://github.com/Reactive-Extensions/RxJS.
+[bacon]: https://baconjs.github.io/
 
 ## Using sigh
 
