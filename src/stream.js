@@ -1,5 +1,5 @@
 import Promise from 'bluebird'
-var { Bacon } = require('baconjs')
+import Bacon from 'baconjs'
 
 /**
  * Adapt the events in a stream by running callback on each event in a new value.

@@ -1,7 +1,7 @@
 import path from 'path'
 import Promise from 'bluebird'
 import esprima from 'esprima'
-var { SourceMapGenerator }  = require('source-map')
+import { SourceMapGenerator } from 'source-map'
 import fs from 'fs'
 var writeFile = Promise.promisify(fs.writeFile)
 var unlink = Promise.promisify(fs.unlink)

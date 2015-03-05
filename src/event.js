@@ -1,4 +1,4 @@
-var { readFileSync } = require('fs')
+import { readFileSync } from 'fs'
 
 /**
  * Event passed through pipeline (which can be modified, concatenated, witheld etc. by any

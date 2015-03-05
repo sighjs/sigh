@@ -1,6 +1,6 @@
-var babel = require('babel')
 import path from 'path'
 import _ from 'lodash'
+var babel = require('babel') // not sure why have to do it this way for babel...
 
 import { mapEvents } from '../stream'
 

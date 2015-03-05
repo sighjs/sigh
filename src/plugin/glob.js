@@ -1,7 +1,7 @@
 import chokidar from 'chokidar'
 import glob from 'glob'
 import _ from 'lodash'
-var { Bacon } = require('baconjs'); // traceur is gone! maybe we can fix this now!
+import Bacon from 'baconjs'
 
 import Event from '../event'
 import { bufferingDebounce } from '../stream'
