@@ -6,12 +6,12 @@ Sigh will be the best JavaScript asset pipeline! It combines the best features f
 
 * Inputs are based on simple glob expressions and the pipeline uses a simple tree structure, no more 500 line grunt files or verbose gulp files.
 * Uses Functional Reactive Programming via [bacon.js][bacon], your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs]).
-* Sigh can watch files for changes without a plugin, just use the `-w` flag. Due to the way Sigh's event stream work is never repeated, only work relating to the actual files changed is performed.
 * Support source maps at every stage of the pipeline: [plumber][plumber] and [gulp][gulp].
 * Caches all data in memory where possible rather than the filesystem: [gulp][gulp].
 * Easy to write plugins in a small number of lines of code: [gobble][gobble].
 * Support watching files and updating the pipeline as files change: [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins).
 * Most importantly, Sigh files have a really neat syntax: [plumber][plumber].
+* Sigh can watch files for changes without a plugin, just use the `-w` flag. Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is sigh library code makes it simple.
 
 [plumber]: https://github.com/plumberjs/plumber
 [gobble]: https://github.com/gobblejs/gobble
