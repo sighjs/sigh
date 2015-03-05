@@ -137,8 +137,12 @@ all(
 ```
 
 ## TODO
-
-* Source files content should be embedded in the source maps. Not having this is pretty annoying.
-* sigh -w should watch Sigh.js file for changes in addition to the source files.
-* Conditional pipeline operations e.g. "sigh -e dev" might avoid minification to reduce build times during development.
+* concat plugin (and source map util: concatenate).
+* Event.prototype.applySourceMap
+* `sigh -w` should watch Sigh.js file for changes in addition to the source files.
+* Support `--environment/-e` flag:
+```javascript
+// uglify only invoked when sigh called with "-e staging" or "-e production"
+glob('src/*.js', traceur(), env('production', 'staging', uglify())
+```
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
