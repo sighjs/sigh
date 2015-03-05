@@ -14,8 +14,13 @@ export default class {
       this.data = fields.data !== undefined ? fields.data : readFileSync(this.path).toString()
     if (fields.basePath)
       this.basePath = fields.basePath
-    if (fields.sourceMap)
+    if (fields.sourceMap) {
       this.sourceMap = fields.sourceMap
+    }
+    else {
+      this.identitySourceMap = true
+      // TODO: construct identity source map
+    }
   }
 
   get fileType() {
@@ -23,7 +28,13 @@ export default class {
   }
 
   applySourceMap(sourceMap) {
-    this.sourceMap = this.sourceMap ? applySourceMap(this.sourceMap, sourceMap) : sourceMap
+    if (this.identitySourceMap) {
+      this.identitySourceMap = false
+      this.sourceMap = sourceMap
+    }
+    else {
+      this.sourceMap = applySourceMap(this.sourceMap, sourceMap)
+    }
   }
 
   get supportsSourceMap() {

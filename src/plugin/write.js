@@ -1,29 +1,12 @@
 import path from 'path'
 import Promise from 'bluebird'
-import esprima from 'esprima'
-import { SourceMapGenerator } from 'source-map'
 import fs from 'fs'
 var writeFile = Promise.promisify(fs.writeFile)
 var unlink = Promise.promisify(fs.unlink)
 var ensureDir = Promise.promisify(require('fs-extra').ensureDir)
 
 import { mapEvents } from '../stream'
-
-function generateIdentitySourceMap(sourceType, sourcePath, data) {
-  if (sourceType === 'js') {
-    var generator = new SourceMapGenerator({ file: path.basename(sourcePath) })
-    var tokens = esprima.tokenize(data, { loc: true })
-    tokens.forEach(function(token) {
-      var loc = token.loc.start
-      generator.addMapping({ generated: loc, original: loc, source: sourcePath })
-    })
-    return generator.toJSON()
-  }
-  else if (sourceType === 'css') {
-    // TODO:
-    return {}
-  }
-}
+import { generateIdentitySourceMap } from '../sourceMap'
 
 export function writeEvent(basePath, event) {
   var { fileType } = event
