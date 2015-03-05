@@ -39,7 +39,8 @@ module.exports = function(grunt) {
         grunt.log.error('\x07' + result.stderr)
       else if (code)
         grunt.log.error('\x07unknown error compiling sigh')
-      done()
+
+      done(code ? Error('failed compilation') : null)
     })
   }
 
