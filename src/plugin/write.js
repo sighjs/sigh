@@ -7,7 +7,7 @@ var writeFile = Promise.promisify(fs.writeFile)
 var unlink = Promise.promisify(fs.unlink)
 var ensureDir = Promise.promisify(require('fs-extra').ensureDir)
 
-import { mapEvents } from './stream'
+import { mapEvents } from '../stream'
 
 function generateIdentitySourceMap(sourceType, sourcePath, data) {
   if (sourceType === 'js') {

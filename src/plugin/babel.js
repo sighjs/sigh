@@ -2,7 +2,7 @@ var babel = require('babel')
 import path from 'path'
 import _ from 'lodash'
 
-import { mapEvents } from './stream'
+import { mapEvents } from '../stream'
 
 function compileEvent(opts, event) {
   if (event.type !== 'add' && event.type !== 'change')

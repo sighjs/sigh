@@ -6,10 +6,10 @@ import fse from 'fs-extra'
 var copy = Promise.promisify(fse.copy)
 var rm = Promise.promisify(fse.remove)
 
-require('chai').should()
-
-import glob from '../lib/glob'
 import Event from '../lib/event'
+import glob from '../lib/plugin/glob'
+
+require('chai').should()
 
 var FIXTURE_PATH = 'test/fixtures/simple-project'
 var TMP_PATH = 'test/tmp/glob'

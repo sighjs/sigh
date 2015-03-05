@@ -3,11 +3,11 @@ import _ from 'lodash'
 import rewire from 'rewire'
 import path from 'path'
 
-import all from './all'
-import concat from './concat'
-import glob from './glob'
-import babel from './babel'
-import write from './write'
+import all from './plugin/all'
+import concat from './plugin/concat'
+import glob from './plugin/glob'
+import babel from './plugin/babel'
+import write from './plugin/write'
 
 var plugins = { all, concat, glob, babel, write }
 

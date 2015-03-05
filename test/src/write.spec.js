@@ -6,10 +6,10 @@ var { Bacon } = require('baconjs')
 var { readFileSync, existsSync } = require('fs')
 var rm = Promise.promisify(fse.remove)
 
-require('chai').should()
-
 import Event from '../lib/event'
-import write from '../lib/write'
+import write from '../lib/plugin/write'
+
+require('chai').should()
 
 var TMP_PATH = 'test/tmp/write'
 var PROJ_PATH = 'subdir/file1.js'

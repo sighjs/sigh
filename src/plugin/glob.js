@@ -3,8 +3,8 @@ import glob from 'glob'
 import _ from 'lodash'
 var { Bacon } = require('baconjs'); // traceur is gone! maybe we can fix this now!
 
-import Event from './event'
-import { bufferingDebounce } from './stream'
+import Event from '../event'
+import { bufferingDebounce } from '../stream'
 
 var DEFAULT_DEBOUNCE = 500
 
