@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs'
+import { apply as applySourceMap } from './sourceMap'
 
 /**
  * Event passed through pipeline (which can be modified, concatenated, witheld etc. by any
@@ -10,9 +11,11 @@ export default class {
     this.type = fields.type
     this.path = fields.path
     if (this.type !== 'remove')
-      this.data = fields.data || readFileSync(this.path).toString()
+      this.data = fields.data !== undefined ? fields.data : readFileSync(this.path).toString()
     if (fields.basePath)
       this.basePath = fields.basePath
+    if (fields.sourceMap)
+      this.sourceMap = fields.sourceMap
   }
 
   get fileType() {
@@ -20,12 +23,7 @@ export default class {
   }
 
   applySourceMap(sourceMap) {
-    if (this.sourceMap) {
-      // TODO: apply source map
-    }
-    // else {
-    this.sourceMap = sourceMap
-    // }
+    this.sourceMap = this.sourceMap ? applySourceMap(this.sourceMap, sourceMap) : sourceMap
   }
 
   get supportsSourceMap() {

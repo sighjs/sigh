@@ -29,3 +29,30 @@ export function bufferingDebounce(stream, delay) {
     return copy
   })
 }
+
+/**
+ * Adapt a stream to forward the current state of the output tree as an object instead of events needed to modify that file. The object is of the form: { relativePath, event } where event is the most recent change/add event to happen to that path.
+ * @param {Bacon} stream Stream to coalesce.
+ */
+export function coalesceEvents(stream) {
+  var eventCache = {} // event by relative path
+
+  return stream.map(events => {
+    events.forEach(event => {
+      switch (event.type) {
+        case 'remove':
+          delete eventCache[event.projectPath]
+          break;
+        case 'change':
+          eventCache[event.projectPath] = event
+          break;
+        case 'add':
+          eventCache[event.projectPath] = event
+          break
+        default:
+          throw Error(`Bad event type ${event.type}`)
+      }
+    })
+    return eventCache
+  })
+}
