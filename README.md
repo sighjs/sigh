@@ -47,11 +47,11 @@ module.exports = function(pipelines) {
   ]
 }
 ```
-This pipeline would glob files matching src/\*.js and transpile them with babel, then concatenate that output together with the files matching vendor/\*.js followed by 'bootstrap.js' as the "all" and "glob" plugins preserve order. Finally the concatenated resource is uglified and written to the directory dist/assets.
+This pipeline would glob files matching `src/\*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/\*.js` followed by `bootstrap.js` as the `all` and `glob` plugins preserve order. Finally the concatenated resource is uglified and written to the directory dist/assets.
 
-Running "sigh -w" would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
+Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
-sigh plugins are injected into the variables defined at the top of the file. "all", "glob", "concat", "write" and "babel" are built-in (for now) whereas uglify is found by scanning package.json for dependency and devDependency entries of the format "sigh-\*".
+sigh plugins are injected into the variables defined at the top of the file. `all`, `glob`, `concat`, `write` and `babel` are built-in (for now) whereas uglify is found by scanning package.json for dependency and devDependency entries of the format `sigh-\*`.
 
 ### Running sigh
 
@@ -97,7 +97,7 @@ The first argument is used to pass information to the plugin, the subsequent arg
 
 Additionally `nextTreeIndex` can be used to pass the next tree index back. This can be used for plugins that need multiple tree indexes e.g. the glob operation uses one tree index per glob pattern.
 
-Assuming the plugin above is called "suffixer" it could be used in a Sighfile like:
+Assuming the plugin above is called `suffixer` it could be used in a Sighfile like:
 ```javascript
 module.exports = function(pipelines) {
   pipelines['js:all'] = [ glob('*.js'), suffixer('kittens'), write('build') ]
@@ -105,7 +105,7 @@ module.exports = function(pipelines) {
 ```
 
 The stream payload is an array of event objects, each event object contains the following fields:
-  * type: "add", "change", or "remove"
+  * type: `add`, `change`, or `remove`
   * path: path to source file.
   * sourceMap: source map as javascript object (can be empty if no transformations have taken place).
   * data: file content as string.
@@ -133,7 +133,7 @@ This causes the babel plugin to strip the first component from the file path to 
 ### glob
 
 The glob plugin takes a list of files as arguments but the first argument can be an object containing the following options:
-  * debounce: file changes are batched until they have settled for more than "debounce" milliseconds, this defaults to 500ms.
+  * debounce: file changes are batched until they have settled for more than `debounce` milliseconds, this defaults to 500ms.
   * basePath: restricts the glob to operate within basePath and also attaches the property to all resources (affecting their projectPath field).
 
 ```javascript
