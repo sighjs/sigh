@@ -10,6 +10,8 @@ export default class {
   constructor(fields) {
     this.type = fields.type
     this.path = fields.path
+    if (fields.opTreeIndex)
+      this.opTreeIndex = fields.opTreeIndex
 
     if (this.type !== 'remove')
       this.data = fields.data !== undefined ? fields.data : readFileSync(this.path).toString()

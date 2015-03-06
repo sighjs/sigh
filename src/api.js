@@ -3,6 +3,7 @@ import _ from 'lodash'
 import rewire from 'rewire'
 import path from 'path'
 
+import { pipelineToStream } from './stream'
 import all from './plugin/all'
 import concat from './plugin/concat'
 import glob from './plugin/glob'
@@ -67,24 +68,14 @@ function invokeHelper(opts) {
   })
 }
 
-function pipelineToStream(watch, pipeline) {
-  var firstOp = pipeline.shift()
-  var plugin = plugins[firstOp.pluginName]
-  var sourceStream = plugin.apply(this, [{ stream: null, watch }].concat(firstOp.args))
-
-  return _.reduce(pipeline, (stream, operation) => {
-    plugin = plugins[operation.pluginName]
-    return plugin.apply(this, [ { stream, watch } ].concat(operation.args))
-  }, sourceStream)
-}
-
 function injectPlugin(module, pluginName) {
-  if (! (pluginName in plugins))
+  var plugin = plugins[pluginName]
+  if (! plugin)
     throw new Error("Nonexistent plugin `" + pluginName + "'")
 
   try {
     var varName = pluginName.replace(/-/g, '_')
-    module.__set__(varName, (...args) => ({ pluginName, args }))
+    module.__set__(varName, (...args) => ({ plugin, args }))
   }
   catch (e) {
     throw new Error("Sigh.js needs `var " + pluginName + "' statement")

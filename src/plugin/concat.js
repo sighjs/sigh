@@ -11,7 +11,7 @@ export default function(op, outputPath, debounceDelay) {
   .debounce(debounceDelay || 500)
   .map(function(eventCache) {
     var data = '', sourceMaps = []
-    _.forEach(eventCache, event => {
+    _.sortBy(eventCache, 'opTreeIndex').forEach(event => {
       data += event.data
       // TODO: strip source map comment
 

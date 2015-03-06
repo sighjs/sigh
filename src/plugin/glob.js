@@ -1,7 +1,8 @@
 import chokidar from 'chokidar'
-import glob from 'glob'
 import _ from 'lodash'
 import Bacon from 'baconjs'
+import Promise from 'bluebird'
+var glob = Promise.promisify(require('glob'))
 
 import Event from '../event'
 import { bufferingDebounce } from '../stream'
@@ -13,10 +14,14 @@ export default function(op, ...patterns) {
   if (stream)
     throw Error('glob must be the first operation in a pipeline')
 
-  // the first pattern could be an option object
+  // the first argument could be an option object rather than a pattern
   var opts = typeof patterns[0] === 'object' ? patterns.shift() : {}
 
-  var newEvent = props => {
+  var { treeIndex = 1 } = op
+  op.nextTreeIndex = treeIndex + patterns.length
+
+  var newEvent = (type, { path, treeIndex }) => {
+    var props = { type, path, opTreeIndex: treeIndex }
     if (opts.basePath)
       props.basePath = opts.basePath
     return new Event(props)
@@ -24,24 +29,33 @@ export default function(op, ...patterns) {
 
   stream = Bacon.combineAsArray(
     patterns.map(
-      pattern => Bacon.fromNodeCallback(
-        glob,
-        opts.basePath ? opts.basePath + '/' + pattern : pattern
+      (pattern, idx) => Bacon.fromPromise(
+        glob(opts.basePath ? opts.basePath + '/' + pattern : pattern).then(
+          paths => paths.map(path => ({ path, treeIndex: treeIndex + idx }))
+        )
       )
     )
   )
   .map(_.flatten)
-  .map(files => files.map(file => newEvent({ type: 'add', path: file })))
+  .map(files => files.map(newEvent.bind(this, 'add')))
   .take(1)
 
   if (! op.watch)
     return stream
 
-  var watcher = chokidar.watch(patterns, { ignoreInitial: true })
+  var watchers = patterns.map(
+    pattern => chokidar.watch(pattern, { ignoreInitial: true })
+  )
 
   var updates = Bacon.mergeAll(
-    Bacon.fromEvent(watcher, 'add').map(path => newEvent({ type: 'add', path })),
-    Bacon.fromEvent(watcher, 'change').map(path => newEvent({ type: 'change', path }))
+    _.flatten(['add', 'change', 'remove'].map(type =>
+      watchers.map(
+        (watcher, idx) => Bacon.fromEvent(watcher, type).map(
+          path => newEvent(type, { path, treeIndex: treeIndex + idx })
+        )
+      )
+    ))
   )
+
   return stream.changes().concat(bufferingDebounce(updates, opts.debounce || DEFAULT_DEBOUNCE))
 }

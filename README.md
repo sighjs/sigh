@@ -31,7 +31,7 @@ Install sigh in your project:
 npm install sigh
 ```
 
-Write a file called "Sigh.js" and put it in the root of your project:
+Write a file called `Sigh.js` and put it in the root of your project:
 ```javascript
 var all, glob, concat, write, babel, uglify
 
@@ -89,6 +89,13 @@ module.exports = function(operation, text) {
   })
 }
 ```
+The first argument is used to pass information to the plugin, the subsequent arguments are passed via the `Sigh.js` file. This argument has the following fields:
+
+ * stream: Bacon.js stream to adapt.
+ * treeIndex: depth-first index of operator in pipeline tree.
+ * watch: true if and only if the `-w` flag was used.
+
+Additionally `nextTreeIndex` can be used to pass the next tree index back. This can be used for plugins that need multiple tree indexes e.g. the glob operation uses one tree index per glob pattern.
 
 Assuming the plugin above is called "suffixer" it could be used in a Sighfile like:
 ```javascript
@@ -105,6 +112,7 @@ The stream payload is an array of event objects, each event object contains the 
   * fileType: filename extension.
   * basePath: optional base directory containing resource.
   * projectPath: path with basePath stripped off.
+  * opTreeIndex: depth-first index (within asset pipeline tree) of the source operator for this event.
 
 The first stream value will contain all source files, subsequent values will contain change events will be debounced and buffered.
 
@@ -142,7 +150,7 @@ all(
 ## TODO
 * concat plugin (and source map util: concatenate).
 * Event.prototype.applySourceMap
-* `sigh -w` should watch Sigh.js file for changes in addition to the source files.
+* `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Support `--environment/-e` flag:
 ```javascript
 // uglify only invoked when sigh called with "-e staging" or "-e production"

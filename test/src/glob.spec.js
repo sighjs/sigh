@@ -23,14 +23,19 @@ describe('glob plugin', () => {
     return glob({}, {}, FIXTURE_PATH + '/*.js').toPromise().then(updates => {
       updates.length.should.equal(2)
       _.pluck(updates, 'projectPath').sort().should.eql(FIXTURE_FILES)
-      updates.forEach(file => { file.type.should.equal('add') })
+      updates.forEach(file => {
+        file.type.should.equal('add')
+        file.opTreeIndex.should.equal(1)
+      })
     })
   })
 
   it('globs a wildcard using the basePath option', () => {
-    return glob({}, { basePath: 'test/fixtures/simple-project' }, '*.js')
+    var opData = { treeIndex: 4 }
+    return glob(opData, { basePath: 'test/fixtures/simple-project' }, '*.js')
     .toPromise()
     .then(updates => {
+      opData.nextTreeIndex.should.equal(5)
       updates.length.should.equal(2)
       updates[0].projectPath.should.equal('file1.js')
       updates[1].projectPath.should.equal('file2.js')
@@ -38,11 +43,15 @@ describe('glob plugin', () => {
   })
 
   it('globs two wildcards', () => {
-    return glob({}, {}, FIXTURE_PATH + '/*1.js', FIXTURE_PATH + '/*2.js')
+    var opData = { treeIndex: 1 }
+    return glob(opData, {}, FIXTURE_PATH + '/*1.js', FIXTURE_PATH + '/*2.js')
     .toPromise()
     .then(updates => {
+      opData.nextTreeIndex.should.equal(3)
       updates.length.should.equal(2)
       _.pluck(updates, 'path').sort().should.eql(FIXTURE_FILES)
+      updates[0].opTreeIndex.should.equal(1)
+      updates[1].opTreeIndex.should.equal(2)
       updates.forEach(file => { file.type.should.equal('add') })
     })
   })
@@ -55,7 +64,8 @@ describe('glob plugin', () => {
       return new Promise(function(resolve) {
         var nUpdates = 0
         var files = [ TMP_PATH + '/file1.js', TMP_PATH + '/file2.js' ]
-        glob({ watch: true }, { debounce: 200 }, TMP_PATH + '/*.js').onValue(updates => {
+        glob({ watch: true, treeIndex: 4 }, { debounce: 200 }, TMP_PATH + '/*.js')
+        .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
             _.delay(fs.appendFile, 20, files[0], 'var file1line2 = 24;\n')
@@ -63,8 +73,8 @@ describe('glob plugin', () => {
           }
           else {
             updates.should.eql([
-              new Event({ type: 'change', path: files[0] }),
-              new Event({ type: 'change', path: files[1] })
+              new Event({ type: 'change', path: files[0], opTreeIndex: 4 }),
+              new Event({ type: 'change', path: files[1], opTreeIndex: 4 })
             ])
             resolve()
           }

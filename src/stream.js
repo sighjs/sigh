@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
@@ -31,7 +32,7 @@ export function bufferingDebounce(stream, delay) {
 }
 
 /**
- * Adapt a stream to forward the current state of the output tree as an object instead of events needed to modify that file. The object is of the form: { relativePath, event } where event is the most recent change/add event to happen to that path.
+ * Adapt a stream to forward the current state of the output tree as an array of Event objects relating to the most recent event for each currently existing tree path (event type will be "add" or "change").
  * @param {Bacon} stream Stream to coalesce.
  */
 export function coalesceEvents(stream) {
@@ -53,6 +54,26 @@ export function coalesceEvents(stream) {
           throw Error(`Bad event type ${event.type}`)
       }
     })
-    return eventCache
+
+    return _.values(eventCache)
   })
+}
+
+/**
+ * Turn a pipeline into a stream.
+ * @param {Boolean} watch Whether to pass "watch" to plugins (i.e. sigh -w was used).
+ * @param {Array} pipeline Array of operations representing pipeline.
+ * @param {Number} treeIndex First tree index, defaulting to 1.
+ */
+export function pipelineToStream(watch, pipeline, treeIndex = 1) {
+  var firstOp = pipeline.shift()
+  var { plugin } = firstOp
+  var opData = { stream: null, watch, treeIndex }
+  var sourceStream = plugin.apply(this, [ opData ].concat(firstOp.args))
+
+  return _.reduce(pipeline, (stream, operation) => {
+    var { plugin } = operation
+    opData = { stream, watch, treeIndex: opData.nextTreeIndex || opData.treeIndex + 1 }
+    return plugin.apply(this, [ opData ].concat(operation.args))
+  }, sourceStream)
 }

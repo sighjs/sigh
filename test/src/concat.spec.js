@@ -10,6 +10,7 @@ describe('concat plugin', () => {
   var makeEvent = num => new Event({
     path: `file${num}.js`,
     type: 'add',
+    opTreeIndex: num,
     data: `var a${num} = ${num}`
   })
 
@@ -30,6 +31,16 @@ describe('concat plugin', () => {
     return concat({ stream }, 'output.js', 10).toPromise().then(events => {
       events.length.should.equal(1)
       events[0].data.should.equal('var a1 = 1\nvar a2 = 2\nvar a3 = 3\n')
+    })
+  })
+
+  it('preserves treeIndex order', () => {
+    var stream = Bacon.fromArray([
+      [2, 1].map(num => makeEvent(num)), // add two files
+    ])
+
+    return concat({ stream }, 'output.js', 10).toPromise().then(events => {
+      events[0].data.should.equal('var a1 = 1\nvar a2 = 2\n')
     })
   })
 
