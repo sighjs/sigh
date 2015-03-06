@@ -36,7 +36,7 @@ Write a file called `Sigh.js` and put it in the root of your project:
 var all, glob, concat, write, babel, uglify
 
 module.exports = function(pipelines) {
-  pipelines['js:all'] = [
+  pipelines['js'] = [
     all(
       [ glob('src/*.js'), babel() ],
       glob('vendor/*.js', 'bootstrap.js')
@@ -47,7 +47,7 @@ module.exports = function(pipelines) {
   ]
 }
 ```
-This pipeline would glob files matching `src/*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/*.js` followed by `bootstrap.js` as the `concat` plugins sorts files by the depth-first index of the source stream. The concatenated resource is uglified but only during builds for `production` and `staging` environments. The resulting file is written to the directory dist/assets.
+This pipeline would glob files matching `src/*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/*.js` followed by `bootstrap.js` as the `concat` plugins sorts files by the depth-first index of the source stream. The concatenated resource is uglified but only during builds for `production` and `staging` environments. The resulting file is written to the directory `dist/assets`.
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
@@ -65,9 +65,9 @@ Compile all pipelines and then watch files for changes compiling those that have
 % sigh -w
 ```
 
-Compile the single specified pipeline:
+Compile the specified pipeline (multiple can be specified):
 ```
-% sigh js:all
+% sigh js
 ```
 
 ## Writing sigh plugins
@@ -100,7 +100,7 @@ Additionally `nextTreeIndex` can be used to pass the next tree index back. This 
 Assuming the plugin above is called `suffixer` it could be used in a Sighfile like:
 ```javascript
 module.exports = function(pipelines) {
-  pipelines['js:all'] = [ glob('*.js'), suffixer('kittens'), write('build') ]
+  pipelines['js'] = [ glob('*.js'), suffixer('kittens'), write('build') ]
 }
 ```
 
@@ -118,38 +118,41 @@ The first stream value will contain all source files, subsequent values will con
 
 # Built-in plugins
 
+## glob
+
+The glob plugin takes a list of glob expressions as arguments.
+
+```javascript
+module.exports = function(pipelines) {
+  pipelines['js'] = [
+    glob('test/*.js', 'src/*.js', 'bootstrap.js'),
+    write('build')
+  ]
+}
+```
+  * debounce: file changes are batched until they have settled for more than `debounce` milliseconds, this defaults to 500ms.
+```javascript
+glob({ debounce: 200 }, 'lib/*.js')
+```
+  * basePath: restricts the glob to operate within basePath and also attaches the property to all resources (affecting their projectPath field).
+```javascript
+glob({ basePath: 'src' }, '*.js') // similar to glob('src/*.js')
+```
+
 ## babel
 
 Create a pipeline that transpiles the given source files using babel:
 ```javascript
 module.exports = function(pipelines) {
-  pipelines['js:all'] = [ glob('*.js'), babel() ]
+  pipelines['js'] = [ glob('*.js'), babel() ]
 }
 ```
 
-### options
 * getModulePath - A function which turns the relative file path into the module path.
 ```javascript
 babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 ```
 * modules - A string denoting the type of modules babel should output e.g. amd/common, see [the babel API](https://babeljs.io/docs/usage/options/).
-
-## glob
-
-The glob plugin takes a list of files as arguments but the first argument can be an object containing the following options:
-  * debounce: file changes are batched until they have settled for more than `debounce` milliseconds, this defaults to 500ms.
-  * basePath: restricts the glob to operate within basePath and also attaches the property to all resources (affecting their projectPath field).
-
-```javascript
-all(
-  // Use the default debounce interval of 500ms
-  glob('test/*.js'),
-  // Like glob('src/*.js') but adds basePath to resources
-  glob({ basePath: 'src' }, '*.js'),
-  // Changes to files matching lib/*.js less than 200ms apart will be buffered together
-  glob({ debounce: 200 }, 'lib/*.js')
-)
-```
 
 # TODO
 * concat plugin (and source map util: concatenate).
