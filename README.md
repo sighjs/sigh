@@ -114,7 +114,7 @@ The stream payload is an array of event objects, each event object contains the 
   * projectPath: path with basePath stripped off.
   * opTreeIndex: depth-first index (within asset pipeline tree) of the source operator for this event.
 
-The first stream value will contain all source files, subsequent values will contain change events will be debounced and buffered.
+The first stream value always contains an event of type `add` for every source file.
 
 # Built-in plugins
 
