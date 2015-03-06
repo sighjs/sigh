@@ -42,12 +42,12 @@ module.exports = function(pipelines) {
       glob('vendor/*.js', 'bootstrap.js')
     ),
     concat('combined'),
-    uglify(),
+    env(uglify(), 'production', 'staging'),
     write('dist/assets')
   ]
 }
 ```
-This pipeline would glob files matching `src/*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/*.js` followed by `bootstrap.js` as the `all` and `glob` plugins preserve order. Finally the concatenated resource is uglified and written to the directory dist/assets.
+This pipeline would glob files matching `src/*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/*.js` followed by `bootstrap.js` as the `concat` plugins sorts files by the depth-first index of the source stream. The concatenated resource is uglified but only during builds for `production` and `staging` environments. The resulting file is written to the directory dist/assets.
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
@@ -116,21 +116,25 @@ The stream payload is an array of event objects, each event object contains the 
 
 The first stream value will contain all source files, subsequent values will contain change events will be debounced and buffered.
 
-## Plugin options
+# Built-in plugins
 
-Some plugins accept an object as their only/first parameter to allow customisation, e.g.:
+## babel
 
+Create a pipeline that transpiles the given source files using babel:
+```javascript
+module.exports = function(pipelines) {
+  pipelines['js:all'] = [ glob('*.js'), babel() ]
+}
+```
+
+### options
+* getModulePath - A function which turns the relative file path into the module path.
 ```javascript
 babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 ```
-This causes the babel plugin to strip the first component from the file path to create the module path.
-
-### babel
-
-* getModulePath - A function which turns the relative file path into the module path.
 * modules - A string denoting the type of modules babel should output e.g. amd/common, see [the babel API](https://babeljs.io/docs/usage/options/).
 
-### glob
+## glob
 
 The glob plugin takes a list of files as arguments but the first argument can be an object containing the following options:
   * debounce: file changes are batched until they have settled for more than `debounce` milliseconds, this defaults to 500ms.
@@ -147,14 +151,10 @@ all(
 )
 ```
 
-## TODO
+# TODO
 * concat plugin (and source map util: concatenate).
 * Event.prototype.applySourceMap
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Support `--environment/-e` flag:
-```javascript
-// uglify only invoked when sigh called with "-e staging" or "-e production"
-glob('src/*.js', traceur(), env('production', 'staging', uglify())
-```
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
 * Investigate possiblity of writing an adapter so that grunt/gulp plugins can be used.
