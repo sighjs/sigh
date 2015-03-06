@@ -47,11 +47,11 @@ module.exports = function(pipelines) {
   ]
 }
 ```
-This pipeline would glob files matching `src/\*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/\*.js` followed by `bootstrap.js` as the `all` and `glob` plugins preserve order. Finally the concatenated resource is uglified and written to the directory dist/assets.
+This pipeline would glob files matching `src/*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/*.js` followed by `bootstrap.js` as the `all` and `glob` plugins preserve order. Finally the concatenated resource is uglified and written to the directory dist/assets.
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
-sigh plugins are injected into the variables defined at the top of the file. `all`, `glob`, `concat`, `write` and `babel` are built-in (for now) whereas uglify is found by scanning package.json for dependency and devDependency entries of the format `sigh-\*`.
+sigh plugins are injected into the variables defined at the top of the file. `all`, `glob`, `concat`, `write` and `babel` are built-in (for now) whereas uglify is found by scanning package.json for dependency and devDependency entries of the format `sigh-*`.
 
 ### Running sigh
 
