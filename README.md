@@ -11,7 +11,7 @@ Sigh will be the best JavaScript asset pipeline! It combines the best features f
 * Easy to write plugins in a small number of lines of code: [gobble][gobble].
 * Support watching files and updating the pipeline as files change: [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins).
 * Most importantly, Sigh files have a really neat syntax: [plumber][plumber].
-* Sigh can watch files for changes without a plugin, just use the `-w` flag. Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is sigh library code makes it simple.
+* Sigh can watch files for changes without a plugin, just use the `-w` flag. Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is Sigh handles it transparently. Library code available to plugin writers makes it simple to handle caching in cases where it is necessary.
 
 [plumber]: https://github.com/plumberjs/plumber
 [gobble]: https://github.com/gobblejs/gobble
@@ -179,4 +179,4 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Support `--environment/-e` flag:
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
-* Investigate possiblity of writing an adapter so that grunt/gulp plugins can be used.
+* Investigate possibility of writing an adapter so that grunt/gulp plugins can be used.
