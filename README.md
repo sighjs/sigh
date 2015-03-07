@@ -152,6 +152,7 @@ pipelines['js'] = [
 ]
 ```
 In this example the order of the files in `output.js` is determined by tree order:
+
 1. The files in `src/*.js` compiled by babel.
 2. The file `loader.js`.
 3. The file `bootstrap.js`.
