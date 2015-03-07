@@ -5,24 +5,29 @@ import { apply as applySourceMap, generateIdentitySourceMap } from './sourceMap'
  * Event passed through pipeline (which can be modified, concatenated, witheld etc. by any
  * pipeline operation), containing the following parameters:
  *   type: add/remove/change: Represents how the file has changed since it was last seen, the first event will always be an array containing an "add" of all files in the project.
+ *   sourceData: data of first source-producing operation.
+ *   data: current data in event (possibly transformed one or more times).
  */
 export default class {
   constructor(fields) {
     this.type = fields.type
     this.path = fields.path
+
     if (fields.opTreeIndex)
       this.opTreeIndex = fields.opTreeIndex
-
-    // setting the data here can also add a source map
-    if (this.type !== 'remove')
-      this.data = fields.data !== undefined ? fields.data : readFileSync(this.path).toString()
 
     if (fields.basePath)
       this.basePath = fields.basePath
 
-    if (fields.sourceMap) {
+    // setting the data here can also add a source map
+    if (this.type === 'remove')
+      return
+
+    this.data = fields.data !== undefined ? fields.data : readFileSync(this.path).toString()
+    this.sourceData = this.data
+
+    if (fields.sourceMap)
       this.applySourceMap(fields.sourceMap)
-    }
   }
 
   // does this need to be a property?
@@ -53,8 +58,10 @@ export default class {
   }
 
   get sourceMap() {
-    if (! this._sourceMap)
+    if (! this._sourceMap) {
       this._sourceMap = generateIdentitySourceMap(this.fileType, this.path, this.data)
+      this._sourceMap.sourcesContent = [ this.sourceData ]
+    }
 
     return this._sourceMap
   }

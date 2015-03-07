@@ -28,7 +28,7 @@ describe('write plugin', () => {
       .should.equal(data + '\n//# sourceMappingURL=file1.js.map')
 
       readFileSync(TMP_FILE + '.map').toString()
-      .should.equal('{"version":3,"sources":["../../../../subdir/file1.js"],"names":[],"mappings":"AAAA,IAAI","file":"file1.js"}')
+      .should.equal('{"version":3,"sources":["../../../../subdir/file1.js"],"names":[],"mappings":"AAAA,IAAI","file":"file1.js","sourcesContent":["var pump\\n"]}')
     })
   })
 
@@ -46,7 +46,7 @@ describe('write plugin', () => {
       .should.equal(data + '\n//# sourceMappingURL=file1.js.map')
 
       readFileSync(tmpFile + '.map').toString()
-      .should.equal('{"version":3,"sources":["../../../subdir/file1.js"],"names":[],"mappings":"AAAA,KAAK","file":"file1.js"}')
+      .should.equal('{"version":3,"sources":["../../../subdir/file1.js"],"names":[],"mappings":"AAAA,KAAK","file":"file1.js","sourcesContent":["var  pumpbaby\\n"]}')
     })
   })
 
