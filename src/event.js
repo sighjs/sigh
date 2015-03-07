@@ -59,6 +59,7 @@ export default class {
 
   get sourceMap() {
     if (! this._sourceMap) {
+      this._hasIdentitySourceMap = true
       this._sourceMap = generateIdentitySourceMap(this.fileType, this.path, this.data)
       this._sourceMap.sourcesContent = [ this.sourceData ]
     }
@@ -67,12 +68,16 @@ export default class {
   }
 
   applySourceMap(sourceMap) {
-    if (! this.sourceMap) {
+    if (this._hasIdentitySourceMap) {
+      this._sourceMap = null
+      delete this._hasIdentitySourceMap
+    }
+
+    var { _sourceMap } = this
+    if (! _sourceMap)
       this._sourceMap = sourceMap
-    }
-    else {
-      this._sourceMap = applySourceMap(this.sourceMap, sourceMap)
-    }
+    else
+      this._sourceMap = applySourceMap(_sourceMap, sourceMap)
   }
 
   get supportsSourceMap() {

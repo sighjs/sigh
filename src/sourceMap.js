@@ -8,8 +8,13 @@ import path from 'path'
  * @return {Object} transformed source map
  */
 export function apply(sourceMap, applicator) {
-  // TODO: ...
-  return applicator
+  var cons = new SourceMapConsumer(sourceMap)
+  var applCons = new SourceMapConsumer(applicator)
+
+  var generator = SourceMapGenerator.fromSourceMap(applCons)
+  generator.applySourceMap(cons, applicator.sources[0])
+
+  return generator.toJSON()
 }
 
 /**
@@ -66,4 +71,26 @@ export function generateIdentitySourceMap(sourceType, sourcePath, data) {
     // TODO:
     return {}
   }
+}
+
+/**
+ * Like indexOf but return source map style line/column data.
+ * @return {Object} { line, column } of matching element or null if not found.
+ */
+export function positionOf(haystack, needle) {
+  var index = haystack.indexOf(needle)
+  if (index === -1)
+    return null
+
+  var line = 1, lineOffset = 0, nextLineOffset = haystack.indexOf('\n')
+  for(;;) {
+    if (nextLineOffset > index)
+      break
+
+    lineOffset = nextLineOffset
+    ++line
+    nextLineOffset = haystack.indexOf('\n', lineOffset + 1)
+  }
+
+  return { line, column: index - lineOffset - 1 } // first column is 0
 }
