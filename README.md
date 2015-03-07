@@ -157,7 +157,7 @@ In this example the order of the files in `output.js` is determined by tree orde
 2. The file `loader.js`.
 3. The file `bootstrap.js`.
 
-You can see here the glob plugin uses multiple tree indexes and assigns them to events according to the index of the glob pattern that produces them.
+You can see here that `glob` uses multiple tree indexes and assigns them to events according to the index of the pattern that produced them.
 
 ## babel
 
