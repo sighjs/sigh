@@ -175,7 +175,6 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 * modules - A string denoting the type of modules babel should output e.g. amd/common, see [the babel API](https://babeljs.io/docs/usage/options/).
 
 # TODO
-* concat plugin (and source map util: concatenate).
 * Event.prototype.applySourceMap
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Support `--environment/-e` flag:
