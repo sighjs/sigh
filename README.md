@@ -176,6 +176,7 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 
 # TODO
 * Event.prototype.applySourceMap
+* `all` plugin.
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Support `--environment/-e` flag:
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.

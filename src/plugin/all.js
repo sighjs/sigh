@@ -1,4 +1,4 @@
-export default function(op, opts) {
-  // TODO: adapt stream
+export default function(op, ...streams) {
+  // TODO: pass this into every stream, debounce etc.
   return op.stream
 }
