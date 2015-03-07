@@ -16,6 +16,16 @@ describe('stream helper module', () => {
     return stream.toPromise().then(value => value.should.equal(2))
   })
 
+  it('pipelineToStream should create stream from stream, passing watch option', () => {
+    var stream = pipelineToStream(true, { plugin(op) {
+      op.watch.should.be.true
+      should.not.exist(op.stream)
+      return Bacon.once(420)
+    } })
+
+    return stream.toPromise().then(value => value.should.equal(420))
+  })
+
   it('pipelineToStream should pass treeIndex and observe nextTreeIndex', () => {
     pipelineToStream(false, [
       { plugin(op) { op.treeIndex.should.equal(1) } },

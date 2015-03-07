@@ -64,16 +64,21 @@ export function coalesceEvents(stream) {
  * @param {Boolean} watch Whether to pass "watch" to plugins (i.e. sigh -w was used).
  * @param {Array} pipeline Array of operations representing pipeline.
  * @param {Number} treeIndex First tree index, defaulting to 1.
+ * @return {Bacon} stream that results from combining all operations in the pipeline.
  */
 export function pipelineToStream(watch, pipeline, treeIndex = 1) {
-  var firstOp = pipeline.shift()
+  var multipleOps = pipeline instanceof Array
+  var firstOp = multipleOps ? pipeline.shift() : pipeline
   var { plugin } = firstOp
   var opData = { stream: null, watch, treeIndex }
-  var sourceStream = plugin.apply(this, [ opData ].concat(firstOp.args))
+  var stream = plugin.apply(this, [ opData ].concat(firstOp.args))
+
+  if (! multipleOps)
+    return stream
 
   return _.reduce(pipeline, (stream, operation) => {
     var { plugin } = operation
     opData = { stream, watch, treeIndex: opData.nextTreeIndex || opData.treeIndex + 1 }
     return plugin.apply(this, [ opData ].concat(operation.args))
-  }, sourceStream)
+  }, stream)
 }
