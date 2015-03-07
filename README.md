@@ -140,7 +140,7 @@ glob({ basePath: 'src' }, '*.js') // similar to glob('src/*.js')
 ```
 
 ## concat
-The concat plugin concatenates all resources together into one file. The files are ordered by the tree index of the stream operator that produced them.
+The concat plugin concatenates all resources together into one file. The order in which the files are concatenated corresponds to the depth-first index within the tree of the plugin that produced the original source content of that file.
 
 ```javascript
 pipelines['js'] = [
