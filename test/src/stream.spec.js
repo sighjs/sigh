@@ -26,6 +26,19 @@ describe('stream helper module', () => {
     return stream.toPromise().then(value => value.should.equal(420))
   })
 
+  it('pipelineToStream should pass arguments to plugin', () => {
+    var stream = pipelineToStream(false, {
+      plugin(op, arg1, arg2) {
+        op.watch.should.be.false
+        should.not.exist(op.stream)
+        return Bacon.once(arg1 + arg2)
+      },
+      args: [ 7, 11 ]
+    })
+
+    return stream.toPromise().then(value => value.should.equal(18))
+  })
+
   it('pipelineToStream should pass treeIndex and observe nextTreeIndex', () => {
     pipelineToStream(false, [
       { plugin(op) { op.treeIndex.should.equal(1) } },
