@@ -4,8 +4,6 @@ import Bacon from 'baconjs'
 import Event from '../lib/event'
 import babel from '../lib/plugin/babel'
 
-require('chai').should()
-
 describe('babel plugin', () => {
   it('compiles a single add event', () => {
     var data = 'var pump = () => "pumper"'

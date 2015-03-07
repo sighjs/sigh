@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     mochaTest: {
       test: { src: 'test/*.js' },
       options: {
+        require: 'test/bootstrap.js',
         reporter: 'spec',
         clearRequireCache: true
       },

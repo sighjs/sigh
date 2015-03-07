@@ -9,8 +9,6 @@ var rm = Promise.promisify(fse.remove)
 import Event from '../lib/event'
 import glob from '../lib/plugin/glob'
 
-require('chai').should()
-
 var FIXTURE_PATH = 'test/fixtures/simple-project'
 var TMP_PATH = 'test/tmp/glob'
 var FIXTURE_FILES = [

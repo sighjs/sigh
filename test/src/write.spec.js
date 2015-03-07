@@ -9,8 +9,6 @@ var rm = Promise.promisify(fse.remove)
 import Event from '../lib/event'
 import write from '../lib/plugin/write'
 
-require('chai').should()
-
 var TMP_PATH = 'test/tmp/write'
 var PROJ_PATH = 'subdir/file1.js'
 var TMP_FILE = TMP_PATH + '/' + PROJ_PATH

@@ -5,8 +5,6 @@ import Event from '../lib/event'
 import concat from '../lib/plugin/concat'
 import { SourceMapConsumer } from 'source-map'
 
-require('chai').should()
-
 describe('concat plugin', () => {
   var makeEvent = num => new Event({
     path: `file${num}.js`,
