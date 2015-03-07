@@ -11,20 +11,26 @@ export default function(op, outputPath, debounceDelay) {
   .debounce(debounceDelay || 500)
   .map(function(eventCache) {
     var data = '', sourceMaps = []
-    _.sortBy(eventCache, 'opTreeIndex').forEach(event => {
+    var offsets = [0], cumOffset = 0
+    var events = _.sortBy(eventCache, 'opTreeIndex')
+    events.forEach((event, idx) => {
+      var offset = event.lineCount - 1
       data += event.data
-      // TODO: strip source map comment
-
-      if (data[data.length - 1] !== '\n')
+      if (data[data.length - 1] !== '\n') {
         data += '\n'
+        ++offset
+      }
       sourceMaps.push(event.sourceMap)
+
+      if (idx < events.length - 1)
+        offsets.push(cumOffset += offset)
     })
 
+    var sourceMap = concatSourceMaps(sourceMaps, offsets)
+    sourceMap.file = outputPath
+
     var ret = [ new Event({
-      type: fileExists ? 'change' : 'add',
-      path: outputPath,
-      data,
-      sourceMap: concatSourceMaps(sourceMaps)
+      type: fileExists ? 'change' : 'add', path: outputPath, data, sourceMap
     }) ]
     fileExists = true
     return ret

@@ -41,7 +41,7 @@ module.exports = function(pipelines) {
       [ glob('src/*.js'), babel() ],
       glob('vendor/*.js', 'bootstrap.js')
     ),
-    concat('combined'),
+    concat('combined.js'),
     env(uglify(), 'production', 'staging'),
     write('dist/assets')
   ]
@@ -138,6 +138,25 @@ glob({ debounce: 200 }, 'lib/*.js')
 ```javascript
 glob({ basePath: 'src' }, '*.js') // similar to glob('src/*.js')
 ```
+
+## concat
+The concat plugin concatenates all resources together into one file. The files are ordered by the tree index of the stream operator that produced them.
+
+```javascript
+pipelines['js'] = [
+  all(
+    [ glob('src/*.js'), babel() ],
+    glob('loader.js', 'bootstrap.js')
+  ),
+  concat('output.js')
+]
+```
+In this example the order of the files in `output.js` is determined by tree order:
+1. The files in `src/*.js` compiled by babel.
+2. The file `loader.js`.
+3. The file `bootstrap.js`.
+
+You can see here the glob plugin uses multiple tree indexes and assigns them to events according to the index of the glob pattern that produces them.
 
 ## babel
 

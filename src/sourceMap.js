@@ -1,5 +1,5 @@
 import esprima from 'esprima'
-import { SourceMapGenerator } from 'source-map'
+import { SourceMapGenerator, SourceMapConsumer } from 'source-map'
 import path from 'path'
 
 /**
@@ -14,11 +14,37 @@ export function apply(sourceMap, applicator) {
 
 /**
  * @param {Array} sourceMaps Array of source maps to concatenate.
- * @return {Object} Concatenated source maps
+ * @param {Array} offsets Contains the offset within the concatenated map for each source map (the array must be the same length as the sourceMaps parameter).
+ * @return {Object} Concatenated source maps (you may wish to set the "file" property)
  */
-export function concatenate(sourceMaps) {
-  // TODO:
-  return sourceMaps[0]
+export function concatenate(sourceMaps, offsets) {
+  var generator = new SourceMapGenerator()
+  var consumers = sourceMaps.map(sourceMap => new SourceMapConsumer(sourceMap))
+
+  // TODO: look for content collisions in consumers?
+  consumers.forEach((consumer, sourceMapIdx) => {
+    consumer.sourcesContent.forEach((content, i) => {
+      generator.setSourceContent(consumer.sources[i], content)
+    })
+
+    var offset = offsets[sourceMapIdx]
+    consumer.eachMapping(mapping => {
+      generator.addMapping({
+          generated: {
+              line: mapping.generatedLine + offset,
+              column: mapping.generatedColumn
+          },
+          original: {
+              line: mapping.originalLine,
+              column: mapping.originalColumn
+          },
+          source: mapping.source,
+          name: mapping.name
+      })
+    })
+  })
+
+  return generator.toJSON()
 }
 
 /**

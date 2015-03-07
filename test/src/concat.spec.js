@@ -3,6 +3,7 @@ var { Bacon } = require('baconjs')
 
 import Event from '../lib/event'
 import concat from '../lib/plugin/concat'
+import { SourceMapConsumer } from 'source-map'
 
 require('chai').should()
 
@@ -19,10 +20,15 @@ describe('concat plugin', () => {
 
     return concat({ stream }, 'output.js', 10).toPromise().then(events => {
       events.length.should.equal(1)
-      var { data } = events[0]
+      var { data, sourceMap } = events[0]
       data.should.equal('var a1 = 1\nvar a2 = 2\nvar a3 = 3\n')
 
-      // TODO: verify source map queries
+      var consumer = new SourceMapConsumer(sourceMap)
+      var varPos = [1, 2, 3].map(line => consumer.originalPositionFor({ line, column: 0 }))
+      varPos.forEach((pos, idx) => {
+        pos.line.should.equal(1)
+        pos.source.should.equal(`file${idx + 1}.js`)
+      })
     })
   })
 
@@ -36,7 +42,7 @@ describe('concat plugin', () => {
 
   it('preserves treeIndex order', () => {
     var stream = Bacon.fromArray([
-      [2, 1].map(num => makeEvent(num)), // add two files
+      [2, 1].map(num => makeEvent(num)), // first file in event array has higher tree index
     ])
 
     return concat({ stream }, 'output.js', 10).toPromise().then(events => {
