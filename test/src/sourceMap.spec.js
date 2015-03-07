@@ -1,4 +1,5 @@
-require('chai').should()
+var should = require('chai').should()
+
 var { Bacon } = require('baconjs')
 import { SourceMapConsumer } from 'source-map'
 import path from 'path'
@@ -25,7 +26,7 @@ describe('sourceMap helper module', () => {
 
     it('returns null for failed match', () => {
       var pos = positionOf('111\n222\n3a\n14', 'b')
-      // TODO: test is null, chai website is down right now
+      should.not.exist(pos)
     })
   })
 
