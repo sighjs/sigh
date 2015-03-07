@@ -2,7 +2,7 @@ import _ from 'lodash'
 import fse from 'fs-extra'
 import fs from 'fs'
 import Promise from 'bluebird'
-var { Bacon } = require('baconjs')
+import Bacon from 'baconjs'
 var { readFileSync, existsSync } = require('fs')
 var rm = Promise.promisify(fse.remove)
 

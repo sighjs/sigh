@@ -1,6 +1,6 @@
 var should = require('chai').should()
 
-var { Bacon } = require('baconjs')
+import Bacon from 'baconjs'
 import { SourceMapConsumer } from 'source-map'
 import path from 'path'
 

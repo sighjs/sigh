@@ -1,5 +1,5 @@
 import _ from 'lodash'
-var { Bacon } = require('baconjs')
+import Bacon from 'baconjs'
 
 import Event from '../lib/event'
 import concat from '../lib/plugin/concat'
