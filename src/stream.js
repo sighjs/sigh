@@ -43,10 +43,10 @@ export function coalesceEvents(stream) {
       switch (event.type) {
         case 'remove':
           delete eventCache[event.projectPath]
-          break;
+          break
         case 'change':
           eventCache[event.projectPath] = event
-          break;
+          break
         case 'add':
           eventCache[event.projectPath] = event
           break
