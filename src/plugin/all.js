@@ -11,7 +11,7 @@ export default function(op, ...pipelines) {
     { debounce: DEFAULT_DEBOUNCE }, pipelines[0].debounce ? pipelines.shift() : {}
   )
 
-  var streams = pipelines.map(pipeline => op.compiler.compile(pipeline, op.stream))
+  var streams = pipelines.map(pipeline => op.compiler.compile(pipeline, op.stream || null))
   var combined = bufferingDebounce(Bacon.mergeAll(streams), opts.debounce).map(_.flatten)
   return op.stream ? op.stream.map(combined) : combined
 }
