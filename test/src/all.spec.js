@@ -2,8 +2,8 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
-import PipelineCompiler from '../lib/pipelineCompiler'
-import Event from '../lib/event'
+import PipelineCompiler from '../lib/PipelineCompiler'
+import Event from '../lib/Event'
 import all from '../lib/plugin/all'
 
 describe('all plugin', () => {

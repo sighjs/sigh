@@ -4,7 +4,7 @@ import Bacon from 'baconjs'
 import Promise from 'bluebird'
 var glob = Promise.promisify(require('glob'))
 
-import Event from '../event'
+import Event from '../Event'
 import { bufferingDebounce } from '../stream'
 
 var DEFAULT_DEBOUNCE = 200

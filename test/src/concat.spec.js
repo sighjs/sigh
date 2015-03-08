@@ -2,7 +2,7 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
-import Event from '../lib/event'
+import Event from '../lib/Event'
 import concat from '../lib/plugin/concat'
 import { SourceMapConsumer } from 'source-map'
 

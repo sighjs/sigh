@@ -5,7 +5,7 @@ import fse from 'fs-extra'
 import { readFileSync, existsSync } from 'fs'
 var rm = Promise.promisify(fse.remove)
 
-import Event from '../lib/event'
+import Event from '../lib/Event'
 import write from '../lib/plugin/write'
 
 var TMP_PATH = 'test/tmp/write'

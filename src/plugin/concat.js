@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { coalesceEvents } from '../stream'
 import { concatenate as concatSourceMaps } from '../sourceMap'
-import Event from '../event'
+import Event from '../Event'
 
 var DEFAULT_DEBOUNCE = 200
 

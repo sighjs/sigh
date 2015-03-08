@@ -4,7 +4,7 @@ import { SourceMapConsumer } from 'source-map'
 import path from 'path'
 
 import { positionOf } from '../lib/sourceMap'
-import Event from '../lib/event'
+import Event from '../lib/Event'
 import concat from '../lib/plugin/concat'
 import babel from '../lib/plugin/babel'
 

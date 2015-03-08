@@ -3,7 +3,7 @@ import _ from 'lodash'
 import rewire from 'rewire'
 import path from 'path'
 
-import PipelineCompiler from './pipelineCompiler'
+import PipelineCompiler from './PipelineCompiler'
 import all from './plugin/all'
 import concat from './plugin/concat'
 import glob from './plugin/glob'

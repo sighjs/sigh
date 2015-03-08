@@ -2,7 +2,7 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
-import Event from '../lib/event'
+import Event from '../lib/Event'
 import babel from '../lib/plugin/babel'
 
 describe('babel plugin', () => {
