@@ -57,7 +57,7 @@ function invokeHelper(opts) {
 
   var compiler = new PipelineCompiler(opts)
   // operation by pipeline name
-  var streams = _.mapValues(pipelines, compiler.compile.bind(compiler))
+  var streams = _.mapValues(pipelines, pipeline => compiler.compile(pipeline))
 
   _.forEach(streams, (stream, pipelineName) => {
     stream.onValue(value => {
