@@ -61,9 +61,11 @@ export function coalesceEvents(stream) {
 
 /**
  * Turn a pipeline into a stream.
- * @param {Boolean} watch Whether to pass "watch" to plugins (i.e. sigh -w was used).
+ * @param {Object} options Object containing the following fields:
+ *  watch: {Booloean} Whether to pass "watch" to plugins (i.e. sigh -w was used).
+ *  environment: {String} Environment being bulit (sigh -e env).
+ *  treeIndex: {Number} treeIndex First tree index, defaulting to 1.
  * @param {Array} pipeline Array of operations representing pipeline.
- * @param {Number} treeIndex First tree index, defaulting to 1.
  * @return {Bacon} stream that results from combining all operations in the pipeline.
  */
 export function pipelineToStream(options, pipeline) {
