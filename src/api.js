@@ -60,7 +60,8 @@ function invokeHelper(opts) {
 
   _.forEach(streams, (stream, pipelineName) => {
     stream.onValue(value => {
-      console.log('pipeline %s - %j', pipelineName, value)
+      // TODO: if (verbose) show value also
+      console.log('pipeline %s complete', pipelineName)
     })
     stream.onError(error => {
       console.warn('\x07error: pipeline %s - %j', pipelineName, error)
