@@ -32,6 +32,16 @@ describe('all plugin', () => {
     ]
 
     compiler.compile([
+      plugin(all, { debounce: 100 }, ...streams)
+    ])
+  })
+
+  it('increments treeIndex for subsequent operations', () => {
+    var compiler = new PipelineCompiler
+    var opData = { compiler }
+    var streams = [ plugin(op => 1), plugin(op => 2) ]
+
+    compiler.compile([
       plugin(all, { debounce: 100 }, ...streams),
       plugin(op => op.treeIndex.should.equal(3))
     ])
