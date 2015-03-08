@@ -5,15 +5,9 @@ import Bacon from 'baconjs'
 import Event from '../lib/Event'
 import concat from '../lib/plugin/concat'
 import { SourceMapConsumer } from 'source-map'
+import { makeEvent } from './helper'
 
 describe('concat plugin', () => {
-  var makeEvent = num => new Event({
-    path: `file${num}.js`,
-    type: 'add',
-    opTreeIndex: num,
-    data: `var a${num} = ${num}`
-  })
-
   it('concatenates three javascript files', () => {
     var stream = Bacon.once([1, 2, 3].map(num => makeEvent(num)))
 

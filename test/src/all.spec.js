@@ -3,18 +3,10 @@ import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
 import PipelineCompiler from '../lib/PipelineCompiler'
-import Event from '../lib/Event'
 import all from '../lib/plugin/all'
-import { plugin } from './helper'
+import { plugin, makeEvent } from './helper'
 
 describe('all plugin', () => {
-  var makeEvent = num => new Event({
-    path: `file${num}.js`,
-    type: 'add',
-    opTreeIndex: num,
-    data: `var a${num} = ${num}`
-  })
-
   it('combines three streams into one', () => {
     var streams = [1, 2, 3].map(i => plugin(op => Bacon.once([ makeEvent(i) ])))
     var opData = { compiler: new PipelineCompiler }
