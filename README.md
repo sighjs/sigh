@@ -2,7 +2,7 @@
 
 [![build status](https://circleci.com/gh/sighjs/sigh.png?circle-token=beca7e0d044a1283d4633dc180c31f8e5592446c)](https://circleci.com/gh/sighjs/sigh)
 
-Sigh is the best JavaScript asset pipeline, combining the best features from the best asset pipelines.
+Sigh is the best JavaScript asset pipeline, combining the best features of the best asset pipelines.
 
 * Inputs are based on simple glob expressions and the pipeline uses a simple tree structure, no more 500 line grunt files or verbose gulp files: [plumber][plumber].
 * Uses Functional Reactive Programming via [bacon.js][bacon], your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs]).
