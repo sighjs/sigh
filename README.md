@@ -123,20 +123,20 @@ module.exports = function(pipelines) {
 ```
 
 The stream payload is an array of event objects, each event object contains the following fields:
-  * type: `add`, `change`, or `remove`
-  * path: path to source file.
-  * sourceMap: source map as javascript object (read-only, see applySourceMap).
-  * data: file content as string (plugins can modify this, if modified then applySourceMap should be called with a source map describing the modifications).
-  * sourceData: original content before any transforms (read-only).
-  * fileType: filename extension (read-only).
-  * basePath: optional base directory containing resource.
-  * projectPath: path with basePath stripped off.
-  * opTreeIndex: depth-first index (within asset pipeline tree) of the source operator for this event.
+  * `type`: `add`, `change`, or `remove`
+  * `path`: path to source file.
+  * `sourceMap`: source map as javascript object (read-only, see applySourceMap).
+  * `data`: file content as string (plugins can modify this, if modified then applySourceMap should be called with a source map describing the modifications).
+  * `sourceData`: original content before any transforms (read-only).
+  * `fileType`: filename extension (read-only).
+  * `basePath`: optional base directory containing resource.
+  * `projectPath`: path with basePath stripped off.
+  * `opTreeIndex`: depth-first index (within asset pipeline tree) of the source operator for this event.
 
 The first array in the stream always contains an event of type `add` for every source file.
 
 The following methods are available:
-  * applySourceMap(nextSourceMap) - apply a new source map on top of the existing resource's source map.
+  * `applySourceMap(nextSourceMap)`: apply a new source map on top of the resource's existing source map.
 
 # Built-in plugins
 
