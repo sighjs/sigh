@@ -2,17 +2,16 @@
 
 [![build status](https://circleci.com/gh/sighjs/sigh.png?circle-token=beca7e0d044a1283d4633dc180c31f8e5592446c)](https://circleci.com/gh/sighjs/sigh)
 
-Sigh is the best JavaScript asset pipeline, combining the best features of the best asset pipelines.
+Sigh combines the best features of the best asset pipelines.
 
 * Inputs are based on simple glob expressions and the pipeline uses a simple tree structure, no more 500 line grunt files or verbose gulp files: [plumber][plumber].
 * Uses Functional Reactive Programming via [bacon.js][bacon], your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs], [gulp][gulp] uses node's built-in stream API).
 * Support source maps at every stage of the pipeline: [plumber][plumber] and [gulp][gulp] (gulp cannot concatenate source maps when merging streams).
 * Caches all data in memory where possible rather than the filesystem: [gulp][gulp].
 * Easy to write plugins in a small number of lines of code: [gobble][gobble].
-* Support watching files and updating the pipeline as files change: [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins).
-* Sigh can watch files for changes without a plugin, just use the `-w` flag.
+* Support watching files and updating the pipeline as files change: [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins). No special code or plugins are necessary for file watching, just use the `-w` flag.
 * Support incremental rebuilds (only perform the minimum work necessary on file changes): [broccoli][broccoli].
-* Sigh has [automated tests](https://circleci.com/gh/sighjs/sigh) (using mocha/chai) covering all functionality.
+* Sigh has [automated tests](https://circleci.com/gh/sighjs/sigh) (using mocha/chai) that cover all functionality.
 
 [plumber]: https://github.com/plumberjs/plumber
 [gobble]: https://github.com/gobblejs/gobble
@@ -124,7 +123,7 @@ pipeline['js'] = [
   write('build')
 ]
 ```
-This would transpile files matching `src/*.js` using babel and copy them to the directory build. Files matching `vendor/*.js` will all be concatenated together into a single file at `build/vendor.js`. The file `bootstrap.js` will be copied to `build` without modifications. A source map is created for each created files to point at the source(s).
+This would transpile files matching `src/*.js` using babel and copy them to the directory build. Files matching `vendor/*.js` will all be concatenated together into a single file at `build/vendor.js`. The file `bootstrap.js` will be copied to `build` without modifications.
 
 ## concat
 The `concat` plugin concatenates all resources together into one file. The order in which the files are concatenated corresponds to the depth-first index within the tree of the plugin that produced the original source content of that file.
