@@ -160,9 +160,23 @@ glob({ debounce: 200 }, 'lib/*.js')
 ```javascript
 glob({ basePath: 'src' }, '*.js') // similar to glob('src/*.js')
 ```
+## all
+The `all` plugin combines many streams together.
+
+```javascript
+pipeline['js'] = [
+  all(
+    [ glob('src/*.js'), babel() ],
+    [ glob('vendor/*.js'), concat('vendor.js') ],
+    glob('bootstrap.js')
+  ),
+  write('build')
+]
+```
+This would transpile files matching `src/*.js` using babel and copy them to the directory build. Files matching `vendor/*.js` will all be concatenated together into a single file at `build/vendor.js`. The file `bootstrap.js` will be copied to `build` without modifications. A source map is created for each created files to point at the source(s).
 
 ## concat
-The concat plugin concatenates all resources together into one file. The order in which the files are concatenated corresponds to the depth-first index within the tree of the plugin that produced the original source content of that file.
+The `concat` plugin concatenates all resources together into one file. The order in which the files are concatenated corresponds to the depth-first index within the tree of the plugin that produced the original source content of that file.
 
 ```javascript
 pipelines['js'] = [
@@ -197,7 +211,6 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 * modules - A string denoting the type of modules babel should output e.g. amd/common, see [the babel API](https://babeljs.io/docs/usage/options/).
 
 # TODO
-* `all` plugin.
 * `pipelineComplete` plugin.
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Support `--environment/-e` flag:
