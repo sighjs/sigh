@@ -52,7 +52,7 @@ module.exports = function(pipelines) {
   ]
 
   pipelines['build:tests'] = [
-    glob({ baseDir: 'src/test' }, '*.js'),
+    glob({ basePath: 'src/test' }, '*.js'),
     babel(),
     write('test')
   ]
@@ -64,7 +64,7 @@ module.exports = function(pipelines) {
 ```
 This pipeline `build:source` globs files matching `src/*.js` and transpiles them with babel, this transpiled output is concatenated together with the files matching the glob pattern `vendor/*.js` followed by the file `bootstrap.js` (`concat` operators sort files by the depth-first index of the source stream that produced their untransformed content). The concatenated resource is uglified but only during builds for `production` and `staging` environments. The resulting file is written to the directory `dist/assets`.
 
-The pipeline `build:tests` takes the files in `src/test`, compiles them with `babel` and writes each compiled file to the directory `test`. Each file's path relative to its `baseDir` becomes its offset within the output directory, in this case only the filename is used.
+The pipeline `build:tests` takes the files in `src/test`, compiles them with `babel` and writes each compiled file to the directory `test`. Each file's path relative to its `basePath` becomes its offset within the output directory, in this case only the filename is used.
 
 The pipeline `run:tests` runs when either the `build:tests` or `build:source` pipelines complete and runs mocha with default options.
 
