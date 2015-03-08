@@ -3,7 +3,7 @@ import _ from 'lodash'
 import rewire from 'rewire'
 import path from 'path'
 
-import { pipelineToStream } from './stream'
+import PipelineCompiler from './pipelineCompiler'
 import all from './plugin/all'
 import concat from './plugin/concat'
 import glob from './plugin/glob'
@@ -55,8 +55,9 @@ function invokeHelper(opts) {
     })
   }
 
+  var compiler = new PipelineCompiler(opts)
   // operation by pipeline name
-  var streams = _.mapValues(pipelines, pipelineToStream.bind(this, opts))
+  var streams = _.mapValues(pipelines, compiler.compile.bind(compiler))
 
   _.forEach(streams, (stream, pipelineName) => {
     stream.onValue(value => {

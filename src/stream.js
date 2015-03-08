@@ -58,38 +58,3 @@ export function coalesceEvents(stream) {
     return _.values(eventCache)
   })
 }
-
-/**
- * Turn a pipeline into a stream.
- * @param {Object} options Object containing the following fields:
- *  watch: {Booloean} Whether to pass "watch" to plugins (i.e. sigh -w was used).
- *  environment: {String} Environment being bulit (sigh -e env).
- *  treeIndex: {Number} treeIndex First tree index, defaulting to 1.
- * @param {Array} pipeline Array of operations representing pipeline.
- * @return {Bacon} stream that results from combining all operations in the pipeline.
- */
-export function pipelineToStream(options, pipeline) {
-  var runOperation = (operation, opData) => {
-    var stream = operation.plugin.apply(this, [ opData ].concat(operation.args))
-    if (options.treeIndex === opData.treeIndex)
-      ++opData.treeIndex
-    options.treeIndex = opData.treeIndex
-    return stream
-  }
-
-  if (! options.treeIndex)
-    options.treeIndex = 1
-
-  var multipleOps = pipeline instanceof Array
-  var firstOp = multipleOps ? pipeline.shift() : pipeline
-  var { watch, treeIndex } = options
-  var stream = runOperation(firstOp, { stream: null, watch, treeIndex })
-
-  if (! multipleOps)
-    return stream
-
-  return _.reduce(pipeline, (stream, operation) => {
-    var { watch, treeIndex } = options
-    return runOperation(operation, { stream, watch, treeIndex })
-  }, stream)
-}

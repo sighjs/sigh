@@ -211,8 +211,7 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 * modules - A string denoting the type of modules babel should output e.g. amd/common, see [the babel API](https://babeljs.io/docs/usage/options/).
 
 # TODO
-* Pass treeIndex back from `all` pipeline.
-* `--environment/-e` flag.
+* `--environment/-e` flag and `env` plugin.
 * `pipelineComplete` plugin.
 * mochaTest/uglify plugins (in external repositories).
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.

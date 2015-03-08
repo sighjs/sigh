@@ -2,6 +2,7 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
+import PipelineCompiler from '../lib/pipelineCompiler'
 import Event from '../lib/event'
 import all from '../lib/plugin/all'
 
@@ -17,8 +18,23 @@ describe('all plugin', () => {
     var streams = [1, 2, 3].map(i => ({
       plugin: op => Bacon.once([ makeEvent(i) ])
     }))
-    return all({}, { debounce: 100 }, ...streams).toPromise(Promise).then(events => {
+    var opData = { compiler: new PipelineCompiler }
+    return all(opData, { debounce: 100 }, ...streams).toPromise(Promise).then(events => {
       events.length.should.equal(3)
     })
+  })
+
+  it('assigns treeIndex to sub-operations', () => {
+    var compiler = new PipelineCompiler
+    var opData = { compiler }
+    var streams = [
+      { plugin(op) { op.treeIndex.should.equal(1) } },
+      { plugin(op) { op.treeIndex.should.equal(2) } }
+    ]
+
+    compiler.compile([
+      { plugin: all, args: [{ debounce: 100 }, ...streams] },
+      { plugin(op) { op.treeIndex.should.equal(3) } }
+    ])
   })
 })

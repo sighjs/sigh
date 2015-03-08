@@ -1,12 +1,13 @@
 import Bacon from 'baconjs'
 import Promise from 'bluebird'
-import { pipelineToStream } from '../lib/stream'
+import PipelineCompiler from '../lib/pipelineCompiler'
 
 var should = require('chai').should()
 
 describe('stream helper module', () => {
   it('pipelineToStream should create appropriate stream from array', () => {
-    var stream = pipelineToStream({}, [
+    var compiler = new PipelineCompiler
+    var stream = compiler.compile([
       { plugin(op) {
         should.not.exist(op.stream)
         return Bacon.once(1)
@@ -18,7 +19,8 @@ describe('stream helper module', () => {
   })
 
   it('pipelineToStream should create stream from stream, passing watch option', () => {
-    var stream = pipelineToStream({ watch: true }, { plugin(op) {
+    var compiler = new PipelineCompiler({ watch: true })
+    var stream = compiler.compile({ plugin(op) {
       op.watch.should.be.true
       should.not.exist(op.stream)
       return Bacon.once(420)
@@ -28,7 +30,8 @@ describe('stream helper module', () => {
   })
 
   it('pipelineToStream should pass arguments to plugin', () => {
-    var stream = pipelineToStream({}, {
+    var compiler = new PipelineCompiler
+    var stream = compiler.compile({
       plugin(op, arg1, arg2) {
         should.not.exist(op.watch)
         should.not.exist(op.stream)
@@ -41,7 +44,8 @@ describe('stream helper module', () => {
   })
 
   it('pipelineToStream should pass treeIndex and observe nextTreeIndex', () => {
-    pipelineToStream({}, [
+    var compiler = new PipelineCompiler
+    compiler.compile([
       { plugin(op) { op.treeIndex.should.equal(1) } },
       { plugin(op) { op.treeIndex.should.equal(2), op.treeIndex = 4 } },
       { plugin(op) { op.treeIndex.should.equal(4) } }
