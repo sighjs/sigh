@@ -114,6 +114,7 @@ The first argument is used to pass information to the plugin, the subsequent arg
  * `treeIndex`: depth-first index of operator within pipeline tree. This can be written to in order to this to set the treeIndex for the next pipeline operation otherwise it is incremented by one.
  * `watch`: true if and only if the `-w` flag was used.
  * `environment`: environment being built (change with the `-e` or `--environment` flag).
+ * `compiler`: a pipeline compiler that can be used to compile any sub-trees (this is only for advanced usage when plugins take pipelines as arguments).
 
 Assuming the plugin above is called `suffixer` it could be used in a Sighfile like:
 ```javascript
