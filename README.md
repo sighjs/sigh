@@ -40,7 +40,7 @@ var all, glob, concat, write, babel, env, pipelineComplete
 var uglify, mochaTests
 
 module.exports = function(pipelines) {
-  pipelines['build:source:js'] = [
+  pipelines['build:source'] = [
     all(
       [ glob('src/*.js'), babel() ],
       glob('vendor/*.js', 'bootstrap.js')
@@ -50,20 +50,22 @@ module.exports = function(pipelines) {
     write('dist/assets')
   ]
 
-  pipelines['build:test:js'] = [
-    glob('src/test/*.js'),
+  pipelines['build:tests'] = [
+    glob({ baseDir: 'src/test' }, '*.js'),
     babel(),
     write('test')
   ]
 
   pipelines['run:tests'] = [
-    pipelineComplete(mochaTests(), 'build:source:js', 'build:test:js')
+    pipelineComplete(mochaTests(), 'build:source', 'build:tests')
   ]
 }
 ```
-This pipeline would glob files matching `src/*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/*.js` followed by `bootstrap.js` as the `concat` plugins sorts files by the depth-first index of the source stream. The concatenated resource is uglified but only during builds for `production` and `staging` environments. The resulting file is written to the directory `dist/assets`.
+This pipeline `build:source` globs files matching `src/*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/*.js` followed by `bootstrap.js` as the `concat` plugins sorts files by the depth-first index of the source stream. The concatenated resource is uglified but only during builds for `production` and `staging` environments. The resulting file is written to the directory `dist/assets`.
 
-There is also a test pipeline for compiling the test files. Additionally tests are run when either the `build:test:js` or `build:source:js` pipelines complete.
+The pipeline `build:tests` takes the files in `src/test`, compiles them with `babel` and then writes each compiled file to the directory `test`, path within `test` is the file's path relative to its `baseDir`.
+
+The pipeline `run:tests` runs when either the `build:tests` or `build:source` pipelines complete and runs mocha with default options.
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
@@ -83,7 +85,7 @@ Compile all pipelines and then watch files for changes compiling those that have
 
 Compile the specified pipeline (multiple can be specified):
 ```
-% sigh js
+% sigh build:source
 ```
 
 ## Writing sigh plugins
