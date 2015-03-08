@@ -1,7 +1,8 @@
-var should = require('chai').should()
-
 import Bacon from 'baconjs'
+import Promise from 'bluebird'
 import { pipelineToStream } from '../lib/stream'
+
+var should = require('chai').should()
 
 describe('stream helper module', () => {
   it('pipelineToStream should create appropriate stream from array', () => {
@@ -13,7 +14,7 @@ describe('stream helper module', () => {
       { plugin(op) { return op.stream.map(v => v + 1) } }
     ])
 
-    return stream.toPromise().then(value => value.should.equal(2))
+    return stream.toPromise(Promise).then(value => value.should.equal(2))
   })
 
   it('pipelineToStream should create stream from stream, passing watch option', () => {
@@ -23,7 +24,7 @@ describe('stream helper module', () => {
       return Bacon.once(420)
     } })
 
-    return stream.toPromise().then(value => value.should.equal(420))
+    return stream.toPromise(Promise).then(value => value.should.equal(420))
   })
 
   it('pipelineToStream should pass arguments to plugin', () => {
@@ -36,7 +37,7 @@ describe('stream helper module', () => {
       args: [ 7, 11 ]
     })
 
-    return stream.toPromise().then(value => value.should.equal(18))
+    return stream.toPromise(Promise).then(value => value.should.equal(18))
   })
 
   it('pipelineToStream should pass treeIndex and observe nextTreeIndex', () => {

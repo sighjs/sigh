@@ -1,6 +1,5 @@
-var should = require('chai').should()
-
 import Bacon from 'baconjs'
+import Promise from 'bluebird'
 import { SourceMapConsumer } from 'source-map'
 import path from 'path'
 
@@ -8,6 +7,8 @@ import { positionOf } from '../lib/sourceMap'
 import Event from '../lib/event'
 import concat from '../lib/plugin/concat'
 import babel from '../lib/plugin/babel'
+
+var should = require('chai').should()
 
 describe('sourceMap helper module', () => {
   var makeEvent = num => new Event({
@@ -35,7 +36,7 @@ describe('sourceMap helper module', () => {
     var concatStream = concat({ stream: inputStream }, 'output.js', 10)
     var babelStream = babel({ stream: concatStream })
 
-    return babelStream.toPromise().then(events => {
+    return babelStream.toPromise(Promise).then(events => {
       events.length.should.equal(1)
       var { sourceMap, data } = events[0]
 

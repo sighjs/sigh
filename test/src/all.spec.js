@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
 import Event from '../lib/event'
@@ -16,7 +17,7 @@ describe('all plugin', () => {
     var streams = [1, 2, 3].map(i => ({
       plugin: op => Bacon.once([ makeEvent(i) ])
     }))
-    return all({}, { debounce: 100 }, ...streams).toPromise().then(events => {
+    return all({}, { debounce: 100 }, ...streams).toPromise(Promise).then(events => {
       events.length.should.equal(3)
     })
   })

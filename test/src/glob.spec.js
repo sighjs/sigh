@@ -18,7 +18,7 @@ var FIXTURE_FILES = [
 
 describe('glob plugin', () => {
   it('globs a wildcard', () => {
-    return glob({}, {}, FIXTURE_PATH + '/*.js').toPromise().then(updates => {
+    return glob({}, {}, FIXTURE_PATH + '/*.js').toPromise(Promise).then(updates => {
       updates.length.should.equal(2)
       _.pluck(updates, 'projectPath').sort().should.eql(FIXTURE_FILES)
       updates.forEach(file => {
@@ -31,7 +31,7 @@ describe('glob plugin', () => {
   it('globs a wildcard using the basePath option', () => {
     var opData = { treeIndex: 4 }
     return glob(opData, { basePath: 'test/fixtures/simple-project' }, '*.js')
-    .toPromise()
+    .toPromise(Promise)
     .then(updates => {
       opData.nextTreeIndex.should.equal(5)
       updates.length.should.equal(2)
@@ -43,7 +43,7 @@ describe('glob plugin', () => {
   it('globs two wildcards', () => {
     var opData = { treeIndex: 1 }
     return glob(opData, {}, FIXTURE_PATH + '/*1.js', FIXTURE_PATH + '/*2.js')
-    .toPromise()
+    .toPromise(Promise)
     .then(updates => {
       opData.nextTreeIndex.should.equal(3)
       updates.length.should.equal(2)

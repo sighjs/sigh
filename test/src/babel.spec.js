@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
 import Event from '../lib/event'
@@ -15,7 +16,7 @@ describe('babel plugin', () => {
     })
     var stream = Bacon.once([ event ])
 
-    return babel({ stream }).toPromise().then(events => {
+    return babel({ stream }).toPromise(Promise).then(events => {
       events.length.should.equal(1)
 
       var { data, sourceMap } = events[0]

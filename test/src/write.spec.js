@@ -1,9 +1,8 @@
 import _ from 'lodash'
-import fse from 'fs-extra'
-import fs from 'fs'
-import Promise from 'bluebird'
 import Bacon from 'baconjs'
-var { readFileSync, existsSync } = require('fs')
+import Promise from 'bluebird'
+import fse from 'fs-extra'
+import { readFileSync, existsSync } from 'fs'
 var rm = Promise.promisify(fse.remove)
 
 import Event from '../lib/event'
@@ -20,7 +19,7 @@ describe('write plugin', () => {
     var data = 'var pump\n'
     var stream = Bacon.once([ new Event({ path: PROJ_PATH, type: 'add', data }) ])
 
-    return write({ stream }, TMP_PATH).toPromise().then(events => {
+    return write({ stream }, TMP_PATH).toPromise(Promise).then(events => {
       // console.log('write events %j', events)
       readFileSync(TMP_FILE).toString()
       .should.equal(data + '\n//# sourceMappingURL=file1.js.map')
@@ -36,7 +35,7 @@ describe('write plugin', () => {
       new Event({ basePath: 'subdir', path: PROJ_PATH, type: 'add', data })
     ])
 
-    return write({ stream }, TMP_PATH).toPromise().then(events => {
+    return write({ stream }, TMP_PATH).toPromise(Promise).then(events => {
       // subdir stripped from the output path due to basePath
       var tmpFile = TMP_PATH + '/file1.js'
 
