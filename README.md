@@ -200,7 +200,7 @@ You can see here that `glob` uses multiple tree indexes and assigns them to even
 Create a pipeline that transpiles the given source files using babel:
 ```javascript
 module.exports = function(pipelines) {
-  pipelines['js'] = [ glob('*.js'), babel() ]
+  pipelines['js'] = [ glob('*.js'), babel(), write('build') ]
 }
 ```
 
@@ -211,6 +211,7 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 * modules - A string denoting the type of modules babel should output e.g. amd/common, see [the babel API](https://babeljs.io/docs/usage/options/).
 
 # TODO
+* Pass treeIndex back from `all` pipeline.
 * `--environment/-e` flag.
 * `pipelineComplete` plugin.
 * mochaTest/uglify plugins (in external repositories).
