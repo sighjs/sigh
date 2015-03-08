@@ -34,10 +34,10 @@ npm install sigh
 
 Write a file called `Sigh.js` and put it in the root of your project:
 ```javascript
-// built in plugins
+// To use a plugin it must be declared as a global variable.
 var all, glob, concat, write, babel, env, pipelineComplete
-// plugins loaded from package.json
-var uglify, mochaTests
+// The above plugins are built-in, the next two are loaded from package.json.
+var uglify, mochaTest
 
 module.exports = function(pipelines) {
   pipelines['build:source'] = [
@@ -57,7 +57,7 @@ module.exports = function(pipelines) {
   ]
 
   pipelines['run:tests'] = [
-    pipelineComplete(mochaTests(), 'build:source', 'build:tests')
+    pipelineComplete(mochaTest(), 'build:source', 'build:tests')
   ]
 }
 ```
@@ -201,5 +201,5 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 * `pipelineComplete` plugin.
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Support `--environment/-e` flag:
-* Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
+* Write mochaTest, sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
 * Investigate possibility of writing an adapter so that grunt/gulp plugins can be used.
