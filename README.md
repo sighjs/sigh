@@ -34,7 +34,10 @@ npm install sigh
 
 Write a file called `Sigh.js` and put it in the root of your project:
 ```javascript
-var all, glob, concat, write, babel, uglify, mochaTests, env, pipelineComplete
+// built in plugins
+var all, glob, concat, write, babel, env, pipelineComplete
+// plugins loaded from package.json
+var uglify, mochaTests
 
 module.exports = function(pipelines) {
   pipelines['build:source:js'] = [
@@ -64,7 +67,7 @@ There is also a test pipeline for compiling the test files. Additionally tests a
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
-sigh plugins are injected into the variables defined at the top of the file. `all`, `glob`, `concat`, `write` and `babel` are built-in (for now) whereas uglify is found by scanning package.json for dependency and devDependency entries of the format `sigh-*`.
+sigh plugins are injected into the variables defined at the top of the file. Some of the plugins are built-in (for now) and others are found by scanning package.json for dependency and devDependency entries of the format `sigh-*`.
 
 ### Running sigh
 
