@@ -195,6 +195,19 @@ In this example the order of the files in `output.js` is determined by tree orde
 
 You can see here that `glob` uses multiple tree indexes and assigns them to events according to the index of the pattern that produced them.
 
+## env
+
+Runs the operation only when one of the selected environments is chosen (using sigh's `-e` or `--environment` flag) otherwise pass data through unchanged.
+
+```javascript
+pipelines['js'] = [
+  glob('src/*.js'),
+  env(concat('output.js'), 'production', 'staging'),
+  write('build')
+]
+```
+This pipeline only concatenates the files together in `production` and `staging` builds otherwise multiple files are written to the build directory. The allowed environments may also be passed as an array.
+
 ## babel
 
 Create a pipeline that transpiles the given source files using babel:
@@ -211,7 +224,6 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 * modules - A string denoting the type of modules babel should output e.g. amd/common, see [the babel API](https://babeljs.io/docs/usage/options/).
 
 # TODO
-* `--environment/-e` flag and `env` plugin.
 * `pipelineComplete` plugin.
 * mochaTest/uglify plugins (in external repositories).
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.

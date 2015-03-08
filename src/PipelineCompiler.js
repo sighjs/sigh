@@ -12,6 +12,7 @@ export default class {
       options = {}
     this.treeIndex = options.treeIndex || 1
     this.watch = options.watch
+    this.environment = options.environment
   }
 
   /**
@@ -19,7 +20,7 @@ export default class {
    * @param {Array} pipeline Array of operations representing pipeline.
    * @return {Bacon} stream that results from combining all operations in the pipeline.
    */
-  compile(pipeline) {
+  compile(pipeline, inputStream = null) {
     var runOperation = (operation, opData) => {
       var stream = operation.plugin.apply(this, [ opData ].concat(operation.args))
       if (this.treeIndex === opData.treeIndex)
@@ -31,15 +32,21 @@ export default class {
 
     var multipleOps = pipeline instanceof Array
     var firstOp = multipleOps ? pipeline.shift() : pipeline
-    var { watch, treeIndex } = this
-    var stream = runOperation(firstOp, { stream: null, watch, treeIndex, compiler: this })
+    var { watch, treeIndex, environment } = this
+    var stream = runOperation(firstOp, {
+      stream: inputStream,
+      watch,
+      treeIndex,
+      compiler: this,
+      environment
+    })
 
     if (! multipleOps)
       return stream
 
     return _.reduce(pipeline, (stream, operation) => {
       var { watch, treeIndex } = this
-      return runOperation(operation, { stream, watch, treeIndex, compiler: this })
+      return runOperation(operation, { stream, watch, treeIndex, compiler: this, environment })
     }, stream)
   }
 }
