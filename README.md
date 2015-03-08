@@ -106,7 +106,7 @@ module.exports = function(operation, text) {
   })
 }
 ```
-The first argument is used to pass information to the plugin, the subsequent arguments are passed via the `Sigh.js` file. This argument has the following fields:
+The first argument is used to pass information to the plugin, the subsequent arguments are passed from the arguments used within the `Sigh.js` file. The `operation` argument has the following fields:
 
  * `stream`: Bacon.js stream to adapt.
  * `treeIndex`: depth-first index of operator within pipeline tree. This can be written to in order to this to set the treeIndex for the next pipeline operation otherwise it is incremented by one.
