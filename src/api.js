@@ -5,12 +5,13 @@ import path from 'path'
 
 import PipelineCompiler from './PipelineCompiler'
 import all from './plugin/all'
-import concat from './plugin/concat'
-import glob from './plugin/glob'
 import babel from './plugin/babel'
+import concat from './plugin/concat'
+import env from './plugin/env'
+import glob from './plugin/glob'
 import write from './plugin/write'
 
-var plugins = { all, concat, glob, babel, write }
+var plugins = { all, babel, concat, env, glob, write }
 
 // Run Sigh.js
 export function invoke(opts) {
