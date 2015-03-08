@@ -110,10 +110,8 @@ module.exports = function(operation, text) {
 The first argument is used to pass information to the plugin, the subsequent arguments are passed via the `Sigh.js` file. This argument has the following fields:
 
  * stream: Bacon.js stream to adapt.
- * treeIndex: depth-first index of operator in pipeline tree.
+ * treeIndex: depth-first index of operator in pipeline tree. This can be written to in order to this to set the treeIndex for the next pipeline operation otherwise it is incremented by one.
  * watch: true if and only if the `-w` flag was used.
-
-Additionally `nextTreeIndex` can be used to pass the next tree index back. This can be used for plugins that need multiple tree indexes e.g. the glob operation uses one tree index per glob pattern.
 
 Assuming the plugin above is called `suffixer` it could be used in a Sighfile like:
 ```javascript

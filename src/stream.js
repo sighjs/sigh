@@ -66,19 +66,28 @@ export function coalesceEvents(stream) {
  * @param {Number} treeIndex First tree index, defaulting to 1.
  * @return {Bacon} stream that results from combining all operations in the pipeline.
  */
-export function pipelineToStream(watch, pipeline, treeIndex = 1) {
+export function pipelineToStream(options, pipeline) {
+  var runOperation = (operation, opData) => {
+    var stream = operation.plugin.apply(this, [ opData ].concat(operation.args))
+    if (options.treeIndex === opData.treeIndex)
+      ++opData.treeIndex
+    options.treeIndex = opData.treeIndex
+    return stream
+  }
+
+  if (! options.treeIndex)
+    options.treeIndex = 1
+
   var multipleOps = pipeline instanceof Array
   var firstOp = multipleOps ? pipeline.shift() : pipeline
-  var { plugin } = firstOp
-  var opData = { stream: null, watch, treeIndex }
-  var stream = plugin.apply(this, [ opData ].concat(firstOp.args))
+  var { watch, treeIndex } = options
+  var stream = runOperation(firstOp, { stream: null, watch, treeIndex })
 
   if (! multipleOps)
     return stream
 
   return _.reduce(pipeline, (stream, operation) => {
-    var { plugin } = operation
-    opData = { stream, watch, treeIndex: opData.nextTreeIndex || opData.treeIndex + 1 }
-    return plugin.apply(this, [ opData ].concat(operation.args))
+    var { watch, treeIndex } = options
+    return runOperation(operation, { stream, watch, treeIndex })
   }, stream)
 }

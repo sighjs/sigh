@@ -56,7 +56,7 @@ function invokeHelper(opts) {
   }
 
   // operation by pipeline name
-  var streams = _.mapValues(pipelines, pipelineToStream.bind(this, opts.watch))
+  var streams = _.mapValues(pipelines, pipelineToStream.bind(this, opts))
 
   _.forEach(streams, (stream, pipelineName) => {
     stream.onValue(value => {
