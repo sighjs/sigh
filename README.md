@@ -10,7 +10,8 @@ Sigh is the best JavaScript asset pipeline, combining the best features of the b
 * Caches all data in memory where possible rather than the filesystem: [gulp][gulp].
 * Easy to write plugins in a small number of lines of code: [gobble][gobble].
 * Support watching files and updating the pipeline as files change: [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins).
-* Sigh can watch files for changes without a plugin, just use the `-w` flag. Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is Sigh handles it transparently. Library code available to plugin writers makes it simple to handle caching in cases where it is necessary.
+* Sigh can watch files for changes without a plugin, just use the `-w` flag.
+* Support incremental rebuilds (only perform the minimum work necessary on file changes): [broccoli][broccoli].
 * Sigh has [automated tests](https://circleci.com/gh/sighjs/sigh) (using mocha/chai) covering all functionality.
 
 [plumber]: https://github.com/plumberjs/plumber
@@ -18,6 +19,7 @@ Sigh is the best JavaScript asset pipeline, combining the best features of the b
 [gulp]: https://github.com/gulpjs/gulp
 [rxjs]: https://github.com/Reactive-Extensions/RxJS
 [bacon]: https://baconjs.github.io/
+[broccoli]: https://github.com/broccolijs/broccoli
 
 ## Using sigh
 
@@ -136,6 +138,10 @@ The first array in the stream always contains an event of type `add` for every s
 
 The following methods are available:
   * `applySourceMap(nextSourceMap)`: apply a new source map on top of the resource's existing source map.
+
+### Incremental rebuilds and plugins
+
+Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is Sigh handles it transparently. Library code available to plugin writers makes it simple to handle caching in cases where it is necessary.
 
 # Built-in plugins
 
