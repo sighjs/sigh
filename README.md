@@ -34,10 +34,10 @@ npm install sigh
 
 Write a file called `Sigh.js` and put it in the root of your project:
 ```javascript
-var all, glob, concat, write, babel, uglify
+var all, glob, concat, write, babel, uglify, mochaTests
 
 module.exports = function(pipelines) {
-  pipelines['js'] = [
+  pipelines['build:source:js'] = [
     all(
       [ glob('src/*.js'), babel() ],
       glob('vendor/*.js', 'bootstrap.js')
@@ -46,9 +46,21 @@ module.exports = function(pipelines) {
     env(uglify(), 'production', 'staging'),
     write('dist/assets')
   ]
+
+  pipelines['build:test:js'] = [
+    glob('src/test/*.js'),
+    babel(),
+    write('test')
+  ]
+
+  pipelines['run:tests'] = [
+    pipelineComplete(mochaTests(), 'build:source:js', 'build:test:js')
+  ]
 }
 ```
 This pipeline would glob files matching `src/*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/*.js` followed by `bootstrap.js` as the `concat` plugins sorts files by the depth-first index of the source stream. The concatenated resource is uglified but only during builds for `production` and `staging` environments. The resulting file is written to the directory `dist/assets`.
+
+There is also a test pipeline for compiling the test files. Additionally tests are run when either the `build:test:js` or `build:source:js` pipelines complete.
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
@@ -181,6 +193,7 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 
 # TODO
 * `all` plugin.
+* `pipelineComplete` plugin.
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Support `--environment/-e` flag:
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
