@@ -7,7 +7,7 @@ var glob = Promise.promisify(require('glob'))
 import Event from '../event'
 import { bufferingDebounce } from '../stream'
 
-var DEFAULT_DEBOUNCE = 500
+var DEFAULT_DEBOUNCE = 200
 
 export default function(op, ...patterns) {
   var { stream } = op

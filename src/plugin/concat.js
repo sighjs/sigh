@@ -3,12 +3,14 @@ import { coalesceEvents } from '../stream'
 import { concatenate as concatSourceMaps } from '../sourceMap'
 import Event from '../event'
 
+var DEFAULT_DEBOUNCE = 200
+
 export default function(op, outputPath, debounceDelay) {
   var { stream } = op
   var fileExists = false
 
   return coalesceEvents(stream)
-  .debounce(debounceDelay || 500)
+  .debounce(debounceDelay || DEFAULT_DEBOUNCE)
   .map(function(eventCache) {
     var data = '', sourceMaps = []
     var offsets = [0], cumOffset = 0

@@ -62,7 +62,7 @@ describe('glob plugin', () => {
       return new Promise(function(resolve) {
         var nUpdates = 0
         var files = [ TMP_PATH + '/file1.js', TMP_PATH + '/file2.js' ]
-        glob({ watch: true, treeIndex: 4 }, { debounce: 200 }, TMP_PATH + '/*.js')
+        glob({ watch: true, treeIndex: 4 }, { debounce: 100 }, TMP_PATH + '/*.js')
         .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
