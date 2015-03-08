@@ -34,7 +34,7 @@ npm install sigh
 
 Write a file called `Sigh.js` and put it in the root of your project:
 ```javascript
-var all, glob, concat, write, babel, uglify, mochaTests
+var all, glob, concat, write, babel, uglify, mochaTests, env, pipelineComplete
 
 module.exports = function(pipelines) {
   pipelines['build:source:js'] = [
