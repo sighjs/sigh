@@ -1,6 +1,8 @@
 # sigh
 
-`Sigh isn't quite ready, check back in a few weeks`
+`Sigh isn't quite ready, check back very soon.`
+
+![build status](https://circleci.com/gh/sighjs/sigh.png?circle-token=beca7e0d044a1283d4633dc180c31f8e5592446c)
 
 Sigh will be the best JavaScript asset pipeline! It combines the best features from all the best asset pipelines out there.
 
