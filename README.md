@@ -61,9 +61,9 @@ module.exports = function(pipelines) {
   ]
 }
 ```
-This pipeline `build:source` globs files matching `src/*.js` and transpile them with babel, then concatenate that output together with the files matching `vendor/*.js` followed by `bootstrap.js` as the `concat` plugins sorts files by the depth-first index of the source stream. The concatenated resource is uglified but only during builds for `production` and `staging` environments. The resulting file is written to the directory `dist/assets`.
+This pipeline `build:source` globs files matching `src/*.js` and transpiles them with babel, this transpiled output is concatenated together with the files matching the glob pattern `vendor/*.js` followed by the file `bootstrap.js` (`concat` plugins sorts files by the depth-first index of the source stream that produced them). The concatenated resource is uglified but only during builds for `production` and `staging` environments. The resulting file is written to the directory `dist/assets`.
 
-The pipeline `build:tests` takes the files in `src/test`, compiles them with `babel` and then writes each compiled file to the directory `test`, path within `test` is the file's path relative to its `baseDir`.
+The pipeline `build:tests` takes the files in `src/test`, compiles them with `babel` and writes each compiled file to the directory `test`. Each file's path relative to its `baseDir` becomes its offset within the output directory, in this case only the filename is used.
 
 The pipeline `run:tests` runs when either the `build:tests` or `build:source` pipelines complete and runs mocha with default options.
 
@@ -83,9 +83,9 @@ Compile all pipelines and then watch files for changes compiling those that have
 % sigh -w
 ```
 
-Compile the specified pipeline (multiple can be specified):
+Compile/watch only the specified pipeline (with the Sighfile.js shown above the source and tests would be compiled but the tests would never be run).
 ```
-% sigh build:source
+% sigh -w build:source build:tests
 ```
 
 ## Writing sigh plugins
