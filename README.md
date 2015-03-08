@@ -23,13 +23,13 @@ Sigh will be the best JavaScript asset pipeline! It combines the best features f
 ## Using sigh
 
 Install sigh-cli globally:
-```
-sudo npm install -g sigh-cli
+```bash
+% sudo npm install -g sigh-cli
 ```
 
 Install sigh in your project:
-```
-npm install sigh
+```bash
+% npm install sigh
 ```
 
 Write a file called `Sigh.js` and put it in the root of your project:
@@ -74,12 +74,12 @@ sigh plugins are injected into the variables defined at the top of the file. Som
 ### Running sigh
 
 Compile all pipelines and exit:
-```shell
+```bash
 % sigh
 ```
 
 Compile all pipelines and then watch files for changes compiling those that have changed:
-```
+```bash
 % sigh -w
 ```
 
