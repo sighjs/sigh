@@ -91,6 +91,6 @@ function injectPlugin(module, pluginName) {
     module.__set__(varName, (...args) => ({ plugin, args }))
   }
   catch (e) {
-    throw new Error("Sigh.js needs `var " + pluginName + "' statement")
+    // plugin not used
   }
 }
