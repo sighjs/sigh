@@ -14,7 +14,9 @@ describe('env plugin', () => {
       plugin(env, plugin(op => op.stream.map(val => val * 2)), 'friend')
     ]
 
-    return compiler.compile(streams).toPromise(Promise).then(v => { v.should.equal(16) })
+    return compiler.compile(streams).then(
+      stream => stream.toPromise(Promise).then(v => { v.should.equal(16) })
+    )
   })
 
   it('passes stream through when selected environments are not chosen', () => {
@@ -24,6 +26,8 @@ describe('env plugin', () => {
       plugin(env, plugin(op => op.stream.map(val => val * 2)), 'e2', 'e3')
     ]
 
-    return compiler.compile(streams).toPromise(Promise).then(v => { v.should.equal(9) })
+    return compiler.compile(streams).then(
+      stream => stream.toPromise(Promise).then(v => { v.should.equal(9) })
+    )
   })
 })

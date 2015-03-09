@@ -10,8 +10,11 @@ describe('all plugin', () => {
   it('combines three streams into one', () => {
     var streams = [1, 2, 3].map(i => plugin(op => Bacon.once([ makeEvent(i) ])))
     var opData = { compiler: new PipelineCompiler }
-    return all(opData, { debounce: 100 }, ...streams).toPromise(Promise).then(events => {
-      events.length.should.equal(3)
+
+    return all(opData, { debounce: 100 }, ...streams).then(streams => {
+      streams.toPromise(Promise).then(events => {
+        events.length.should.equal(3)
+      })
     })
   })
 
@@ -23,7 +26,7 @@ describe('all plugin', () => {
       plugin(op => op.treeIndex.should.equal(2))
     ]
 
-    compiler.compile([
+    return compiler.compile([
       plugin(all, { debounce: 100 }, ...streams)
     ])
   })
@@ -33,7 +36,7 @@ describe('all plugin', () => {
     var opData = { compiler }
     var streams = [ plugin(op => 1), plugin(op => 2) ]
 
-    compiler.compile([
+    return compiler.compile([
       plugin(all, { debounce: 100 }, ...streams),
       plugin(op => op.treeIndex.should.equal(3))
     ])

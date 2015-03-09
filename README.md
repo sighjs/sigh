@@ -241,6 +241,8 @@ The first array in the stream always contains an event of type `add` for every s
 The following methods are available:
   * `applySourceMap(nextSourceMap)`: apply a new source map on top of the resource's existing source map.
 
+Plugins can also return a `Promise` to delay construction of the pipeline.
+
 ## Incremental rebuilds and plugins
 
 Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is Sigh handles it transparently. Library code available to plugin writers makes it simple to handle caching in cases where it is necessary.

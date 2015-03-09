@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import Promise from 'bluebird'
 
 export default class {
   /**
@@ -23,11 +23,14 @@ export default class {
   compile(pipeline, inputStream = null) {
     var runOperation = (operation, opData) => {
       var stream = operation.plugin.apply(this, [ opData ].concat(operation.args))
-      if (this.treeIndex === opData.treeIndex)
-        ++this.treeIndex
-      else if (opData.treeIndex > this.treeIndex)
-        this.treeIndex = opData.treeIndex
-      return stream
+      return Promise.resolve(stream).then(stream => {
+        if (this.treeIndex === opData.treeIndex)
+          ++this.treeIndex
+        else if (opData.treeIndex > this.treeIndex)
+          this.treeIndex = opData.treeIndex
+
+        return stream
+      })
     }
 
     var multipleOps = pipeline instanceof Array
@@ -42,9 +45,9 @@ export default class {
     })
 
     if (! multipleOps)
-      return stream
+      return Promise.resolve(stream)
 
-    return _.reduce(pipeline, (stream, operation) => {
+    return Promise.reduce(pipeline, (stream, operation) => {
       var { watch, treeIndex } = this
       return runOperation(operation, { stream, watch, treeIndex, compiler: this, environment })
     }, stream)
