@@ -1,5 +1,6 @@
 import fs from 'fs'
 import _ from 'lodash'
+import Promise from 'bluebird'
 import rewire from 'rewire'
 import path from 'path'
 
@@ -58,15 +59,18 @@ function invokeHelper(opts) {
 
   var compiler = new PipelineCompiler(opts)
   // operation by pipeline name
-  var streams = _.mapValues(pipelines, pipeline => compiler.compile(pipeline))
-
-  _.forEach(streams, (stream, pipelineName) => {
-    stream.onValue(value => {
-      // TODO: if (verbose) show value also
-      console.log('pipeline %s complete', pipelineName)
-    })
-    stream.onError(error => {
-      console.warn('\x07error: pipeline %s - %j', pipelineName, error)
+  Promise.props(
+    _.mapValues(pipelines, pipeline => compiler.compile(pipeline))
+  )
+  .then(streams => {
+    _.forEach(streams, (stream, pipelineName) => {
+      stream.onValue(value => {
+        // TODO: if (verbose) show value also
+        console.log('pipeline %s complete', pipelineName)
+      })
+      stream.onError(error => {
+        console.warn('\x07error: pipeline %s - %j', pipelineName, error)
+      })
     })
   })
 }
