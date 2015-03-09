@@ -1,3 +1,4 @@
+import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
 import PipelineCompiler from '../lib/PipelineCompiler'
