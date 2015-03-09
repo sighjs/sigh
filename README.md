@@ -151,7 +151,8 @@ pipelines['js'] = [
     [ glob('src/*.js'), babel() ],
     glob('loader.js', 'bootstrap.js')
   ),
-  concat('output.js')
+  concat('output.js'),
+  write('build')
 ]
 ```
 In this example the order of the files in `output.js` is determined by tree order:
