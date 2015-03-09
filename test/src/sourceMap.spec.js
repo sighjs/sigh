@@ -1,7 +1,6 @@
 import Bacon from 'baconjs'
 import Promise from 'bluebird'
 import { SourceMapConsumer } from 'source-map'
-import path from 'path'
 
 import { positionOf } from '../lib/sourceMap'
 import Event from '../lib/Event'
@@ -45,13 +44,13 @@ describe('sourceMap helper module', () => {
       var pos = consumer.originalPositionFor(positionOf(data, 'add1'))
       pos.line.should.equal(1)
       pos.column.should.equal(4)
-      pos.source.should.equal(path.join(process.cwd(), 'file1.js'))
+      pos.source.should.equal('file1.js')
 
       // verify mapping of token "add2"
       pos = consumer.originalPositionFor(positionOf(data, 'add2'))
       pos.line.should.equal(1)
       pos.column.should.equal(4)
-      pos.source.should.equal(path.join(process.cwd(), 'file2.js'))
+      pos.source.should.equal('file2.js')
     })
   })
 })

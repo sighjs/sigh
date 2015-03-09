@@ -23,7 +23,6 @@ describe('babel plugin', () => {
       data.should.equal('define("subdir/file", ["exports"], function (exports) {\n  "use strict";\n\n  var pump = function () {\n    return "pumper";\n  };\n});')
       sourceMap.mappings.should.equal(';;;AAAA,MAAI,IAAI,GAAG;WAAM,QAAQ;GAAA,CAAA')
       sourceMap.file.should.equal(event.path)
-      sourceMap.sourceRoot.should.equal(event.basePath)
     })
   })
 

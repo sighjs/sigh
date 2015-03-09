@@ -9,7 +9,6 @@ function compileEvent(opts, event) {
     return event
 
   var babelOpts = {
-    sourceRoot: event.basePath || process.cwd(),
     modules: opts.modules,
     filename: event.path,
     sourceMap: true,
