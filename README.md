@@ -140,7 +140,7 @@ pipeline['js'] = [
   write('build')
 ]
 ```
-This would transpile files matching `src/*.js` using babel and copy them to the directory build. Files matching `vendor/*.js` will all be concatenated together into a single file at `build/vendor.js`. The file `bootstrap.js` will be copied to `build` without being modified beyond adding a source map comment.
+This would transpile files matching `src/*.js` using babel and copy them to the directory `build`. Files matching `vendor/*.js` will all be concatenated together into a single file at `build/vendor.js`. The file `bootstrap.js` will be copied to `build` without being modified beyond adding a source map comment.
 
 ## concat
 The `concat` plugin concatenates all resources together into one file. The order in which the files are concatenated corresponds to the depth-first index within the tree of the plugin that produced the original source content of that file.
@@ -174,7 +174,7 @@ pipelines['js'] = [
   write('build')
 ]
 ```
-This pipeline only concatenates the files together in `production` and `staging` builds otherwise multiple files are written to the build directory. The allowed environments may also be passed as an array.
+This pipeline only concatenates the files together in `production` and `staging` builds otherwise multiple files are written to the directory `build`. The allowed environments may also be passed as an array.
 
 ## babel
 
