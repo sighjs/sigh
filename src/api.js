@@ -14,10 +14,13 @@ import write from './plugin/write'
 
 var plugins = { all, babel, concat, env, glob, write }
 
-// Run Sigh.js
+/**
+ * Run Sigh.js
+ * @return {Promise} Resolves to an object { pipelineName: baconStream }
+ */
 export function invoke(opts) {
   try {
-    invokeHelper(opts)
+    return invokeHelper(opts)
   }
   catch (e) {
     if (typeof e === 'function' && e instanceof Error) {
@@ -31,7 +34,10 @@ export function invoke(opts) {
   }
 }
 
-/// Run the Sigh.js file in the current directory with the given options.
+/**
+ * Run the Sigh.js file in the current directory with the given options.
+ * @return {Promise} Resolves to an object { pipelineName: baconStream }
+ */
 function invokeHelper(opts) {
   var packageJson = JSON.parse(fs.readFileSync('package.json'))
   ; [ packageJson.devDependencies, packageJson.dependencies ].forEach(deps => {
@@ -58,8 +64,7 @@ function invokeHelper(opts) {
   }
 
   var compiler = new PipelineCompiler(opts)
-  // operation by pipeline name
-  Promise.props(
+  return Promise.props(
     _.mapValues(pipelines, pipeline => compiler.compile(pipeline))
   )
   .then(streams => {
