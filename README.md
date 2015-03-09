@@ -61,7 +61,9 @@ module.exports = function(pipelines) {
   ]
 
   pipelines['run:tests'] = [
-    pipelineComplete(mochaTest(), 'build:source', 'build:tests')
+    pipelineComplete('build:source', 'build:tests'),
+    debounce(500),
+    mochaTest()
   ]
 }
 ```
@@ -69,7 +71,7 @@ The pipeline `build:source` globs files matching `src/**/*.js` (recursive glob) 
 
 The pipeline `build:tests` takes the files in `test`, compiles them with `babel` and writes each compiled file to the directory `build/test`. Each file's path relative to its `basePath` becomes its offset within the output directory, in this case only the filename is used.
 
-The pipeline `run:tests` runs when either the `build:tests` or `build:source` pipelines complete and runs mocha with default options.
+The pipeline `run:tests` runs mocha when either the `build:tests` or `build:source` pipelines complete. `run:tests` is delayed until neither pipeline completes for 500ms to avoid wasting CPU time.
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
@@ -161,6 +163,19 @@ In this example the order of the files in `output.js` is determined by tree orde
 3. The file `bootstrap.js`.
 
 You can see here that `glob` uses multiple tree indexes and assigns them to events according to the index of the pattern that produced them.
+
+## debounce
+Combines events in the pipeline until the event stream settles for more than the given period.
+
+```javascript
+pipelines['js'] = [
+  glob('loader.js', 'bootstrap.js')
+  debounce(200),
+  concat('output.js'),
+  write('build')
+]
+```
+In this pipeline if `loader.js` and `bootstrap.js` change within 200 milliseconds of each other then the `concat` plugin will contain an array of two events (rather than being called twice with an array of one event each time). If no parameter is given then a default of 500 milliseconds is used.
 
 ## env
 
