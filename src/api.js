@@ -8,11 +8,12 @@ import PipelineCompiler from './PipelineCompiler'
 import all from './plugin/all'
 import babel from './plugin/babel'
 import concat from './plugin/concat'
+import debounce from './plugin/debounce'
 import env from './plugin/env'
 import glob from './plugin/glob'
 import write from './plugin/write'
 
-var plugins = { all, babel, concat, env, glob, write }
+var plugins = { all, babel, concat, debounce, env, glob, write }
 
 /**
  * Run Sigh.js
