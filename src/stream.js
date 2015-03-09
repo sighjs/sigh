@@ -3,9 +3,11 @@ import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
 /**
- * Adapt the events in a stream by running callback on each event in a new value.
+ * Adapt the events in a stream by running callback on each event in a new
+ * value.
  * @return {Bacon} stream that will pass the adapted events.
- * @param {Function} callback To adapt event, can also return a promise to delay the stream.
+ * @param {Function} callback To adapt event, can also return a promise to
+ * delay the stream.
  */
 export function mapEvents(stream, callback) {
   return stream.flatMapConcat(events => Bacon.fromPromise(Promise.all(events.map(callback))))
@@ -32,7 +34,9 @@ export function bufferingDebounce(stream, delay) {
 }
 
 /**
- * Adapt a stream to forward the current state of the output tree as an array of Event objects relating to the most recent event for each currently existing tree path (event type will be "add" or "change").
+ * Adapt a stream to forward the current state of the output tree as an array
+ * of Event objects relating to the most recent event for each currently
+ * existing tree path (event type will be "add" or "change").
  * @param {Bacon} stream Stream to coalesce.
  */
 export function coalesceEvents(stream) {

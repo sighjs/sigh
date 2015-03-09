@@ -4,7 +4,7 @@
 
 Sigh combines the best features of the best asset pipelines.
 
-* Inputs are based on simple glob expressions and the pipeline uses a simple tree structure, no more 500 line grunt files or verbose gulp files: [plumber][plumber].
+* Pipelines are written in JavaScript with a very neat tree-based syntax, no more grunt spaghetti or verbose gulp files: [plumber][plumber].
 * Uses Functional Reactive Programming via [bacon.js][bacon], your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs], [gulp][gulp] uses node's built-in stream API).
 * Support source maps at every stage of the pipeline: [plumber][plumber] and [gulp][gulp] (gulp cannot concatenate source maps when merging streams).
 * Caches all data in memory where possible rather than the filesystem: [gulp][gulp].
@@ -12,6 +12,8 @@ Sigh combines the best features of the best asset pipelines.
 * Support watching files and updating the pipeline as files change: [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins). No special code or plugins are necessary for file watching, just use the `-w` flag.
 * Support incremental rebuilds (only perform the minimum work necessary on file changes): [broccoli][broccoli].
 * Sigh has [automated tests](https://circleci.com/gh/sighjs/sigh) (using mocha/chai) that cover all functionality.
+* Inputs are based on simple glob expressions. Recursive glob expressions can be used when you want to speak in terms of directory trees rather than files.
+* Operations wait for streams to settle when appropriate to avoid unnecessary work.
 
 [plumber]: https://github.com/plumberjs/plumber
 [gobble]: https://github.com/gobblejs/gobble
@@ -241,9 +243,9 @@ The following methods are available:
 
 Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is Sigh handles it transparently. Library code available to plugin writers makes it simple to handle caching in cases where it is necessary.
 
-
-# TODO
+# Future Work
 * `pipelineComplete` plugin.
+* Document plugin caching system, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [coalesceEvents](https://github.com/sighjs/sigh/blob/master/src/stream.js).
 * mochaTest/uglify plugins (in external repositories).
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Write sass, compass, less, coffeescript, eco, slim, jade and haml plugins.
