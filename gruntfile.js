@@ -4,7 +4,7 @@ var path = require('path')
 module.exports = function(grunt) {
   grunt.initConfig({
     mochaTest: {
-      test: { src: 'test/*.js' },
+      test: { src: 'test/*.spec.js' },
       options: {
         require: 'test/bootstrap.js',
         reporter: 'spec',
