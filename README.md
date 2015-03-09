@@ -115,7 +115,7 @@ glob({ basePath: 'src' }, '*.js') // similar to glob('src/*.js')
 ```
 
 ## write
-The `write` plugin is responsible for writing data to the filesystem. It adds file corresponding to `Event` objects with type `add`, updates files for events with type `change` and removes files corresponding to events with type `remove`. The contents of the output directory are recursively removed when the pipeline is constructed. The output path of each file is determined by prefixing its `projectPath` with the argument to `write`. Operations that produce events (such as glob) take a `basePath` option so that the output path can be easily manipulated.
+The `write` plugin is responsible for writing data to the filesystem. It adds files corresponding to `Event` objects with type `add`, updates files for events with type `change` and removes files corresponding to events with type `remove`. The contents of the output directory are recursively removed when the pipeline is constructed. The output path of each file is determined by prefixing its `projectPath` with the argument to `write`. Operations that produce events (such as glob) take a `basePath` option so that the output path can be easily manipulated.
 
 ```javascript
 module.exports = function(pipelines) {
@@ -140,7 +140,7 @@ pipeline['js'] = [
   write('build')
 ]
 ```
-This would transpile files matching `src/*.js` using babel and copy them to the directory build. Files matching `vendor/*.js` will all be concatenated together into a single file at `build/vendor.js`. The file `bootstrap.js` will be copied to `build` without modifications.
+This would transpile files matching `src/*.js` using babel and copy them to the directory build. Files matching `vendor/*.js` will all be concatenated together into a single file at `build/vendor.js`. The file `bootstrap.js` will be copied to `build` without being modified beyond adding a source map comment.
 
 ## concat
 The `concat` plugin concatenates all resources together into one file. The order in which the files are concatenated corresponds to the depth-first index within the tree of the plugin that produced the original source content of that file.
