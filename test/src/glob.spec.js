@@ -66,8 +66,8 @@ describe('glob plugin', () => {
         .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
-            _.delay(fs.appendFile, 20, files[0], 'var file1line2 = 24;\n')
-            _.delay(fs.appendFile, 100, files[1], 'var file2line2 = 25;\n')
+            _.delay(fs.appendFile, 50, files[0], 'var file1line2 = 24;\n')
+            _.delay(fs.appendFile, 500, files[1], 'var file2line2 = 25;\n')
           }
           else {
             updates.should.eql([

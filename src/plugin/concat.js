@@ -6,10 +6,9 @@ import Event from '../Event'
 var DEFAULT_DEBOUNCE = 200
 
 export default function(op, outputPath, debounceDelay) {
-  var { stream } = op
   var fileExists = false
 
-  return coalesceEvents(stream)
+  return coalesceEvents(op.stream)
   .debounce(debounceDelay || DEFAULT_DEBOUNCE)
   .map(function(eventCache) {
     var data = '', sourceMaps = []
