@@ -165,7 +165,7 @@ In this example the order of the files in `output.js` is determined by tree orde
 You can see here that `glob` uses multiple tree indexes and assigns them to events according to the index of the pattern that produced them.
 
 ## debounce
-Combines events in the pipeline until the event stream settles for more than the given period.
+Combines events in the pipeline until the event stream settles for longer than the given period.
 
 ```javascript
 pipelines['js'] = [
