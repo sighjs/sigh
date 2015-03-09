@@ -11,9 +11,10 @@ import concat from './plugin/concat'
 import debounce from './plugin/debounce'
 import env from './plugin/env'
 import glob from './plugin/glob'
+import pipeline from './plugin/pipeline'
 import write from './plugin/write'
 
-var plugins = { all, babel, concat, debounce, env, glob, write }
+var plugins = { all, babel, concat, debounce, env, glob, pipeline, write }
 
 /**
  * Run Sigh.js

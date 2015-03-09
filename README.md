@@ -262,7 +262,6 @@ Plugins can also return a `Promise` to delay construction of the pipeline.
 Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is Sigh handles it transparently. Library code available to plugin writers makes it simple to handle caching in cases where it is necessary.
 
 # Future Work
-* `pipeline` plugin.
 * Document plugin caching system, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [coalesceEvents](https://github.com/sighjs/sigh/blob/master/src/stream.js).
 * mochaTest/uglify plugins (in external repositories).
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.

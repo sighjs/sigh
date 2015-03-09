@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import Promise from 'bluebird'
 
 export default class {
@@ -13,6 +14,7 @@ export default class {
     this.treeIndex = options.treeIndex || 1
     this.watch = options.watch
     this.environment = options.environment
+    this.pipelines = options.pipelines ? _.clone(options.pipelines) : {}
   }
 
   /**
@@ -20,7 +22,7 @@ export default class {
    * @param {Array} pipeline Array of operations representing pipeline.
    * @return {Bacon} stream that results from combining all operations in the pipeline.
    */
-  compile(pipeline, inputStream = null) {
+  compile(pipeline, inputStream = null, name = null) {
     var runOperation = (operation, opData) => {
       var stream = operation.plugin.apply(this, [ opData ].concat(operation.args))
       return Promise.resolve(stream).then(stream => {
@@ -33,23 +35,17 @@ export default class {
       })
     }
 
-    var multipleOps = pipeline instanceof Array
-    var firstOp = multipleOps ? pipeline.shift() : pipeline
-    var { watch, treeIndex, environment } = this
-    var stream = runOperation(firstOp, {
-      stream: inputStream,
-      watch,
-      treeIndex,
-      compiler: this,
-      environment
-    })
+    if (! (pipeline instanceof Array))
+      pipeline = [ pipeline ]
 
-    if (! multipleOps)
-      return Promise.resolve(stream)
-
-    return Promise.reduce(pipeline, (stream, operation) => {
-      var { watch, treeIndex } = this
+    var { watch, environment } = this
+    var streamPromise = Promise.reduce(pipeline, (stream, operation) => {
+      var { treeIndex } = this
       return runOperation(operation, { stream, watch, treeIndex, compiler: this, environment })
-    }, stream)
+    }, inputStream)
+
+    return name ?
+      streamPromise.then(stream => this.pipelines[name] = stream) :
+      streamPromise
   }
 }
