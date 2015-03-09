@@ -18,7 +18,7 @@ var FIXTURE_FILES = [
 
 describe('glob plugin', () => {
   it('globs a wildcard', () => {
-    return glob({}, {}, FIXTURE_PATH + '/*.js').toPromise(Promise).then(updates => {
+    return glob({}, FIXTURE_PATH + '/*.js').toPromise(Promise).then(updates => {
       updates.length.should.equal(2)
       _.pluck(updates, 'projectPath').sort().should.eql(FIXTURE_FILES)
       updates.forEach(file => {
@@ -42,7 +42,7 @@ describe('glob plugin', () => {
 
   it('globs two wildcards', () => {
     var opData = { treeIndex: 1 }
-    return glob(opData, {}, FIXTURE_PATH + '/*1.js', FIXTURE_PATH + '/*2.js')
+    return glob(opData, FIXTURE_PATH + '/*1.js', FIXTURE_PATH + '/*2.js')
     .toPromise(Promise)
     .then(updates => {
       opData.nextTreeIndex.should.equal(3)
@@ -62,7 +62,7 @@ describe('glob plugin', () => {
       return new Promise(function(resolve) {
         var nUpdates = 0
         var files = [ TMP_PATH + '/file1.js', TMP_PATH + '/file2.js' ]
-        glob({ watch: true, treeIndex: 4 }, { debounce: 200 }, TMP_PATH + '/*.js')
+        glob({ watch: true, treeIndex: 4 }, TMP_PATH + '/*.js')
         .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
@@ -71,10 +71,10 @@ describe('glob plugin', () => {
           }
           else {
             updates.should.eql([
-              new Event({ type: 'change', path: files[0], opTreeIndex: 4 }),
-              new Event({ type: 'change', path: files[1], opTreeIndex: 4 })
+              new Event({ type: 'change', path: files[nUpdates - 2], opTreeIndex: 4 }),
             ])
-            resolve()
+            if (nUpdates === 3)
+              resolve()
           }
         })
       })
@@ -85,7 +85,7 @@ describe('glob plugin', () => {
     (() => {
       // the first argument is the stream and must be null for the glob operation,
       // this is a special value passed during the stream construction in src/api.js
-      glob({ stream: 'some stream' }, {}, FIXTURE_PATH + '/*.js')
+      glob({ stream: 'some stream' }, FIXTURE_PATH + '/*.js')
     }).should.throw()
   })
 })

@@ -5,9 +5,6 @@ import Promise from 'bluebird'
 var glob = Promise.promisify(require('glob'))
 
 import Event from '../Event'
-import { bufferingDebounce } from '../stream'
-
-var DEFAULT_DEBOUNCE = 200
 
 export default function(op, ...patterns) {
   var { stream } = op
@@ -51,11 +48,11 @@ export default function(op, ...patterns) {
     _.flatten(['add', 'change', 'remove'].map(type =>
       watchers.map(
         (watcher, idx) => Bacon.fromEvent(watcher, type).map(
-          path => newEvent(type, { path, treeIndex: treeIndex + idx })
+          path => [ newEvent(type, { path, treeIndex: treeIndex + idx }) ]
         )
       )
     ))
   )
 
-  return stream.changes().concat(bufferingDebounce(updates, opts.debounce || DEFAULT_DEBOUNCE))
+  return stream.changes().concat(updates)
 }

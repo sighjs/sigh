@@ -48,6 +48,7 @@ module.exports = function(pipelines) {
       [ glob('src/**/*.js'), babel() ],
       glob('vendor/*.js', 'bootstrap.js')
     ),
+    debounce(500),
     concat('combined.js'),
     env(uglify(), 'production', 'staging'),
     write('build/assets')
@@ -105,10 +106,8 @@ module.exports = function(pipelines) {
   ]
 }
 ```
-  * debounce: file changes are batched until they have settled for more than `debounce` milliseconds, this defaults to `200`.
-```javascript
-glob({ debounce: 100 }, 'lib/*.js')
-```
+
+### options
   * basePath: restricts the glob to operate within basePath and also attaches the property to all resources (affecting their projectPath field).
 ```javascript
 glob({ basePath: 'src' }, '*.js') // similar to glob('src/*.js')
