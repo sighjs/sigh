@@ -38,7 +38,7 @@ Install sigh in your project:
 Write a file called `Sigh.js` and put it in the root of your project:
 ```javascript
 // To use a plugin it must be declared as a global variable.
-var all, glob, concat, write, babel, env, pipelineComplete
+var all, glob, concat, write, babel, env, pipeline
 // The above plugins are built-in, the next two are loaded from package.json.
 var uglify, mochaTest
 
@@ -61,7 +61,7 @@ module.exports = function(pipelines) {
   ]
 
   pipelines['run:tests'] = [
-    pipelineComplete('build:source', 'build:tests'),
+    pipeline('build:source', 'build:tests'),
     debounce(500),
     mochaTest()
   ]
@@ -262,7 +262,7 @@ Plugins can also return a `Promise` to delay construction of the pipeline.
 Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is Sigh handles it transparently. Library code available to plugin writers makes it simple to handle caching in cases where it is necessary.
 
 # Future Work
-* `pipelineComplete` plugin.
+* `pipeline` plugin.
 * Document plugin caching system, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [coalesceEvents](https://github.com/sighjs/sigh/blob/master/src/stream.js).
 * mochaTest/uglify plugins (in external repositories).
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
