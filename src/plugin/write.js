@@ -1,9 +1,12 @@
 import path from 'path'
 import Promise from 'bluebird'
 import fs from 'fs'
+
+import fse from 'fs-extra'
+var rm = Promise.promisify(fse.remove) // TODO: not used yet, see later comment
 var writeFile = Promise.promisify(fs.writeFile)
 var unlink = Promise.promisify(fs.unlink)
-var ensureDir = Promise.promisify(require('fs-extra').ensureDir)
+var ensureDir = Promise.promisify(fse.ensureDir)
 
 import { mapEvents } from '../stream'
 
@@ -48,5 +51,13 @@ export function writeEvent(basePath, event) {
 
 // basePath = base directory in which to write output files
 export default function(op, basePath) {
+  // sanitize a path we are about to recursively remove... it must be below
+  // the current working directory (which contains Sigh.js)
+  if (! basePath || basePath[0] === '/' || basePath.substr(0, 3) === '../')
+    throw Error(`bad basePath '${basePath}'`)
+
+  // TODO: do it with a promise
+  fse.removeSync(basePath)
+
   return mapEvents(op.stream, writeEvent.bind(this, basePath))
 }

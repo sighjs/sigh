@@ -1,9 +1,7 @@
 import _ from 'lodash'
 import Bacon from 'baconjs'
 import Promise from 'bluebird'
-import fse from 'fs-extra'
 import { readFileSync, existsSync } from 'fs'
-var rm = Promise.promisify(fse.remove)
 
 import Event from '../lib/Event'
 import write from '../lib/plugin/write'
@@ -13,8 +11,6 @@ var PROJ_PATH = 'subdir/file1.js'
 var TMP_FILE = TMP_PATH + '/' + PROJ_PATH
 
 describe('write plugin', () => {
-  beforeEach(() => rm(TMP_PATH))
-
   it('writes a single file with no map to output directory with identity map', () => {
     var data = 'var pump\n'
     var stream = Bacon.once([ new Event({ path: PROJ_PATH, type: 'add', data }) ])
