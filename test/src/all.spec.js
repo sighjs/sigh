@@ -11,9 +11,16 @@ describe('all plugin', () => {
     var streams = [1, 2, 3].map(i => plugin(op => Bacon.once([ makeEvent(i) ])))
     var opData = { compiler: new PipelineCompiler }
 
-    return all(opData, { debounce: 100 }, ...streams).then(streams => {
-      streams.toPromise(Promise).then(events => {
-        events.length.should.equal(3)
+    return all(opData, ...streams).then(streams => {
+      var nEvents = 0
+      return new Promise(function(resolve, reject) {
+        streams.onValue(events => {
+          ++nEvents
+          events.length.should.equal(1)
+          events[0].path.should.equal(`file${nEvents}.js`)
+          if (nEvents === 3)
+            resolve()
+        })
       })
     })
   })
@@ -26,9 +33,7 @@ describe('all plugin', () => {
       plugin(op => op.treeIndex.should.equal(2))
     ]
 
-    return compiler.compile([
-      plugin(all, { debounce: 100 }, ...streams)
-    ])
+    return compiler.compile([ plugin(all, ...streams) ])
   })
 
   it('increments treeIndex for subsequent operations', () => {
@@ -37,7 +42,7 @@ describe('all plugin', () => {
     var streams = [ plugin(op => 1), plugin(op => 2) ]
 
     return compiler.compile([
-      plugin(all, { debounce: 100 }, ...streams),
+      plugin(all, ...streams),
       plugin(op => op.treeIndex.should.equal(3))
     ])
   })
