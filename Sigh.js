@@ -14,6 +14,7 @@ module.exports = function(pipelines) {
   ]
 
   pipelines['tests:run'] = [
-    pipelineComplete(mochaTests(), 'source:js', 'test:js')
+    pipeline('source:js', 'test:js'),
+    mochaTests()
   ]
 }
