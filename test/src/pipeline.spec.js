@@ -21,8 +21,10 @@ describe('pipeline plugin', () => {
           ++nValues
           events.should.eql(nValues)
 
-          if (nValues === 2)
+          if (nValues === 2) {
             resolve()
+            return Bacon.noMore
+          }
         })
       })
     })

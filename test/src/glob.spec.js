@@ -1,3 +1,4 @@
+import Bacon from 'baconjs'
 import _ from 'lodash'
 import Promise from 'bluebird'
 import fs from 'fs'
@@ -73,8 +74,10 @@ describe('glob plugin', () => {
             updates.should.eql([
               new Event({ type: 'change', path: files[nUpdates - 2], opTreeIndex: 4 }),
             ])
-            if (nUpdates === 3)
+            if (nUpdates === 3) {
               resolve()
+              return Bacon.noMore
+            }
           }
         })
       })

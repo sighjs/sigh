@@ -18,8 +18,10 @@ describe('all plugin', () => {
           ++nEvents
           events.length.should.equal(1)
           events[0].path.should.equal(`file${nEvents}.js`)
-          if (nEvents === 3)
+          if (nEvents === 3) {
             resolve()
+            return Bacon.noMore
+          }
         })
       })
     })

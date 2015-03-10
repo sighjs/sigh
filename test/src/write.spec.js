@@ -64,6 +64,7 @@ describe('write plugin', () => {
           existsSync(TMP_FILE).should.not.be.ok
           existsSync(TMP_FILE + '.map').should.not.be.ok
           resolve()
+          return Bacon.noMore
         }
       })
       writeStream.onError(reject)
