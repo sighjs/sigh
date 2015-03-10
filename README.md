@@ -270,3 +270,4 @@ Due to the way Sigh's event stream works processing never needs to be repeated, 
 * More plugins: sass, compass, less, coffeescript, eco, slim, jade and haml.
 * `gulp` plugin adapter
 * Investigate possibility of grunt plugin adapter
+* glob tests: Close chokidar watches after each test.
