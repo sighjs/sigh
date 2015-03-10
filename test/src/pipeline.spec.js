@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
@@ -35,22 +36,29 @@ describe('pipeline plugin', () => {
       idx => compiler.compile([ plugin(op => Bacon.once(idx)) ], null, `stream${idx}`)
     ))
     .then(streams => {
+      // this stops the pipelines from spitting out all the events into the first
+      // subscriber, emulating how a true pipeline would work using async glob etc.
+      compiler.pipelines = _.mapValues(compiler.pipelines, stream => stream.delay(0))
+
       return Promise.all([
         new Promise(function(resolve, reject) {
           var nValues = 0
           pipeline({ compiler }, 'stream1', 'stream2').onValue(events => {
             ++nValues
             events.should.equal(nValues)
-
-            console.log("debug:sub1", nValues)
-            if (nValues === 2)
+            if (nValues === 2) {
               resolve()
+              return Bacon.noMore
+            }
           })
         }),
-        pipeline({ compiler }, 'stream2').toPromise(Promise).then(events => {
-          console.log("debug:sub2")
-          events.should.eql(2)
-        })
+        new Promise(function(resolve, reject) {
+          pipeline({ compiler }, 'stream2').onValue(events => {
+            events.should.equal(2)
+            resolve()
+            return Bacon.noMore
+          })
+        }),
       ])
     })
   })
