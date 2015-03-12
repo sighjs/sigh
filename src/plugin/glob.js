@@ -44,11 +44,12 @@ export default function(op, ...patterns) {
     pattern => chokidar.watch(pattern, { ignoreInitial: true })
   )
 
+  var chokEvRemap = { unlink: 'remove' }
   var updates = Bacon.mergeAll(
     _.flatten(['add', 'change', 'remove'].map(type =>
       watchers.map(
         (watcher, idx) => Bacon.fromEvent(watcher, type).map(
-          path => [ newEvent(type, { path, treeIndex: treeIndex + idx }) ]
+          path => [ newEvent(chokEvRemap[type] || type, { path, treeIndex: treeIndex + idx }) ]
         )
       )
     ))

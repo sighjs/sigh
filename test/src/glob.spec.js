@@ -84,6 +84,9 @@ describe('glob plugin', () => {
     })
   })
 
+  xit('detects new file', () => {
+  })
+
   xit('detects file unlink', () => {
   })
 
