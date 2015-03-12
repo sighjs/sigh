@@ -30,7 +30,7 @@ describe('pipeline plugin', () => {
     })
   })
 
-  it('can subscripe to the same stream as another pipeline', () => {
+  it('can subscribe to the same stream as another pipeline', () => {
     var compiler = new PipelineCompiler
     var opData = { compiler }
 

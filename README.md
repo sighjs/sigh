@@ -132,7 +132,7 @@ This pipeline takes all files with the extension `js` recursively reachable from
 The `all` plugin combines many streams together.
 
 ```javascript
-pipeline['js'] = [
+pipelines['js'] = [
   all(
     [ glob('src/*.js'), babel() ],
     [ glob('vendor/*.js'), concat('vendor.js') ],
