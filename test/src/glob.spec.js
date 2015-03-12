@@ -84,6 +84,12 @@ describe('glob plugin', () => {
     })
   })
 
+  xit('detects file unlink', () => {
+  })
+
+  xit('detects file rename', () => {
+  })
+
   it('only accepts first position in pipeline', () => {
     (() => {
       // the first argument is the stream and must be null for the glob operation,
