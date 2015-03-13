@@ -134,7 +134,7 @@ The `merge` plugin combines many streams together.
 ```javascript
 pipelines['js'] = [
   merge(
-    [ glob('src/*.js'), babel() ],
+    [ glob({ basePath: 'src' }, '*.js'), babel() ],
     [ glob('vendor/*.js'), concat('vendor.js') ],
     glob('bootstrap.js')
   ),
