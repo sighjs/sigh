@@ -207,7 +207,7 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 
 # Writing sigh plugins
 
-Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/src/doc/writing-plugins.md)
+Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
 # Future Work
 * More documentation for `pipeline`.
