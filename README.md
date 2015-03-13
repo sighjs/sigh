@@ -218,4 +218,4 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 * `mochaTest`/`uglify` plugins (in external repositories).
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
 * Investigate possibility of grunt plugin adapter
-* glob tests: Close chokidar watches after each test.
+* Ensure chokidar watchers are closed after each test.

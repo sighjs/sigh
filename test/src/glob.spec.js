@@ -84,7 +84,34 @@ describe('glob plugin', () => {
     })
   })
 
-  xit('detects new file', () => {
+  it('detects new file', () => {
+    // TODO: allow this to work at TMP_PATH, could be to do with the chokidar watchers
+    //       not being closed between test runs.
+    var tmpPath = TMP_PATH + '2'
+    return rm(tmpPath).then(() => {
+      return copy(FIXTURE_PATH, tmpPath)
+    })
+    .then(() => {
+      var addedFile = tmpPath + '/added-file.js'
+      return new Promise(function(resolve) {
+        var nUpdates = 0
+        var files = [ tmpPath + '/file1.js', tmpPath + '/file2.js' ]
+        glob({ watch: true, treeIndex: 4 }, tmpPath + '/*.js')
+        .onValue(updates => {
+          if (++nUpdates === 1) {
+            updates.length.should.equal(2)
+            _.delay(fs.writeFile, 300, addedFile, 'var file3line1 = 33;\n')
+          }
+          else {
+            updates.should.eql([
+              new Event({ type: 'add', path: addedFile, opTreeIndex: 4 }),
+            ])
+            resolve()
+            return Bacon.noMore
+          }
+        })
+      })
+    })
   })
 
   xit('detects file unlink', () => {
