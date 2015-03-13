@@ -3,15 +3,15 @@ import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
 import PipelineCompiler from '../lib/PipelineCompiler'
-import all from '../lib/plugin/all'
+import merge from '../lib/plugin/merge'
 import { plugin, makeEvent } from './helper'
 
-describe('all plugin', () => {
+describe('merge plugin', () => {
   it('combines three streams into one', () => {
     var streams = [1, 2, 3].map(i => plugin(op => Bacon.once([ makeEvent(i) ])))
     var opData = { compiler: new PipelineCompiler }
 
-    return all(opData, ...streams).then(streams => {
+    return merge(opData, ...streams).then(streams => {
       var nEvents = 0
       return new Promise(function(resolve, reject) {
         streams.onValue(events => {
@@ -35,7 +35,7 @@ describe('all plugin', () => {
       plugin(op => op.treeIndex.should.equal(2))
     ]
 
-    return compiler.compile([ plugin(all, ...streams) ])
+    return compiler.compile([ plugin(merge, ...streams) ])
   })
 
   it('increments treeIndex for subsequent operations', () => {
@@ -44,7 +44,7 @@ describe('all plugin', () => {
     var streams = [ plugin(op => 1), plugin(op => 2) ]
 
     return compiler.compile([
-      plugin(all, ...streams),
+      plugin(merge, ...streams),
       plugin(op => op.treeIndex.should.equal(3))
     ])
   })

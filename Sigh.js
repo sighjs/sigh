@@ -1,4 +1,4 @@
-var glob, babel, write, mochaTests
+var glob, babel, debounce, write, mochaTests
 
 module.exports = function(pipelines) {
   pipelines['source:js'] = [
@@ -15,6 +15,7 @@ module.exports = function(pipelines) {
 
   pipelines['tests:run'] = [
     pipeline('source:js', 'test:js'),
+    debounce(),
     mochaTests()
   ]
 }

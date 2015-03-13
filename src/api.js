@@ -5,7 +5,7 @@ import rewire from 'rewire'
 import path from 'path'
 
 import PipelineCompiler from './PipelineCompiler'
-import all from './plugin/all'
+import merge from './plugin/merge'
 import babel from './plugin/babel'
 import concat from './plugin/concat'
 import debounce from './plugin/debounce'
@@ -14,7 +14,7 @@ import glob from './plugin/glob'
 import pipeline from './plugin/pipeline'
 import write from './plugin/write'
 
-var plugins = { all, babel, concat, debounce, env, glob, pipeline, write }
+var plugins = { merge, babel, concat, debounce, env, glob, pipeline, write }
 
 /**
  * Run Sigh.js

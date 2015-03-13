@@ -38,13 +38,13 @@ Install sigh in your project:
 Write a file called `Sigh.js` and put it in the root of your project:
 ```javascript
 // To use a plugin it must be declared as a global variable.
-var all, glob, concat, write, babel, env, pipeline
+var merge, glob, concat, write, babel, env, pipeline
 // The above plugins are built-in, the next two are loaded from package.json.
 var uglify, mochaTest
 
 module.exports = function(pipelines) {
   pipelines['build:source'] = [
-    all(
+    merge(
       [ glob('src/**/*.js'), babel() ],
       glob('vendor/*.js', 'bootstrap.js')
     ),
@@ -128,12 +128,12 @@ module.exports = function(pipelines) {
 ```
 This pipeline takes all files with the extension `js` recursively reachable from `src` and writes each one to `build` directory (without the `src` prefix due to `basePath`).
 
-## all
-The `all` plugin combines many streams together.
+## merge
+The `merge` plugin combines many streams together.
 
 ```javascript
 pipelines['js'] = [
-  all(
+  merge(
     [ glob('src/*.js'), babel() ],
     [ glob('vendor/*.js'), concat('vendor.js') ],
     glob('bootstrap.js')
@@ -148,7 +148,7 @@ The `concat` plugin concatenates all resources together into one file. The order
 
 ```javascript
 pipelines['js'] = [
-  all(
+  merge(
     [ glob('src/*.js'), babel() ],
     glob('loader.js', 'bootstrap.js')
   ),
