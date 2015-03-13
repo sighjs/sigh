@@ -263,11 +263,11 @@ Due to the way Sigh's event stream works processing never needs to be repeated, 
 
 # Future Work
 * More documentation for `pipeline`.
+* `gulp` plugin adapter
+* Write some external plugins that aren't possible in gulp.
 * More documentation about building plugins.
 * Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [coalesceEvents](https://github.com/sighjs/sigh/blob/master/src/stream.js).
 * `mochaTest`/`uglify` plugins (in external repositories).
 * `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
-* More plugins: sass, compass, less, coffeescript, eco, slim, jade and haml.
-* `gulp` plugin adapter
 * Investigate possibility of grunt plugin adapter
 * glob tests: Close chokidar watches after each test.
