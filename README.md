@@ -12,7 +12,7 @@ Sigh combines the best features of the best asset pipelines.
 * Support watching files and updating the pipeline as files change: [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins). No special code or plugins are necessary for file watching, just use the `-w` flag.
 * Support incremental rebuilds (only perform the minimum work necessary on file changes): [broccoli][broccoli].
 * Inputs are based on simple glob expressions. Recursive glob expressions can be used when you want to speak in terms of directory trees rather than files.
-* Supports `n:1` and `1:n` operations, Sigh is not built around `1:1` operations: [broccoli][broccoli].
+* Supports `n:n`, `n:1` and `1:n` operations: [broccoli][broccoli].
 * Operations wait for streams to settle when appropriate to avoid unnecessary work [plumber][plumber].
 * Sigh has [automated tests](https://circleci.com/gh/sighjs/sigh) (using mocha/chai) that cover all functionality.
 
