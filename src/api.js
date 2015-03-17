@@ -22,7 +22,18 @@ var plugins = { merge, babel, concat, debounce, env, glob, pipeline, write }
  */
 export function invoke(opts) {
   try {
-    return invokeHelper(opts)
+    return compile(opts)
+    .then(streams => {
+      _.forEach(streams, (stream, pipelineName) => {
+        stream.onValue(value => {
+          // TODO: if (verbose) show value also
+          console.log('pipeline %s complete', pipelineName)
+        })
+        stream.onError(error => {
+          console.warn('\x07error: pipeline %s - %j', pipelineName, error)
+        })
+      })
+    })
   }
   catch (e) {
     if (typeof e === 'function' && e instanceof Error) {
@@ -37,20 +48,26 @@ export function invoke(opts) {
 }
 
 /**
- * Run the Sigh.js file in the current directory with the given options.
+ * Compile the Sigh.js file in the current directory with the given options.
  * @return {Promise} Resolves to an object { pipelineName: baconStream }
  */
-function invokeHelper(opts) {
-  var packageJson = JSON.parse(fs.readFileSync('package.json'))
-  ; [ packageJson.devDependencies, packageJson.dependencies ].forEach(deps => {
-    if (! deps)
-      return
+export function compile(opts) {
+  try {
+    var packageJson = JSON.parse(fs.readFileSync('package.json'))
+  }
+  catch (e) {}
 
-    _.forEach(deps, function(version, pkg) {
-      if (/^sigh-/.test(pkg) && pkg !== 'sigh-cli')
-        plugins[pkg.substr(5)] = require(path.join(process.cwd(), 'node_modules', pkg))
+  if (packageJson) {
+    [ packageJson.devDependencies, packageJson.dependencies ].forEach(deps => {
+      if (! deps)
+        return
+
+      _.forEach(deps, function(version, pkg) {
+        if (/^sigh-/.test(pkg) && pkg !== 'sigh-cli')
+          plugins[pkg.substr(5)] = require(path.join(process.cwd(), 'node_modules', pkg))
+      })
     })
-  })
+  }
 
   var sighModule = rewire(path.join(process.cwd(), 'Sigh'))
   _.forEach(plugins, (plugin, key) => injectPlugin(sighModule, key))
@@ -58,7 +75,7 @@ function invokeHelper(opts) {
   var pipelines = {}
   sighModule(pipelines)
 
-  if (opts.pipelines.length) {
+  if (opts.pipelines && opts.pipelines.length) {
     Object.keys(pipelines).forEach(name => {
       if (opts.pipelines.indexOf(name) === -1)
         delete pipelines[name]
@@ -69,17 +86,6 @@ function invokeHelper(opts) {
   return Promise.props(
     _.mapValues(pipelines, pipeline => compiler.compile(pipeline))
   )
-  .then(streams => {
-    _.forEach(streams, (stream, pipelineName) => {
-      stream.onValue(value => {
-        // TODO: if (verbose) show value also
-        console.log('pipeline %s complete', pipelineName)
-      })
-      stream.onError(error => {
-        console.warn('\x07error: pipeline %s - %j', pipelineName, error)
-      })
-    })
-  })
 }
 
 function injectPlugin(module, pluginName) {
