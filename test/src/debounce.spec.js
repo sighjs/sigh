@@ -13,7 +13,7 @@ describe('debounce plugin', () => {
     var opData = { compiler }
 
     return compiler.compile([
-      plugin(op => streams),
+      op => streams,
       plugin(debounce, 100)
     ])
     .then(streams => streams.toPromise(Promise))

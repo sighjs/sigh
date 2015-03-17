@@ -4,7 +4,6 @@ import Bacon from 'baconjs'
 
 import PipelineCompiler from '../lib/PipelineCompiler'
 import pipeline from '../lib/plugin/pipeline'
-import { plugin, makeEvent } from './helper'
 
 describe('pipeline plugin', () => {
   it('intercepts the end of two pipelines', () => {
@@ -12,7 +11,7 @@ describe('pipeline plugin', () => {
     var opData = { compiler }
 
     return Promise.all([1, 2].map(
-      idx => compiler.compile([ plugin(op => Bacon.once(idx)) ], null, `stream${idx}`)
+      idx => compiler.compile(op => Bacon.once(idx), null, `stream${idx}`)
     ))
     .then(streams => {
       return new Promise(function(resolve, reject) {
@@ -35,7 +34,7 @@ describe('pipeline plugin', () => {
     var opData = { compiler }
 
     return Promise.all([1, 2].map(
-      idx => compiler.compile([ plugin(op => Bacon.once(idx)) ], null, `stream${idx}`)
+      idx => compiler.compile(op => Bacon.once(idx), null, `stream${idx}`)
     ))
     .then(streams => {
       // this stops the pipelines from spitting out all the events into the first
@@ -66,5 +65,8 @@ describe('pipeline plugin', () => {
   })
 
   xit('throws an error when a non-existent stream name is used', () => {
+  })
+
+  xit('can subscribe to inactive pipeline', () => {
   })
 })

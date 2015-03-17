@@ -24,7 +24,10 @@ export default class {
    */
   compile(pipeline, inputStream = null, name = null) {
     var runOperation = (operation, opData) => {
-      var stream = operation.plugin.apply(this, [ opData ].concat(operation.args))
+      var stream = operation.plugin ?
+        operation.plugin.apply(this, [ opData ].concat(operation.args)) :
+        operation(opData)
+
       return Promise.resolve(stream).then(stream => {
         if (this.treeIndex === opData.treeIndex)
           ++this.treeIndex

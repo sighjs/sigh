@@ -10,8 +10,8 @@ describe('env plugin', () => {
   it('modifies stream when selected environment is chosen', () => {
     var compiler = new PipelineCompiler({ environment: 'friend' })
     var streams = [
-      plugin(op => Bacon.once(8)),
-      plugin(env, plugin(op => op.stream.map(val => val * 2)), 'friend')
+      op => Bacon.once(8),
+      plugin(env, op => op.stream.map(val => val * 2), 'friend')
     ]
 
     return compiler.compile(streams).then(
@@ -22,8 +22,8 @@ describe('env plugin', () => {
   it('passes stream through when selected environments are not chosen', () => {
     var compiler = new PipelineCompiler({ environment: 'e1' })
     var streams = [
-      plugin(op => Bacon.once(9)),
-      plugin(env, plugin(op => op.stream.map(val => val * 2)), 'e2', 'e3')
+      op => Bacon.once(9),
+      plugin(env, op => op.stream.map(val => val * 2), 'e2', 'e3')
     ]
 
     return compiler.compile(streams).then(

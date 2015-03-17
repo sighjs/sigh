@@ -10,22 +10,22 @@ describe('PipelineCompiler', () => {
   it('should create appropriate stream from array', () => {
     var compiler = new PipelineCompiler
     return compiler.compile([
-      plugin(op => {
+      op => {
         should.not.exist(op.stream)
         return Bacon.once(1)
-      }),
-      plugin(op => { return op.stream.map(v => v + 1) })
+      },
+      op => op.stream.map(v => v + 1)
     ])
     .then(stream => stream.toPromise(Promise).then(value => value.should.equal(2)))
   })
 
   it('should create stream from stream, passing watch option', () => {
     var compiler = new PipelineCompiler({ watch: true })
-    return compiler.compile(plugin(op => {
+    return compiler.compile(op => {
       op.watch.should.be.true
       should.not.exist(op.stream)
       return Bacon.once(420)
-    }))
+    })
     .then(
       stream => stream.toPromise(Promise).then(value => value.should.equal(420))
     )
@@ -44,9 +44,9 @@ describe('PipelineCompiler', () => {
   it('should pass treeIndex and observe nextTreeIndex', () => {
     var compiler = new PipelineCompiler
     return compiler.compile([
-      plugin(op => { op.treeIndex.should.equal(1) }),
-      plugin(op => { op.treeIndex.should.equal(2), op.treeIndex = 4 }),
-      plugin(op => { op.treeIndex.should.equal(4) })
+      op => { op.treeIndex.should.equal(1) },
+      op => { op.treeIndex.should.equal(2), op.treeIndex = 4 },
+      op => { op.treeIndex.should.equal(4) }
     ])
   })
 })
