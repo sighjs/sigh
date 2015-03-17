@@ -6,12 +6,13 @@ import { apply as applySourceMap, generateIdentitySourceMap } from './sourceMap'
  * pipeline operation), containing the following parameters:
  *   type: add/remove/change: Represents how the file has changed since it was last seen, the first event will always be an array containing an "add" of all files in the project.
  *   sourceData: data of first source-producing operation.
+ *   sourcePath: path of first file producing operation.
  *   data: current data in event (possibly transformed one or more times).
  */
 export default class {
   constructor(fields) {
     this.type = fields.type
-    this.path = fields.path
+    this.sourcePath = this.path = fields.path
 
     if (fields.opTreeIndex)
       this.opTreeIndex = fields.opTreeIndex
@@ -60,7 +61,7 @@ export default class {
   get sourceMap() {
     if (! this._sourceMap) {
       this._hasIdentitySourceMap = true
-      this._sourceMap = generateIdentitySourceMap(this.fileType, this.path, this.data)
+      this._sourceMap = generateIdentitySourceMap(this.fileType, this.sourcePath, this.data)
       this._sourceMap.sourcesContent = [ this.sourceData ]
     }
 

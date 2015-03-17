@@ -17,8 +17,8 @@ export function writeEvent(basePath, event) {
   var outputPath = path.join(basePath, projectPath)
 
   // amend object passed out of pipeline to reflect written file
-  // delete event.basePath
-  // event.path = outputPath
+  delete event.basePath
+  event.path = outputPath
 
   if (event.type === 'remove') {
     return unlink(outputPath).then(() => {

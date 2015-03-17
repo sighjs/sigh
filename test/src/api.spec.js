@@ -23,8 +23,7 @@ describe('api', () => {
     .then(events => {
       events.length.should.equal(1)
       var event = events[0]
-      // TODO: should be dist/combined.js
-      event.path.should.equal('combined.js')
+      event.path.should.equal('dist/combined.js')
     })
     .finally(() => {
       if (pathBackup)
