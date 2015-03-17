@@ -2,8 +2,8 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
-import Event from '../lib/Event'
-import concat from '../lib/plugin/concat'
+import Event from '../../lib/Event'
+import concat from '../../lib/plugin/concat'
 import { SourceMapConsumer } from 'source-map'
 import { makeEvent } from './helper'
 

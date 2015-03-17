@@ -34,6 +34,10 @@ export default class {
         else if (opData.treeIndex > this.treeIndex)
           this.treeIndex = opData.treeIndex
 
+        if (opData.cleanup) {
+          // TODO: register pipeline cleanup function
+        }
+
         return stream
       })
     }

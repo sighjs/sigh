@@ -1,9 +1,9 @@
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
-import PipelineCompiler from '../lib/PipelineCompiler'
-import Event from '../lib/Event'
-import debounce from '../lib/plugin/debounce'
+import PipelineCompiler from '../../lib/PipelineCompiler'
+import Event from '../../lib/Event'
+import debounce from '../../lib/plugin/debounce'
 import { plugin, makeEvent } from './helper'
 
 describe('debounce plugin', () => {

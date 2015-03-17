@@ -2,8 +2,8 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
-import PipelineCompiler from '../lib/PipelineCompiler'
-import merge from '../lib/plugin/merge'
+import PipelineCompiler from '../../lib/PipelineCompiler'
+import merge from '../../lib/plugin/merge'
 import { plugin, makeEvent } from './helper'
 
 describe('merge plugin', () => {

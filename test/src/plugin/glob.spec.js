@@ -7,8 +7,8 @@ import fse from 'fs-extra'
 var copy = Promise.promisify(fse.copy)
 var rm = Promise.promisify(fse.remove)
 
-import Event from '../lib/Event'
-import glob from '../lib/plugin/glob'
+import Event from '../../lib/Event'
+import glob from '../../lib/plugin/glob'
 
 var FIXTURE_PATH = 'test/fixtures/simple-project'
 var TMP_PATH = 'test/tmp/glob'
