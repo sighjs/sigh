@@ -19,7 +19,7 @@ describe('api', () => {
       process.chdir(TMP_PATH)
       return compile({ environment: 'production' })
     })
-    .then(streams => streams.js.toPromise())
+    .then(streams => streams.js.toPromise(Promise))
     .then(events => {
       events.length.should.equal(1)
       var event = events[0]
