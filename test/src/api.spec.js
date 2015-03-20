@@ -11,9 +11,8 @@ var TMP_PATH = 'test/tmp/api'
 describe('api', () => {
   it('compile should build working bacon streams from pipelines in Sigh.js file', () => {
     var pathBackup
-    return rm(TMP_PATH).then(() => {
-      return copy(FIXTURE_PATH, TMP_PATH)
-    })
+    return rm(TMP_PATH)
+    .then(() => copy(FIXTURE_PATH, TMP_PATH))
     .then(() => {
       pathBackup = process.cwd()
       process.chdir(TMP_PATH)

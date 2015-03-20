@@ -20,7 +20,7 @@ var plugins = { merge, babel, concat, debounce, env, glob, pipeline, write }
  * Run Sigh.js
  * @return {Promise} Resolves to an object { pipelineName: baconStream }
  */
-export function invoke(opts) {
+export function invoke(opts = {}) {
   try {
     return compile(opts)
     .then(streams => {
@@ -51,7 +51,7 @@ export function invoke(opts) {
  * Compile the Sigh.js file in the current directory with the given options.
  * @return {Promise} Resolves to an object { pipelineName: baconStream }
  */
-export function compile(opts) {
+export function compile(opts = {}) {
   try {
     var packageJson = JSON.parse(fs.readFileSync('package.json'))
   }
@@ -84,7 +84,7 @@ export function compile(opts) {
 
   var compiler = new PipelineCompiler(opts)
   return Promise.props(
-    _.mapValues(pipelines, pipeline => compiler.compile(pipeline))
+    _.mapValues(pipelines, (pipeline, name) => compiler.compile(pipeline, null, name))
   )
 }
 
