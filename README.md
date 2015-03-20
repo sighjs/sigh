@@ -2,7 +2,7 @@
 
 [![build status](https://circleci.com/gh/sighjs/sigh.png?circle-token=beca7e0d044a1283d4633dc180c31f8e5592446c)](https://circleci.com/gh/sighjs/sigh)
 
-Sigh combines the best features of the best asset pipelines including incredible speed and perfect source maps even in production builds. No matter how many transpilers and minifiers you pass your code through Sigh will do the minimum work possible without touching your hard drive until you write your final destination files.
+Sigh combines the best features of the best asset pipelines including incredible speed and perfect source maps even in production builds. No matter how many transpilers and minifiers you pass your code through Sigh will do the minimum work possible without touching your hard drive until the output files are written to disk.
 
 * Pipelines are written in JavaScript with a very neat tree-based syntax, no more grunt spaghetti or verbose gulp files: [plumber][plumber].
 * Uses Functional Reactive Programming via [bacon.js][bacon], your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs], [gulp][gulp] uses node's built-in stream API).
