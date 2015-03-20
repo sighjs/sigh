@@ -1,4 +1,4 @@
-import Event from '../../lib/Event'
+import Event from '../../Event'
 
 export function makeEvent(num) {
   return new Event({

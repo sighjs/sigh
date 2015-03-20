@@ -2,8 +2,8 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
-import Event from '../../lib/Event'
-import babel from '../../lib/plugin/babel'
+import Event from '../../Event'
+import babel from '../../plugin/babel'
 
 describe('babel plugin', () => {
   it('compiles a single add event', () => {

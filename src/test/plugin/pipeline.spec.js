@@ -2,8 +2,8 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
-import PipelineCompiler from '../../lib/PipelineCompiler'
-import pipeline from '../../lib/plugin/pipeline'
+import PipelineCompiler from '../../PipelineCompiler'
+import pipeline from '../../plugin/pipeline'
 
 describe('pipeline plugin', () => {
   it('intercepts the end of two pipelines', () => {

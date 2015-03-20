@@ -2,10 +2,10 @@ import Bacon from 'baconjs'
 import Promise from 'bluebird'
 import { SourceMapConsumer } from 'source-map'
 
-import { positionOf } from '../lib/sourceMap'
-import Event from '../lib/Event'
-import concat from '../lib/plugin/concat'
-import babel from '../lib/plugin/babel'
+import { positionOf } from '../sourceMap'
+import Event from '../Event'
+import concat from '../plugin/concat'
+import babel from '../plugin/babel'
 
 var should = require('chai').should()
 

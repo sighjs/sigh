@@ -1,6 +1,6 @@
 import Bacon from 'baconjs'
 import Promise from 'bluebird'
-import PipelineCompiler from '../lib/PipelineCompiler'
+import PipelineCompiler from '../PipelineCompiler'
 
 import { plugin } from './plugin/helper'
 

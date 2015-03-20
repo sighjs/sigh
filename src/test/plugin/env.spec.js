@@ -1,9 +1,9 @@
 import Bacon from 'baconjs'
 import Promise from 'bluebird'
 
-import Event from '../../lib/Event'
-import env from '../../lib/plugin/env'
-import PipelineCompiler from '../../lib/PipelineCompiler'
+import Event from '../../Event'
+import env from '../../plugin/env'
+import PipelineCompiler from '../../PipelineCompiler'
 import { plugin } from './helper'
 
 describe('env plugin', () => {

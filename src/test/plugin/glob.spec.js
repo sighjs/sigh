@@ -7,8 +7,8 @@ import fse from 'fs-extra'
 var copy = Promise.promisify(fse.copy)
 var rm = Promise.promisify(fse.remove)
 
-import Event from '../../lib/Event'
-import glob from '../../lib/plugin/glob'
+import Event from '../../Event'
+import glob from '../../plugin/glob'
 
 var FIXTURE_PATH = 'test/fixtures/simple-project'
 var TMP_PATH = 'test/tmp/glob'
@@ -31,7 +31,7 @@ describe('glob plugin', () => {
 
   it('globs a wildcard using the basePath option', () => {
     var opData = { treeIndex: 4 }
-    return glob(opData, { basePath: 'test/fixtures/simple-project' }, '*.js')
+    return glob(opData, { basePath: FIXTURE_PATH }, '*.js')
     .toPromise(Promise)
     .then(updates => {
       opData.nextTreeIndex.should.equal(5)

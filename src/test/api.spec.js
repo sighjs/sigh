@@ -3,7 +3,7 @@ import fse from 'fs-extra'
 var copy = Promise.promisify(fse.copy)
 var rm = Promise.promisify(fse.remove)
 
-import { compile } from '../lib/api'
+import { compile } from '../api'
 
 var FIXTURE_PATH = 'test/fixtures/sigh-project'
 var TMP_PATH = 'test/tmp/api'

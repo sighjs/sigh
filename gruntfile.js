@@ -1,12 +1,12 @@
 var path = require('path')
 
-// TODO: eat dogfood
 module.exports = function(grunt) {
   grunt.initConfig({
+    // TODO: remove mochaTest and watch, use `grunt sigh` instead
     mochaTest: {
-      test: { src: 'test/{,plugin/}*.spec.js' },
+      test: { src: 'lib/test/{,plugin/}*.spec.js' },
       options: {
-        require: 'test/bootstrap.js',
+        require: 'lib/test/bootstrap.js',
         reporter: 'spec',
         clearRequireCache: true
       },
@@ -15,10 +15,6 @@ module.exports = function(grunt) {
       sources: {
         files: 'src/**/*.js',
         tasks: ['build', 'test']
-      },
-      testSources: {
-        files: 'test/src/**/*.js',
-        tasks: ['test']
       },
       options: {
         spawn: false
@@ -48,12 +44,9 @@ module.exports = function(grunt) {
   grunt.registerTask('build', function() {
     transpileEs6('src', 'lib', this.async())
   })
-  grunt.registerTask('buildTests', function() {
-    transpileEs6('test/src', 'test', this.async())
-  })
   grunt.registerTask('default', ['build', 'test', 'watch'])
 
-  grunt.registerTask('test', ['buildTests', 'mochaTest'])
+  grunt.registerTask('test', ['build', 'mochaTest'])
 
   grunt.registerTask('sigh', 'Use `sigh -w` to bootstrap then watch for changes', function() {
     var invoke = require('./lib/api').invoke

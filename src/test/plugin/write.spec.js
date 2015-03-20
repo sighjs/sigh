@@ -3,8 +3,8 @@ import Bacon from 'baconjs'
 import Promise from 'bluebird'
 import { readFileSync, existsSync } from 'fs'
 
-import Event from '../../lib/Event'
-import write from '../../lib/plugin/write'
+import Event from '../../Event'
+import write from '../../plugin/write'
 
 var TMP_PATH = 'test/tmp/write'
 var PROJ_PATH = 'subdir/file1.js'
