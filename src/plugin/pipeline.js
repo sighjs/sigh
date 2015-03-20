@@ -7,6 +7,6 @@ import { bufferingDebounce } from '../stream'
 var DEFAULT_DEBOUNCE = 200
 
 export default function(op, ...pipelineNames) {
-  return Bacon.mergeAll(pipelineNames.map(name => op.compiler.pipelines[name]))
+  return Bacon.mergeAll(pipelineNames.map(name => op.compiler.getPipeline(name)))
 }
 

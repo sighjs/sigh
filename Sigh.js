@@ -16,7 +16,7 @@ module.exports = function(pipelines) {
 
   pipelines['tests:run'] = [
     pipeline('source:js', 'test:js'),
-    // debounce()
+    debounce()
     // TODO: run mocha
   ]
 }

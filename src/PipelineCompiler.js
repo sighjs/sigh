@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import Bacon from 'baconjs'
 import Promise from 'bluebird'
 
 export default class {
@@ -14,7 +15,11 @@ export default class {
     this.treeIndex = options.treeIndex || 1
     this.watch = options.watch
     this.environment = options.environment
-    this.pipelines = options.pipelines ? _.clone(options.pipelines) : {}
+
+    // buses by pipeline name, the pipeline with the corresponding name will
+    // be plugged into the bus. This allows subscribers to register interest
+    // before a pipeline has been created
+    this.pipelines = {}
   }
 
   /**
@@ -51,8 +56,27 @@ export default class {
       return runOperation(operation, { stream, watch, treeIndex, compiler: this, environment })
     }, inputStream)
 
-    return name ?
-      streamPromise.then(stream => this.pipelines[name] = stream) :
-      streamPromise
+    if (! name)
+      return streamPromise
+
+    var bus = this.getPipeline(name)
+    return streamPromise.then(stream => {
+      bus.plug(stream)
+      return stream
+    })
   }
+
+  /**
+   * This allows you to subscribe to the events from the given pipeline, it can
+   * be called before the pipeline is registered.
+   * @return {Bacon.Bus} Bus connected to stream of pipeline
+   * @param {String} name Name of pipeline to get stream of
+   */
+  getPipeline(name) {
+    var bus = this.pipelines[name]
+    if (bus)
+      return bus
+    return this.pipelines[name] = new Bacon.Bus()
+  }
+
 }

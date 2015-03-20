@@ -8,7 +8,6 @@ import pipeline from '../../lib/plugin/pipeline'
 describe('pipeline plugin', () => {
   it('intercepts the end of two pipelines', () => {
     var compiler = new PipelineCompiler
-    var opData = { compiler }
 
     return Promise.all([1, 2].map(
       idx => compiler.compile(op => Bacon.once(idx), null, `stream${idx}`)
@@ -31,7 +30,6 @@ describe('pipeline plugin', () => {
 
   it('can subscribe to the same stream as another pipeline', () => {
     var compiler = new PipelineCompiler
-    var opData = { compiler }
 
     return Promise.all([1, 2].map(
       idx => compiler.compile(op => Bacon.once(idx), null, `stream${idx}`)
@@ -64,9 +62,18 @@ describe('pipeline plugin', () => {
     })
   })
 
-  xit('throws an error when a non-existent stream name is used', () => {
-  })
+  it('can subscribe to a pipeline before it has been created', () => {
+    var compiler = new PipelineCompiler
 
-  xit('can subscribe to inactive pipeline', () => {
+    var pipelineOp = pipeline({ compiler }, 'stream').toPromise()
+
+    compiler.compile(op => Bacon.once(1), null, 'stream')
+    .then(stream => {
+      compiler.pipelines.stream = compiler.pipelines.stream.delay(0)
+      return pipelineOp
+    })
+    .then(function(values) {
+      values.should.eql(1)
+    })
   })
 })
