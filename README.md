@@ -29,12 +29,12 @@ Install sigh-cli globally:
 % sudo npm install -g sigh-cli
 ```
 
-Install sigh in your project:
+Install sigh in the project:
 ```bash
 % npm install sigh
 ```
 
-Write a file called `Sigh.js` and put it in the root of your project:
+Write a file called `Sigh.js` and put it in the root of the project:
 ```javascript
 // To use a plugin it must be declared as a global variable.
 var merge, glob, concat, write, babel, env, pipeline
@@ -115,7 +115,7 @@ module.exports = function(pipelines) {
     glob({ basePath: 'src' }, '*.js') // similar to glob('src/*.js')
     ```
 
-  * debounce: Debounce file updates, defaults to 120 (milliseconds). Ideally you should not set it much lower than 120 as this interval is also used to iron out bad events reported by the underlying file watching plugin Sigh uses.
+  * debounce: Debounce file updates, defaults to 120 (milliseconds). Ideally it should not be set lower than 120, this interval is also used to iron out bad events reported by the underlying file watching plugin Sigh uses.
 
 ## write
 The `write` plugin is responsible for writing data to the filesystem. It adds files corresponding to `Event` objects with type `add`, updates files for events with type `change` and removes files corresponding to events with type `remove`. The contents of the output directory are recursively removed when the pipeline is constructed. The output path of each file is determined by prefixing its `projectPath` with the argument to `write`. Operations that produce events (such as glob) take a `basePath` option so that the output path can be easily manipulated.
