@@ -1,12 +1,12 @@
 import _ from 'lodash'
-import { coalesceEvents } from '../stream'
+import { toFileSystemState } from '../stream'
 import { concatenate as concatSourceMaps } from '../sourceMap'
 import Event from '../Event'
 
 export default function(op, outputPath) {
   var fileExists = false
 
-  return coalesceEvents(op.stream)
+  return toFileSystemState(op.stream)
   .map(function(eventCache) {
     var data = '', sourceMaps = []
     var offsets = [0], cumOffset = 0

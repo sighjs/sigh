@@ -63,7 +63,7 @@ export function bufferingDebounce(stream, delay) {
  * existing tree path (event type will be "add" or "change").
  * @param {Bacon} stream Stream to coalesce.
  */
-export function coalesceEvents(stream) {
+export function toFileSystemState(stream) {
   var eventCache = {} // event by relative path
 
   return stream.map(events => {
