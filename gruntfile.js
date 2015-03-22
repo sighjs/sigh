@@ -49,13 +49,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['build', 'mochaTest'])
 
   grunt.registerTask('sigh', 'Use `sigh -w` to bootstrap then watch for changes', function() {
-    var invoke = require('./lib/api').invoke
-    try {
-      invoke({ watch: true })
-      this.async()
-    }
-    catch (e) {
-      console.warn(e.stack ? e.stack : e)
-    }
+    this.async()
+    require('./bootstrap')
   })
 }
