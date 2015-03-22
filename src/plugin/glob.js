@@ -57,7 +57,7 @@ export default function(op, ...patterns) {
       (watcher, idx) => Bacon.fromEvent(watcher, type).map(
         path => {
           // TODO: remove
-          console.log('watch', Date.now(), type, path)
+          // console.log('watch', Date.now(), type, path)
           return [ newEvent(chokEvRemap[type] || type, { path, treeIndex: treeIndex + idx }) ]
         }
       )
