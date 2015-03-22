@@ -3,6 +3,32 @@ import Promise from 'bluebird'
 import Bacon from 'baconjs'
 
 /**
+ * Adapt a stream to pull Bacon.Error values out of the `events` payload and
+ * push them down the stream as error events.
+ */
+export function raiseErrors(stream) {
+  return stream.flatMap(function(events) {
+    // The events array may contain individual errors, the need to be passed separately
+    var nonErrors = []
+    var errors = events.filter(event => {
+      if (event instanceof Bacon.Error)
+        return true
+      else
+        nonErrors.push(event)
+    })
+
+    if (errors.length) {
+      // send the errors individually followed by the non-errors
+      errors.push(nonErrors)
+      return Bacon.fromArray(errors)
+    }
+    else {
+      return events
+    }
+  })
+}
+
+/**
  * Adapt the events in a stream by running callback on each event in a new
  * value.
  * @return {Bacon} stream that will pass the adapted events.
@@ -10,7 +36,9 @@ import Bacon from 'baconjs'
  * delay the stream.
  */
 export function mapEvents(stream, callback) {
-  return stream.flatMapConcat(events => Bacon.fromPromise(Promise.all(events.map(callback))))
+  return raiseErrors(
+    stream.flatMapConcat(events => Bacon.fromPromise(Promise.all(events.map(callback))))
+  )
 }
 
 /**
