@@ -1,7 +1,7 @@
 {
   "name": "sigh",
   "version": "0.6.3",
-  "description": "Another tool for managing web asset pipelines",
+  "description": "A web asset-pipeline combining the best features of existing state of the art.",
   "main": "index",
   "directories": {
     "lib": "./lib"

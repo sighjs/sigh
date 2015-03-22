@@ -95,6 +95,7 @@ function injectPlugin(module, pluginName) {
     throw new Error("Nonexistent plugin `" + pluginName + "'")
 
   try {
+    // TODO: make camelCase instead
     var varName = pluginName.replace(/-/g, '_')
     module.__set__(varName, (...args) => ({ plugin, args }))
   }
