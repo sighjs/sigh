@@ -49,7 +49,7 @@ export default function(op, ...patterns) {
 
   var chokEvRemap = { unlink: 'remove' }
   var updates = Bacon.mergeAll(
-    _.flatten(['add', 'change', 'remove'].map(type =>
+    _.flatten(['add', 'change', 'unlink'].map(type =>
       watchers.map(
         (watcher, idx) => Bacon.fromEvent(watcher, type).map(
           path => [ newEvent(chokEvRemap[type] || type, { path, treeIndex: treeIndex + idx }) ]
