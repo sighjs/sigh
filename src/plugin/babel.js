@@ -30,7 +30,7 @@ function compileEvent(opts, event) {
     var result = babel.transform(event.data, babelOpts)
   }
   catch (e) {
-    return new Bacon.Error(e)
+    return new Bacon.Error(e.toString())
   }
 
   event.data = result.code

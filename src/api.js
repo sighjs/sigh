@@ -30,7 +30,8 @@ export function invoke(opts = {}) {
           console.log('pipeline %s complete', pipelineName)
         })
         stream.onError(error => {
-          console.warn('\x07error: pipeline %s - %j', pipelineName, error)
+          console.warn('\x07error: pipeline %s', pipelineName)
+          console.warn(error)
         })
       })
     })
