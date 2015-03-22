@@ -1,4 +1,5 @@
 import path from 'path'
+import Bacon from 'baconjs'
 import _ from 'lodash'
 var babel = require('babel') // not sure why have to do it this way for babel...
 
@@ -25,7 +26,12 @@ function compileEvent(opts, event) {
   if (event.basePath)
     babelOpts.filenameRelative = event.projectDir
 
-  var result = babel.transform(event.data, babelOpts)
+  try {
+    var result = babel.transform(event.data, babelOpts)
+  }
+  catch (e) {
+    return new Bacon.Error(e)
+  }
 
   event.data = result.code
   event.applySourceMap(result.map)
