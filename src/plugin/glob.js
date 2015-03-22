@@ -4,7 +4,11 @@ import Bacon from 'baconjs'
 import Promise from 'bluebird'
 var glob = Promise.promisify(require('glob'))
 
+import { bufferingDebounce, coalesceEvents } from '../stream'
 import Event from '../Event'
+
+// necessary to detect chokidar's duplicate/invalid events, see later comment
+var DEFAULT_DEBOUNCE = 120
 
 export default function(op, ...patterns) {
   var { stream } = op
@@ -14,7 +18,7 @@ export default function(op, ...patterns) {
   // the first argument could be an option object rather than a pattern
   var opts = typeof patterns[0] === 'object' ? patterns.shift() : {}
 
-  var { treeIndex = 1 } = op
+  var { treeIndex = 1, debounce = DEFAULT_DEBOUNCE } = op
   op.nextTreeIndex = treeIndex + patterns.length
 
   var newEvent = (type, { path, treeIndex }) => {
@@ -51,10 +55,19 @@ export default function(op, ...patterns) {
   var updates = Bacon.mergeAll(
     _.flatten(['add', 'change', 'unlink'].map(type => watchers.map(
       (watcher, idx) => Bacon.fromEvent(watcher, type).map(
-        path => [ newEvent(chokEvRemap[type] || type, { path, treeIndex: treeIndex + idx }) ]
+        path => {
+          // TODO: remove
+          console.log('watch', Date.now(), type, path)
+          return [ newEvent(chokEvRemap[type] || type, { path, treeIndex: treeIndex + idx }) ]
+        }
       )
     )))
   )
 
-  return stream.changes().concat(updates)
+  // see https://github.com/paulmillr/chokidar/issues/262
+  // the debounce alone makes chokidar behave but eventually coalesceEvents will
+  // act as a second defense to this issue.
+  return stream.changes().concat(
+    coalesceEvents( bufferingDebounce(updates, debounce).map(_.flatten) )
+  )
 }

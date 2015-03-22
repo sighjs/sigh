@@ -86,3 +86,15 @@ export function toFileSystemState(stream) {
     return _.values(eventCache)
   })
 }
+
+/**
+ * Adapt a stream to filter out invalid events (e.g. update before add) and coalesce
+ * events in each stream payload.
+ */
+export function coalesceEvents(stream) {
+  // set of existing project paths (for filtering change events to non-existing files)
+  var files = {}
+
+  // TODO:
+  return stream
+}
