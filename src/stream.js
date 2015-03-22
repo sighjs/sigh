@@ -54,11 +54,7 @@ export function bufferingDebounce(stream, delay) {
     buffer.push(value)
     return Bacon.later(delay, buffer)
   })
-  .map(buffer => {
-    var copy = buffer.slice(0)
-    buffer.length = 0
-    return copy
-  })
+  .map(buffer => buffer.splice(0))
 }
 
 /**
