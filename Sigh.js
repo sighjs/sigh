@@ -9,7 +9,6 @@ module.exports = function(pipelines) {
 
   pipelines['test:js'] = [
     glob({ basePath: 'src/test' }, '*.js', 'plugin/*.js'),
-    debounce(200),
     babel({ modules: 'common' }),
     write('lib/test')
   ]
