@@ -3,7 +3,8 @@ import fse from 'fs-extra'
 var copy = Promise.promisify(fse.copy)
 var rm = Promise.promisify(fse.remove)
 
-import { compile } from '../api'
+import PipelineCompiler from '../PipelineCompiler'
+import { compileSighfile } from '../api'
 
 var FIXTURE_PATH = 'test/fixtures/sigh-project'
 var TMP_PATH = 'test/tmp/api'
@@ -16,7 +17,10 @@ describe('api', () => {
     .then(() => {
       pathBackup = process.cwd()
       process.chdir(TMP_PATH)
-      return compile({ environment: 'production' })
+
+      var opts = { environment: 'production' }
+      var compiler = new PipelineCompiler(opts)
+      return compileSighfile(compiler, opts)
     })
     .then(streams => streams.js.toPromise(Promise))
     .then(events => {

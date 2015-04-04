@@ -3,6 +3,7 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import rewire from 'rewire'
 import path from 'path'
+import Bacon from 'baconjs'
 
 import PipelineCompiler from './PipelineCompiler'
 import merge from './plugin/merge'
@@ -22,8 +23,21 @@ var plugins = { merge, babel, concat, debounce, env, glob, pipeline, write }
  */
 export function invoke(opts = {}) {
   try {
-    return compile(opts)
-    .then(streams => {
+    var streams
+    var compiler = new PipelineCompiler(opts)
+
+    return compileSighfile(compiler, opts)
+    .then(_streams => {
+      streams = _streams
+
+      if (opts.verbose)
+        console.info('waiting for subprocesses: %s', Date.now())
+      return compiler.procPool.ready()
+    })
+    .then(() => {
+      if (opts.verbose)
+        console.info('subprocesses started:     %s', Date.now())
+
       _.forEach(streams, (stream, pipelineName) => {
         stream.onValue(value => {
           // TODO: if (verbose) show value also
@@ -33,6 +47,12 @@ export function invoke(opts = {}) {
           console.warn('\x07error: pipeline %s', pipelineName)
           console.warn(error)
         })
+      })
+
+      Bacon.mergeAll(_.values(streams)).onEnd(() => {
+        if (opts.verbose)
+          console.info('pipeline(s) complete:     %s', Date.now())
+        compiler.destroy()
       })
     })
   }
@@ -52,7 +72,7 @@ export function invoke(opts = {}) {
  * Compile the Sigh.js file in the current directory with the given options.
  * @return {Promise} Resolves to an object { pipelineName: baconStream }
  */
-export function compile(opts = {}) {
+export function compileSighfile(compiler, opts = {}) {
   try {
     var packageJson = JSON.parse(fs.readFileSync('package.json'))
   }
@@ -83,7 +103,6 @@ export function compile(opts = {}) {
     })
   }
 
-  var compiler = new PipelineCompiler(opts)
   return Promise.props(
     _.mapValues(pipelines, (pipeline, name) => compiler.compile(pipeline, null, name))
   )

@@ -1,6 +1,7 @@
 import Bacon from 'baconjs'
 import Promise from 'bluebird'
 import { SourceMapConsumer } from 'source-map'
+import ProcessPool from 'process-pool'
 
 import { positionOf } from '../sourceMap'
 import Event from '../Event'
@@ -33,7 +34,8 @@ describe('sourceMap helper module', () => {
   it('applies one source map to another', () => {
     var inputStream = Bacon.once([1, 2].map(num => makeEvent(num)))
     var concatStream = concat({ stream: inputStream }, 'output.js', 10)
-    var babelStream = babel({ stream: concatStream })
+    var procPool = new ProcessPool
+    var babelStream = babel({ stream: concatStream, procPool })
 
     return babelStream.toPromise(Promise).then(events => {
       events.length.should.equal(1)

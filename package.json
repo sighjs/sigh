@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "A web asset-pipeline combining the best features of existing state of the art.",
   "main": "index",
   "directories": {
@@ -32,6 +32,7 @@
     "fs-extra": "~0.16.3",
     "glob": "~5.0.1",
     "lodash": "3.3.1",
+    "process-pool": "~0.2.5",
     "rewire": "2.1.3",
     "source-map": "~0.4.0"
   },

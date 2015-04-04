@@ -1,44 +1,54 @@
 import path from 'path'
 import Bacon from 'baconjs'
 import _ from 'lodash'
-var babel = require('babel') // not sure why have to do it this way for babel...
 
 import { mapEvents } from '../stream'
 
-function compileEvent(opts, event) {
-  if (event.type !== 'add' && event.type !== 'change')
-    return event
+function eventCompiler(opts) {
+  var babel = require('babel')
+  var _ = require('lodash')
 
-  var babelOpts = {
-    modules: opts.modules,
-    filename: event.path,
-    sourceMap: true,
-    moduleIds: true
-  }
+  return function(event) {
+    if (event.type !== 'add' && event.type !== 'change')
+      return event
 
-  if (opts.modules === 'amd') {
-    var modulePath = event.projectPath.replace(/\.js$/, '')
-    if (opts.getModulePath)
-      modulePath = opts.getModulePath(modulePath)
-    babelOpts.moduleId = modulePath
-  }
+    var babelOpts = {
+      modules: opts.modules,
+      filename: event.path,
+      sourceMap: true,
+      moduleIds: true
+    }
 
-  if (event.basePath)
-    babelOpts.filenameRelative = event.projectDir
+    if (opts.modules === 'amd') {
+      var modulePath = event.projectPath.replace(/\.js$/, '')
+      if (opts.getModulePath)
+        modulePath = opts.getModulePath(modulePath)
+      babelOpts.moduleId = modulePath
+    }
 
-  try {
+    // if (event.basePath)
+    //   babelOpts.filenameRelative = event.basePath
+
     var result = babel.transform(event.data, babelOpts)
+    return _.pick(result, 'code', 'map')
   }
-  catch (e) {
-    return new Bacon.Error(e.toString())
-  }
+}
 
-  event.data = result.code
-  event.applySourceMap(result.map)
-  return event
+// (de)serialise argument to and result of babel subprocess
+function adaptEvent(compiler) {
+  return event => {
+    var result = compiler(_.pick(event, 'type', 'data', 'path', 'projectPath'))
+
+    return result.then(result => {
+      event.data = result.code
+      event.applySourceMap(result.map)
+      return event
+    })
+  }
 }
 
 export default function(op, opts) {
   opts = _.assign({ modules: 'amd' }, opts || {})
-  return mapEvents(op.stream, compileEvent.bind(this, opts))
+
+  return mapEvents(op.stream, adaptEvent(op.procPool.prepare(eventCompiler, opts)))
 }
