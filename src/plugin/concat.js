@@ -5,19 +5,25 @@ import Event from '../Event'
 
 export default function(op, outputPath) {
   var fileExists = false
-  var createTime = new Date
+  var maxCreateTime = new Date(-8640000000000000)
 
   return toFileSystemState(op.stream)
   .map(function(eventCache) {
     var data = '', sourceMaps = []
     var offsets = [0], cumOffset = 0
     var events = _.sortBy(eventCache, 'opTreeIndex')
-    var nextCreateTime = new Date(8640000000000000)
+
+    var createTime = new Date(8640000000000000)
+    var nextMaxCreateTime = maxCreateTime
 
     events.forEach((event, idx) => {
-      // set createTime to next lowest create time later than previous lowerst create time
-      if (event.createTime > createTime && event.createTime < nextCreateTime)
-        nextCreateTime = event.createTime
+      if (event.createTime > maxCreateTime) {
+        if (event.createTime < createTime)
+          createTime = event.createTime
+
+        if (event.createTime > nextMaxCreateTime)
+          nextMaxCreateTime = event.createTime
+      }
 
       var offset = event.lineCount - 1
       data += event.data
@@ -31,7 +37,7 @@ export default function(op, outputPath) {
         offsets.push(cumOffset += offset)
     })
 
-    createTime = nextCreateTime
+    maxCreateTime = nextMaxCreateTime
 
     var sourceMap = concatSourceMaps(sourceMaps, offsets)
     sourceMap.file = outputPath
