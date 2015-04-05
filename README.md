@@ -217,7 +217,6 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
 # Future Work
-* Bootstrap sigh using sigh.
 * More documentation for `pipeline`.
 * `gulp` plugin adapter
 * Write some external plugins that aren't possible in gulp.
