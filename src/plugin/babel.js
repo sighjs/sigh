@@ -39,6 +39,7 @@ function adaptEvent(compiler) {
   return event => {
     var result = compiler(_.pick(event, 'type', 'data', 'path', 'projectPath'))
 
+    // without proc pool a Promise.resolve is needed here
     return result.then(result => {
       event.data = result.code
       event.applySourceMap(result.map)
@@ -49,6 +50,9 @@ function adaptEvent(compiler) {
 
 export default function(op, opts) {
   opts = _.assign({ modules: 'amd' }, opts || {})
+
+  // without proc pool:
+  // return mapEvents(op.stream, adaptEvent(eventCompiler(opts)))
 
   return mapEvents(op.stream, adaptEvent(op.procPool.prepare(eventCompiler, opts)))
 }

@@ -3,4 +3,4 @@
 require('source-map-support').install()
 
 var invoke = require('./lib/api').invoke
-invoke({ watch: true })
+invoke({ watch: true, jobs: 2 })

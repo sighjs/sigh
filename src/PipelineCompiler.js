@@ -3,6 +3,8 @@ import Bacon from 'baconjs'
 import Promise from 'bluebird'
 import ProcessPool from 'process-pool'
 
+var DEFAULT_JOBS = 4
+
 export default class {
   /**
    * @param {Object} options Object containing the following fields:
@@ -21,7 +23,7 @@ export default class {
     // be plugged into the bus. This allows subscribers to register interest
     // before a pipeline has been created
     this.pipelines = {}
-    this.procPool = new ProcessPool
+    this.procPool = new ProcessPool({ processLimit: options.jobs || DEFAULT_JOBS })
   }
 
   /**
@@ -94,5 +96,4 @@ export default class {
       return bus
     return this.pipelines[name] = new Bacon.Bus()
   }
-
 }
