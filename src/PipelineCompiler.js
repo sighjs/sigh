@@ -3,7 +3,7 @@ import Bacon from 'baconjs'
 import Promise from 'bluebird'
 import ProcessPool from 'process-pool'
 
-var DEFAULT_JOBS = 4
+var DEFAULT_JOBS = 2
 
 export default class {
   /**
@@ -23,7 +23,14 @@ export default class {
     // be plugged into the bus. This allows subscribers to register interest
     // before a pipeline has been created
     this.pipelines = {}
-    this.procPool = new ProcessPool({ processLimit: options.jobs || DEFAULT_JOBS })
+
+    var processLimit = options.jobs || DEFAULT_JOBS
+    // include sigh process as one job so subtract one
+    // TODO: (processLimit > 0) when process-pools supports limit of 0
+    if (processLimit > 1)
+      --processLimit
+
+    this.procPool = new ProcessPool({ processLimit })
   }
 
   /**
