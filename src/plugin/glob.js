@@ -25,6 +25,7 @@ export default function(op, ...patterns) {
     var props = { type, path, opTreeIndex: treeIndex }
     if (opts.basePath)
       props.basePath = opts.basePath
+    props.createTime = new Date
     return new Event(props)
   }
 

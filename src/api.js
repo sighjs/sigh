@@ -39,9 +39,15 @@ export function invoke(opts = {}) {
         console.info('subprocesses started:     %s', Date.now())
 
       _.forEach(streams, (stream, pipelineName) => {
-        stream.onValue(value => {
-          // TODO: if (verbose) show value also
-          console.log('pipeline %s complete', pipelineName)
+        stream.onValue(events => {
+          var now = new Date
+
+          var createTime = _.min(events, 'createTime').createTime
+          var timeDuration = createTime ?
+            (now.getTime() - createTime.getTime()) / 1000 : 'unknown'
+
+          // TODO: show more content on verbose
+          console.log('pipeline %s complete - %s seconds', pipelineName, timeDuration)
         })
         stream.onError(error => {
           console.warn('\x07error: pipeline %s', pipelineName)

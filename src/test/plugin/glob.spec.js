@@ -72,7 +72,12 @@ describe('glob plugin', () => {
           }
           else {
             updates.should.eql([
-              new Event({ type: 'change', path: files[nUpdates - 2], opTreeIndex: 4 }),
+              new Event({
+                type: 'change',
+                path: files[nUpdates - 2],
+                opTreeIndex: 4,
+                createTime: updates[0].createTime
+              }),
             ])
             if (nUpdates === 3) {
               resolve()
@@ -104,7 +109,12 @@ describe('glob plugin', () => {
           }
           else {
             updates.should.eql([
-              new Event({ type: 'add', path: addedFile, opTreeIndex: 4 }),
+              new Event({
+                type: 'add',
+                path: addedFile,
+                opTreeIndex: 4,
+                createTime: updates[0].createTime
+              }),
             ])
             resolve()
             return Bacon.noMore

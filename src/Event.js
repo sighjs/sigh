@@ -8,21 +8,21 @@ import { apply as applySourceMap, generateIdentitySourceMap } from './sourceMap'
  *   sourceData: data of first source-producing operation.
  *   sourcePath: path of first file producing operation.
  *   data: current data in event (possibly transformed one or more times).
+ *   createTime: Date resource was created by initial operation.
  */
 export default class {
   constructor(fields) {
     this.type = fields.type
     this.sourcePath = this.path = fields.path
 
-    if (fields.opTreeIndex)
-      this.opTreeIndex = fields.opTreeIndex
-
-    if (fields.basePath)
-      this.basePath = fields.basePath
+    this.opTreeIndex = fields.opTreeIndex
+    this.basePath = fields.basePath
 
     // setting the data here can also add a source map
     if (this.type === 'remove')
       return
+
+    this.createTime = fields.createTime
 
     this.data = fields.data !== undefined ? fields.data : readFileSync(this.path).toString()
     this.sourceData = this.data
