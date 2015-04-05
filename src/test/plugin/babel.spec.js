@@ -14,7 +14,9 @@ describe('babel plugin', () => {
     procPool = new ProcessPool
   })
 
-  it('compiles a single add event', () => {
+  it('compiles a single add event', function() {
+    this.timeout(2500)
+
     var data = 'var pump = () => "pumper"'
     var event = new Event({
       basePath: 'root',

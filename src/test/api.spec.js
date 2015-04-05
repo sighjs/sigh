@@ -10,7 +10,9 @@ var FIXTURE_PATH = 'test/fixtures/sigh-project'
 var TMP_PATH = 'test/tmp/api'
 
 describe('api', () => {
-  it('compile should build working bacon streams from pipelines in Sigh.js file', () => {
+  it('compile should build working bacon streams from pipelines in Sigh.js file', function() {
+    this.timeout(3000)
+
     var pathBackup
     return rm(TMP_PATH)
     .then(() => copy(FIXTURE_PATH, TMP_PATH))
