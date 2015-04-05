@@ -1,14 +1,13 @@
 {
   "name": "sigh",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "A web asset-pipeline combining the best features of existing state of the art.",
   "main": "index",
   "directories": {
     "lib": "./lib"
   },
   "scripts": {
-    "test": "grunt test",
-    "install": "grunt build"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
