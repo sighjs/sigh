@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { apply as applySourceMap, generateIdentitySourceMap } from './sourceMap'
+import { apply as sourceMapApply, generateIdentitySourceMap } from './sourceMap'
 
 /**
  * Event passed through pipeline (which can be modified, concatenated, witheld etc. by any
@@ -78,7 +78,7 @@ export default class {
     if (! _sourceMap)
       this._sourceMap = sourceMap
     else
-      this._sourceMap = applySourceMap(_sourceMap, sourceMap)
+      this._sourceMap = sourceMapApply(_sourceMap, sourceMap)
   }
 
   get supportsSourceMap() {

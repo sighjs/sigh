@@ -36,7 +36,7 @@
     "source-map": "~0.4.0"
   },
   "devDependencies": {
-    "babel": "~4.6.6",
+    "babel": "~5.0.8",
     "chai": "~2.2.0",
     "grunt": "~0.4.5",
     "grunt-contrib-clean": "~0.6.0",
