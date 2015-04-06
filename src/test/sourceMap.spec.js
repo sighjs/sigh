@@ -32,7 +32,7 @@ describe('sourceMap helper module', () => {
   })
 
   it('applies one source map to another', function() {
-    this.timeout(2500)
+    this.timeout(3300)
 
     var inputStream = Bacon.once([1, 2].map(num => makeEvent(num)))
     var concatStream = concat({ stream: inputStream }, 'output.js', 10)
