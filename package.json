@@ -26,7 +26,7 @@
   "dependencies": {
     "baconjs": "~0.7.52",
     "bluebird": "~2.9.13",
-    "chokidar": "~1.0.0-rc3",
+    "chokidar": "~1.0.0",
     "esprima": "~2.1.0",
     "fs-extra": "~0.18.0",
     "glob": "~5.0.1",
