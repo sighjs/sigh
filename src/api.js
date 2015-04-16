@@ -26,17 +26,20 @@ export function invoke(opts = {}) {
     var streams
     var compiler = new PipelineCompiler(opts)
 
+    var startTime = Date.now()
+    var relTime = () => ((Date.now() - startTime) / 1000).toFixed(3)
+
     return compileSighfile(compiler, opts)
     .then(_streams => {
       streams = _streams
 
       if (opts.verbose)
-        console.info('waiting for subprocesses: %s', Date.now())
+        console.info('waiting for subprocesses to start')
       return compiler.procPool.ready()
     })
     .then(() => {
       if (opts.verbose)
-        console.info('subprocesses started:     %s', Date.now())
+        console.info('subprocesses started in %s seconds', relTime())
 
       _.forEach(streams, (stream, pipelineName) => {
         stream.onValue(events => {
@@ -47,7 +50,7 @@ export function invoke(opts = {}) {
             (now.getTime() - createTime.getTime()) / 1000 : 'unknown'
 
           // TODO: show more content on verbose
-          console.log('pipeline %s complete - %s seconds', pipelineName, timeDuration)
+          console.log('pipeline %s complete: %s seconds', pipelineName, timeDuration)
         })
         stream.onError(error => {
           console.warn('\x07error: pipeline %s', pipelineName)
@@ -57,7 +60,7 @@ export function invoke(opts = {}) {
 
       Bacon.mergeAll(_.values(streams)).onEnd(() => {
         if (opts.verbose)
-          console.info('pipeline(s) complete:     %s', Date.now())
+          console.info('pipeline(s) complete: %s seconds', relTime())
         compiler.destroy()
       })
     })
@@ -107,6 +110,14 @@ export function compileSighfile(compiler, opts = {}) {
       if (opts.pipelines.indexOf(name) === -1)
         delete pipelines[name]
     })
+  }
+
+  if (opts.verbose) {
+    console.info(
+      'running pipelines [ %s ] with %s jobs',
+      Object.keys(pipelines).join(', '),
+      opts.jobs
+    )
   }
 
   return Promise.props(

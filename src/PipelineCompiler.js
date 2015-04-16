@@ -3,7 +3,7 @@ import Bacon from 'baconjs'
 import Promise from 'bluebird'
 import ProcessPool from 'process-pool'
 
-var DEFAULT_JOBS = 2
+var DEFAULT_JOBS = 4
 
 export default class {
   /**

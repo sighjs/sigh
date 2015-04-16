@@ -54,5 +54,11 @@ export default function(op, opts) {
   // without proc pool:
   // return mapEvents(op.stream, adaptEvent(eventCompiler(opts)))
 
-  return mapEvents(op.stream, adaptEvent(op.procPool.prepare(eventCompiler, opts)))
+  var { procPool } = op
+  var processLimit = Math.max(1, Math.floor(procPool.processLimit / 2))
+
+  return mapEvents(
+    op.stream,
+    adaptEvent(procPool.prepare(eventCompiler, opts, { processLimit }))
+  )
 }
