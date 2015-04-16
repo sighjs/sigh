@@ -108,7 +108,14 @@ export function compileSighfile(compiler, opts = {}) {
     })
   }
 
-  var sighModule = rewire(path.join(process.cwd(), 'Sigh'))
+  var sighModule
+  try {
+    sighModule = rewire(path.join(process.cwd(), 'sigh'))
+  }
+  catch (e) {
+    sighModule = rewire(path.join(process.cwd(), 'Sigh'))
+  }
+
   _.forEach(plugins, (plugin, key) => injectPlugin(sighModule, key))
 
   var pipelines = {}

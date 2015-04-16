@@ -13,7 +13,7 @@ export default function(op, outputPath) {
     var offsets = [0], cumOffset = 0
     var events = _.sortBy(eventCache, 'opTreeIndex')
 
-    // set this to the minimum new createTime above maxCreateTime
+    // set this to the earliest new createTime after maxCreateTime
     var createTime = null
     var nextMaxCreateTime = maxCreateTime
 
@@ -47,7 +47,6 @@ export default function(op, outputPath) {
     var sourceMap = concatSourceMaps(sourceMaps, offsets)
     sourceMap.file = outputPath
 
-    // TODO: set createTime as minimum time since previous event
     var ret = [ new Event({
       type: fileExists ? 'change' : 'add',
       path: outputPath,

@@ -35,7 +35,7 @@ Install sigh in the project:
 % npm install sigh
 ```
 
-Write a file called `Sigh.js` and put it in the root of the project:
+Write a file called `sigh.js` (or `Sigh.js`) and put it in the root of the project:
 ```javascript
 // To use a plugin it must be declared as a global variable.
 var merge, glob, concat, write, babel, env, pipeline
@@ -89,7 +89,7 @@ Compile all pipelines and then watch files for changes compiling those that have
 % sigh -w
 ```
 
-Compile/watch only the specified pipeline (with the Sighfile.js shown above the source and tests would be compiled but the tests would never be run).
+Compile/watch only the specified pipeline (with the `sigh.js` shown above the source and tests would be compiled but the tests would never be run).
 ```
 % sigh -w build:source build:tests
 ```
@@ -223,6 +223,6 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 * More documentation about building plugins.
 * Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [toFileSystemState](https://github.com/sighjs/sigh/blob/master/src/stream.js).
 * `mochaTest`/`uglify` plugins (in external repositories).
-* `sigh -w` should watch `Sigh.js` file for changes in addition to the source files.
+* `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
 * Investigate possibility of grunt plugin adapter
 * Ensure chokidar watchers are closed after each test.
