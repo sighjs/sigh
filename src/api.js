@@ -49,8 +49,17 @@ export function invoke(opts = {}) {
           var timeDuration = createTime ?
             (now.getTime() - createTime.getTime()) / 1000 : 'unknown'
 
-          // TODO: show more content on verbose
-          console.log('pipeline %s complete: %s seconds', pipelineName, timeDuration)
+          if (opts.verbose) {
+            console.log(
+              'pipeline %s complete: %s seconds %j',
+              pipelineName,
+              timeDuration,
+              _.map(events, event => _.pick(event, 'type', 'path'))
+            )
+          }
+          else {
+            console.log('pipeline %s complete: %s seconds', pipelineName, timeDuration)
+          }
         })
         stream.onError(error => {
           console.warn('\x07error: pipeline %s', pipelineName)

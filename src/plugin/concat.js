@@ -13,12 +13,13 @@ export default function(op, outputPath) {
     var offsets = [0], cumOffset = 0
     var events = _.sortBy(eventCache, 'opTreeIndex')
 
-    var createTime = new Date(8640000000000000)
+    // set this to the minimum new createTime above maxCreateTime
+    var createTime = null
     var nextMaxCreateTime = maxCreateTime
 
     events.forEach((event, idx) => {
       if (event.createTime > maxCreateTime) {
-        if (event.createTime < createTime)
+        if (event.createTime < createTime || createTime === null)
           createTime = event.createTime
 
         if (event.createTime > nextMaxCreateTime)
@@ -36,6 +37,10 @@ export default function(op, outputPath) {
       if (idx < events.length - 1)
         offsets.push(cumOffset += offset)
     })
+
+    // is null when none of the creation times was greater than the previous
+    if (createTime === null)
+      createTime = maxCreateTime
 
     maxCreateTime = nextMaxCreateTime
 
