@@ -49,7 +49,7 @@ export function invoke(opts = {}) {
           var timeDuration = createTime ?
             (now.getTime() - createTime.getTime()) / 1000 : 'unknown'
 
-          if (opts.verbose) {
+          if (opts.verbose > 1) {
             console.log(
               'pipeline %s complete: %s seconds %j',
               pipelineName,
