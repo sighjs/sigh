@@ -218,7 +218,7 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 
 # Future Work
 * `pipelines.alias`
-* pipeline streams should end when the streams connected to the corresponding bus end.
+* When using positional arguments and one of the pipelines used in a `pipeline` is not selected then this can prevent sigh from exiting.
 * `gulp` plugin adapter
 * More documentation for `pipeline` plugin.
 * More documentation about building plugins.

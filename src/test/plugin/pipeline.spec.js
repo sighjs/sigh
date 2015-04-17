@@ -10,7 +10,7 @@ describe('pipeline plugin', () => {
     var compiler = new PipelineCompiler
 
     return Promise.all([1, 2].map(
-      idx => compiler.compile(op => Bacon.once(idx), null, `stream${idx}`)
+      idx => compiler.compile(op => Bacon.constant(idx), null, `stream${idx}`)
     ))
     .then(streams => {
       return new Promise(function(resolve, reject) {
@@ -32,7 +32,7 @@ describe('pipeline plugin', () => {
     var compiler = new PipelineCompiler
 
     return Promise.all([1, 2].map(
-      idx => compiler.compile(op => Bacon.once(idx), null, `stream${idx}`)
+      idx => compiler.compile(op => Bacon.constant(idx), null, `stream${idx}`)
     ))
     .then(streams => {
       // this stops the pipelines from spitting out all the events into the first
