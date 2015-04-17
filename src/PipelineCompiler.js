@@ -77,7 +77,8 @@ export default class {
         treeIndex,
         procPool,
         compiler: this,
-        environment
+        environment,
+        Bacon
       })
     }, inputStream)
 
