@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.8.12",
+  "version": "0.8.13",
   "description": "A web asset-pipeline combining the best features of existing state of the art.",
   "main": "index",
   "directories": {
@@ -31,7 +31,7 @@
     "fs-extra": "~0.18.0",
     "glob": "~5.0.1",
     "lodash": "~3.6.0",
-    "process-pool": "~0.3.0",
+    "process-pool": "~0.3.1",
     "rewire": "~2.3.1",
     "source-map": "~0.4.0",
     "source-map-support": "~0.2.10"
@@ -40,10 +40,7 @@
     "babel": "~5.0.8",
     "chai": "~2.2.0",
     "grunt": "~0.4.5",
-    "grunt-contrib-clean": "~0.6.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-mocha-test": "~0.12.4",
-    "jit-grunt": "~0.9.1",
-    "mocha": "~2.2.1"
+    "mocha": "~2.2.1",
+    "sigh-mocha": "~0.0.1"
   }
 }

@@ -1,4 +1,4 @@
-var glob, pipeline, babel, debounce, write
+var glob, pipeline, babel, debounce, write, mocha
 
 module.exports = function(pipelines) {
   pipelines['source:js'] = [
@@ -15,7 +15,7 @@ module.exports = function(pipelines) {
 
   pipelines['tests:run'] = [
     pipeline('source:js', 'test:js'),
-    debounce(700)
-    // TODO: run mocha
+    debounce(700),
+    mocha({ files: 'lib/test/**/*.spec.js' })
   ]
 }

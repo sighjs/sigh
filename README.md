@@ -40,7 +40,7 @@ Write a file called `sigh.js` (or `Sigh.js`) and put it in the root of the proje
 // To use a plugin it must be declared as a global variable.
 var merge, glob, concat, write, babel, env, pipeline
 // The above plugins are built-in, the next two are loaded from package.json.
-var uglify, mochaTest
+var uglify, mocha
 
 module.exports = function(pipelines) {
   pipelines['build:source'] = [
@@ -63,7 +63,7 @@ module.exports = function(pipelines) {
   pipelines['run:tests'] = [
     pipeline('build:source', 'build:tests'),
     debounce(500),
-    mochaTest()
+    mocha()
   ]
 }
 ```
@@ -222,7 +222,7 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 * Write some external plugins that aren't possible in gulp.
 * More documentation about building plugins.
 * Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [toFileSystemState](https://github.com/sighjs/sigh/blob/master/src/stream.js).
-* `mochaTest`/`uglify` plugins (in external repositories).
+* `uglify` plugins (in external repositories).
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
 * Investigate possibility of grunt plugin adapter
 * Ensure chokidar watchers are closed after each test.
