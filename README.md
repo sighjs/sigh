@@ -217,12 +217,11 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
 # Future Work
-* More documentation for `pipeline`.
+* `pipelines.alias`
+* pipeline streams should end when the streams connected to the corresponding bus end.
 * `gulp` plugin adapter
-* Write some external plugins that aren't possible in gulp.
+* More documentation for `pipeline` plugin.
 * More documentation about building plugins.
 * Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [toFileSystemState](https://github.com/sighjs/sigh/blob/master/src/stream.js).
-* `uglify` plugins (in external repositories).
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
 * Investigate possibility of grunt plugin adapter
-* Ensure chokidar watchers are closed after each test.
