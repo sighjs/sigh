@@ -24,6 +24,7 @@ var plugins = { merge, babel, concat, debounce, env, glob, pipeline, write }
  */
 export function invoke(opts = {}) {
   try {
+    var exitCode = 0
     var streams
     var compiler = new PipelineCompiler(opts)
 
@@ -64,6 +65,7 @@ export function invoke(opts = {}) {
         })
 
         stream.onError(error => {
+          exitCode = 1
           log.warn('\x07error: pipeline %s', pipelineName)
           log.warn(error)
         })
@@ -78,6 +80,8 @@ export function invoke(opts = {}) {
         if (opts.verbose)
           log('pipeline(s) complete: %s seconds', relTime())
         compiler.destroy()
+
+        process.exit(exitCode)
       })
     })
   }
