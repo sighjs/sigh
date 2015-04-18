@@ -62,9 +62,15 @@ export function invoke(opts = {}) {
             log('pipeline %s complete: %s seconds', pipelineName, timeDuration)
           }
         })
+
         stream.onError(error => {
           log.warn('\x07error: pipeline %s', pipelineName)
           log.warn(error)
+        })
+
+        stream.onEnd(error => {
+          // close the bus associated bus allowing subscribers to close
+          compiler.getPipeline(pipelineName).end()
         })
       })
 

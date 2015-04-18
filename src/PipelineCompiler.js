@@ -88,7 +88,6 @@ export default class {
     var bus = this.getPipeline(name)
     return streamPromise.then(stream => {
       bus.plug(stream)
-      stream.onEnd(() => { bus.end() })
       return stream
     })
   }
