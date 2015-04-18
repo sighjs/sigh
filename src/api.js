@@ -5,6 +5,7 @@ import rewire from 'rewire'
 import path from 'path'
 import Bacon from 'baconjs'
 
+import log from './log'
 import PipelineCompiler from './PipelineCompiler'
 import merge from './plugin/merge'
 import babel from './plugin/babel'
@@ -34,12 +35,12 @@ export function invoke(opts = {}) {
       streams = _streams
 
       if (opts.verbose)
-        console.info('waiting for subprocesses to start')
+        log('waiting for subprocesses to start')
       return compiler.procPool.ready()
     })
     .then(() => {
       if (opts.verbose)
-        console.info('subprocesses started in %s seconds', relTime())
+        log('subprocesses started in %s seconds', relTime())
 
       _.forEach(streams, (stream, pipelineName) => {
         stream.onValue(events => {
@@ -50,7 +51,7 @@ export function invoke(opts = {}) {
             (now.getTime() - createTime.getTime()) / 1000 : 'unknown'
 
           if (opts.verbose > 1) {
-            console.log(
+            log(
               'pipeline %s complete: %s seconds %j',
               pipelineName,
               timeDuration,
@@ -58,18 +59,18 @@ export function invoke(opts = {}) {
             )
           }
           else {
-            console.log('pipeline %s complete: %s seconds', pipelineName, timeDuration)
+            log('pipeline %s complete: %s seconds', pipelineName, timeDuration)
           }
         })
         stream.onError(error => {
-          console.warn('\x07error: pipeline %s', pipelineName)
-          console.warn(error)
+          log.warn('\x07error: pipeline %s', pipelineName)
+          log.warn(error)
         })
       })
 
       Bacon.mergeAll(_.values(streams)).onEnd(() => {
         if (opts.verbose)
-          console.info('pipeline(s) complete: %s seconds', relTime())
+          log('pipeline(s) complete: %s seconds', relTime())
         compiler.destroy()
       })
     })
@@ -77,7 +78,7 @@ export function invoke(opts = {}) {
   catch (e) {
     if (typeof e === 'function' && e instanceof Error) {
       // TODO: add some red stuff before it
-      console.warn(e.message)
+      log.warn(e.message)
       process.exit(1)
     }
     else {
@@ -140,7 +141,7 @@ export function compileSighfile(compiler, opts = {}) {
   }
 
   if (opts.verbose) {
-    console.info(
+    log(
       'running pipelines [ %s ] with %s jobs',
       Object.keys(pipelines).join(', '),
       opts.jobs
