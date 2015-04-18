@@ -206,6 +206,8 @@ This pipeline only concatenates the files together in `production` and `staging`
 
 ## babel
 
+You will need to `npm install --save-dev babel` before using this plugin, it uses your own installation of babel rather than bundling one.
+
 Create a pipeline that transpiles the given source files using babel:
 ```javascript
 module.exports = function(pipelines) {
