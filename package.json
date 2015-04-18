@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.8.14",
+  "version": "0.8.15",
   "description": "A web asset-pipeline combining the best features of existing state of the art.",
   "main": "index",
   "directories": {

@@ -60,6 +60,8 @@ module.exports = function(pipelines) {
     write('build/test')
   ]
 
+  pipelines.alias('build', ['build:source', 'build:tests'])
+
   pipelines['run:tests'] = [
     pipeline('build:source', 'build:tests'),
     debounce(500),
@@ -92,6 +94,11 @@ Compile all pipelines and then watch files for changes compiling those that have
 Compile/watch only the specified pipeline (with the `sigh.js` shown above the source and tests would be compiled but the tests would never be run).
 ```
 % sigh -w build:source build:tests
+```
+
+This is equivalent to using the alias defined in `sigh.js`:
+```
+% sigh -w build
 ```
 
 # Built-in plugins

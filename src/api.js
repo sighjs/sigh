@@ -118,10 +118,21 @@ export function compileSighfile(compiler, opts = {}) {
 
   _.forEach(plugins, (plugin, key) => injectPlugin(sighModule, key))
 
-  var pipelines = {}
+  var pipelines = {}, aliases = {}
+  pipelines.alias = (name, ...sources) => {
+    sources = _.flatten(sources)
+    aliases[name] = sources
+  }
   sighModule(pipelines)
+  delete pipelines.alias
 
   if (opts.pipelines && opts.pipelines.length) {
+    if (! _.isEmpty(aliases)) {
+      opts.pipelines = _.flatten(
+        opts.pipelines.map(pipelineName => aliases[pipelineName] || pipelineName)
+      )
+    }
+
     Object.keys(pipelines).forEach(name => {
       if (opts.pipelines.indexOf(name) === -1)
         delete pipelines[name]
