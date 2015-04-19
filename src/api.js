@@ -82,7 +82,6 @@ export function invoke(opts = {}) {
   }
   catch (e) {
     if (typeof e === 'function' && e instanceof Error) {
-      // TODO: add some red stuff before it
       log.warn(e.message)
       process.exit(1)
     }
