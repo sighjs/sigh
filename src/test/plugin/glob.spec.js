@@ -18,8 +18,10 @@ var FIXTURE_FILES = [
 ]
 
 describe('glob plugin', () => {
+  var stream = Bacon.constant([])
+
   it('globs a wildcard', () => {
-    return glob({}, FIXTURE_PATH + '/*.js').toPromise(Promise).then(updates => {
+    return glob({ stream }, FIXTURE_PATH + '/*.js').toPromise(Promise).then(updates => {
       updates.length.should.equal(2)
       _.pluck(updates, 'projectPath').sort().should.eql(FIXTURE_FILES)
       updates.forEach(file => {
@@ -30,7 +32,7 @@ describe('glob plugin', () => {
   })
 
   it('globs a wildcard using the basePath option', () => {
-    var opData = { treeIndex: 4 }
+    var opData = { stream, treeIndex: 4 }
     return glob(opData, { basePath: FIXTURE_PATH }, '*.js')
     .toPromise(Promise)
     .then(updates => {
@@ -42,7 +44,7 @@ describe('glob plugin', () => {
   })
 
   it('globs two wildcards', () => {
-    var opData = { treeIndex: 1 }
+    var opData = { stream, treeIndex: 1 }
     return glob(opData, FIXTURE_PATH + '/*1.js', FIXTURE_PATH + '/*2.js')
     .toPromise(Promise)
     .then(updates => {
@@ -63,7 +65,7 @@ describe('glob plugin', () => {
       return new Promise(function(resolve) {
         var nUpdates = 0
         var files = [ TMP_PATH + '/file1.js', TMP_PATH + '/file2.js' ]
-        glob({ watch: true, treeIndex: 4 }, TMP_PATH + '/*.js')
+        glob({ stream, watch: true, treeIndex: 4 }, TMP_PATH + '/*.js')
         .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
@@ -101,7 +103,7 @@ describe('glob plugin', () => {
       return new Promise(function(resolve) {
         var nUpdates = 0
         var files = [ tmpPath + '/file1.js', tmpPath + '/file2.js' ]
-        glob({ watch: true, treeIndex: 4 }, tmpPath + '/*.js')
+        glob({ stream, watch: true, treeIndex: 4 }, tmpPath + '/*.js')
         .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
@@ -128,13 +130,5 @@ describe('glob plugin', () => {
   })
 
   xit('detects file rename', () => {
-  })
-
-  it('only accepts first position in pipeline', () => {
-    (() => {
-      // the first argument is the stream and must be null for the glob operation,
-      // this is a special value passed during the stream construction in src/api.js
-      glob({ stream: 'some stream' }, FIXTURE_PATH + '/*.js')
-    }).should.throw()
   })
 })

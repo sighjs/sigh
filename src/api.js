@@ -69,11 +69,6 @@ export function invoke(opts = {}) {
           log.warn('\x07error: pipeline %s', pipelineName)
           log.warn(error)
         })
-
-        stream.onEnd(error => {
-          // close the bus associated bus allowing subscribers to close
-          compiler.getPipeline(pipelineName).end()
-        })
       })
 
       Bacon.mergeAll(_.values(streams)).onEnd(() => {

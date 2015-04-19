@@ -19,10 +19,8 @@ export default class {
     this.watch = options.watch
     this.environment = options.environment
 
-    // buses by pipeline name, the pipeline with the corresponding name will
-    // be plugged into the bus. This allows subscribers to register interest
-    // before a pipeline has been created
-    this.pipelines = {}
+    // compiled stream by pipeline name
+    this.streams = {}
 
     var processLimit = options.jobs || DEFAULT_JOBS
     // include sigh process as one job so subtract one
@@ -46,6 +44,9 @@ export default class {
    * @return {Bacon} stream that results from combining all operations in the pipeline.
    */
   compile(pipeline, inputStream = null, name = null) {
+    if (! inputStream)
+      inputStream = Bacon.constant([])
+
     var compileOperation = (operation, opData) => {
       var stream = operation.plugin ?
         operation.plugin.apply(this, [ opData ].concat(operation.args)) :
@@ -85,23 +86,8 @@ export default class {
     if (! name)
       return streamPromise
 
-    var bus = this.getPipeline(name)
     return streamPromise.then(stream => {
-      bus.plug(stream)
-      return stream
+      return this.streams[name] = stream
     })
-  }
-
-  /**
-   * This allows you to subscribe to the events from the given pipeline, it can
-   * be called before the pipeline is registered.
-   * @return {Bacon.Bus} Bus connected to stream of pipeline
-   * @param {String} name Name of pipeline to get stream of
-   */
-  getPipeline(name) {
-    var bus = this.pipelines[name]
-    if (bus)
-      return bus
-    return this.pipelines[name] = new Bacon.Bus()
   }
 }

@@ -6,6 +6,8 @@ import PipelineCompiler from '../../PipelineCompiler'
 import pipeline from '../../plugin/pipeline'
 
 describe('pipeline plugin', () => {
+  var stream = Bacon.constant([])
+
   it('intercepts the end of two pipelines', () => {
     var compiler = new PipelineCompiler
 
@@ -15,7 +17,7 @@ describe('pipeline plugin', () => {
     .then(streams => {
       return new Promise(function(resolve, reject) {
         var nValues = 0
-        pipeline({ compiler }, 'stream1', 'stream2').onValue(events => {
+        pipeline({ stream, compiler }, 'stream1', 'stream2').onValue(events => {
           ++nValues
           events.should.eql(nValues)
 
@@ -37,12 +39,12 @@ describe('pipeline plugin', () => {
     .then(streams => {
       // this stops the pipelines from spitting out all the events into the first
       // subscriber, emulating how a true pipeline would work using async glob etc.
-      compiler.pipelines = _.mapValues(compiler.pipelines, stream => stream.delay(0))
+      compiler.streams = _.mapValues(compiler.streams, stream => stream.delay(0))
 
       return Promise.all([
         new Promise(function(resolve, reject) {
           var nValues = 0
-          pipeline({ compiler }, 'stream1', 'stream2').onValue(events => {
+          pipeline({ stream, compiler }, 'stream1', 'stream2').onValue(events => {
             ++nValues
             events.should.equal(nValues)
             if (nValues === 2) {
@@ -52,7 +54,7 @@ describe('pipeline plugin', () => {
           })
         }),
         new Promise(function(resolve, reject) {
-          pipeline({ compiler }, 'stream2').onValue(events => {
+          pipeline({ stream, compiler }, 'stream2').onValue(events => {
             events.should.equal(2)
             resolve()
             return Bacon.noMore
@@ -62,15 +64,15 @@ describe('pipeline plugin', () => {
     })
   })
 
-  it('can subscribe to a pipeline before it has been created', () => {
+  it('can subscribe to a pipeline before it has been compiled', () => {
     var compiler = new PipelineCompiler
 
-    var pipelineOp = pipeline({ compiler }, 'stream').toPromise(Promise)
+    var pipelineOp = pipeline({ stream, compiler }, 'stream')
 
     compiler.compile(op => Bacon.once(1), null, 'stream')
     .then(stream => {
-      compiler.pipelines.stream = compiler.pipelines.stream.delay(0)
-      return pipelineOp
+      compiler.streams.stream = compiler.streams.stream.delay(0)
+      return pipelineOp.toPromise(Promise)
     })
     .then(function(values) {
       values.should.eql(1)
