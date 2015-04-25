@@ -164,7 +164,8 @@ function injectPlugin(module, pluginName) {
 
   try {
     // TODO: make camelCase instead
-    var varName = pluginName.replace(/-/g, '_')
+    var varName = pluginName.replace(/(\w)-(\w)/, (match, $1, $2) => $1 + $2.toUpperCase())
+
     module.__set__(varName, (...args) => ({ plugin, args }))
   }
   catch (e) {

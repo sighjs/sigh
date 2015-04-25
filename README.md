@@ -228,6 +228,7 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 # Future Work
 * `pipeline.explicit`.
 * `pipeline` should be able to forward input.
+* `pipeline` should not forward errors.
 * `gulp` plugin adapter
 * More documentation for `pipeline` plugin.
 * More documentation about building plugins.

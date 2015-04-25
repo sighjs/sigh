@@ -14,8 +14,8 @@ export default function(op, ...pipelineNames) {
     // TODO: forward events to named pipelines
   })
 
-  // wait until the first value to construct the merged stream, they may not
-  // be available during this call.
+  // during this call the streams may not be set up, wait until the first
+  // "stream initialisation" value before merging the pipeline streams.
   return op.stream.take(1).flatMap(events => {
     return Bacon.mergeAll(pipelineNames.map(name => op.compiler.streams[name]))
   })
