@@ -29,7 +29,7 @@ export function invoke(opts = {}) {
     var compiler = new PipelineCompiler(opts)
 
     var startTime = Date.now()
-    var relTime = () => ((Date.now() - startTime) / 1000).toFixed(3)
+    var relTime = (time = startTime) => ((Date.now() - time) / 1000).toFixed(3)
 
     return compileSighfile(compiler, opts)
     .then(_streams => {
@@ -42,14 +42,14 @@ export function invoke(opts = {}) {
     .then(() => {
       if (opts.verbose)
         log('subprocesses started in %s seconds', relTime())
+      var pipeStartTime = Date.now()
 
       _.forEach(streams, (stream, pipelineName) => {
         stream.onValue(events => {
           var now = new Date
 
           var createTime = _.min(events, 'createTime').createTime
-          var timeDuration = createTime ?
-            (now.getTime() - createTime.getTime()) / 1000 : 'unknown'
+          var timeDuration = relTime(createTime ? createTime.getTime() : pipeStartTime)
 
           if (opts.verbose > 1) {
             log(
