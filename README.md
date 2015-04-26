@@ -226,10 +226,10 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
 # Future Work
-* `pipeline.explicit`.
-* `pipeline` should be able to forward input.
-* `pipeline` should not forward errors.
+* Should be able to forward stream input to `pipeline` plugin.
+* `pipeline` plugin should not forward errors down the stream.
 * `gulp` plugin adapter
+* Document `pipeline.explicit`.
 * More documentation for `pipeline` plugin.
 * More documentation about building plugins.
 * Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [toFileSystemState](https://github.com/sighjs/sigh/blob/master/src/stream.js).

@@ -123,7 +123,7 @@ export function compileSighfile(compiler, opts = {}) {
 
   _.forEach(plugins, (plugin, key) => injectPlugin(sighModule, key))
 
-  var pipelines = { alias: {} }
+  var pipelines = { alias: {}, explicit: {} }
   sighModule(pipelines)
 
   if (opts.pipelines && opts.pipelines.length) {
@@ -135,6 +135,14 @@ export function compileSighfile(compiler, opts = {}) {
       )
     }
 
+    if (! _.isEmpty(pipelines.explicit)) {
+      opts.pipelines.forEach(pipelineName => {
+        var explicitPipeline = pipelines.explicit[pipelineName]
+        if (explicitPipeline)
+          pipelines[pipelineName] = explicitPipeline
+      })
+    }
+
     Object.keys(pipelines).forEach(name => {
       if (opts.pipelines.indexOf(name) === -1)
         delete pipelines[name]
@@ -143,6 +151,7 @@ export function compileSighfile(compiler, opts = {}) {
 
   // remove non-pipelines from pipelines object
   delete pipelines.alias
+  delete pipelines.explicit
 
   if (opts.verbose) {
     log(
