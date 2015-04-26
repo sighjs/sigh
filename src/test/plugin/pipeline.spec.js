@@ -6,11 +6,13 @@ import PipelineCompiler from '../../PipelineCompiler'
 import pipeline from '../../plugin/pipeline'
 
 describe('pipeline plugin', () => {
-  var stream = Bacon.constant([])
+  var compiler, stream
+  beforeEach(() => {
+    compiler = new PipelineCompiler
+    stream = compiler.initStream
+  })
 
   it('intercepts the end of two pipelines', () => {
-    var compiler = new PipelineCompiler
-
     return Promise.all([1, 2].map(
       idx => compiler.compile(op => Bacon.constant(idx), null, `stream${idx}`)
     ))
@@ -31,8 +33,6 @@ describe('pipeline plugin', () => {
   })
 
   it('can subscribe to the same stream as another pipeline', () => {
-    var compiler = new PipelineCompiler
-
     return Promise.all([1, 2].map(
       idx => compiler.compile(op => Bacon.constant(idx), null, `stream${idx}`)
     ))
@@ -65,8 +65,6 @@ describe('pipeline plugin', () => {
   })
 
   it('can subscribe to a pipeline before it has been compiled', () => {
-    var compiler = new PipelineCompiler
-
     var pipelineOp = pipeline({ stream, compiler }, 'stream')
 
     compiler.compile(op => Bacon.once(1), null, 'stream')

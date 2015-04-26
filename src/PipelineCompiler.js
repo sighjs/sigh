@@ -22,6 +22,8 @@ export default class {
     // compiled stream by pipeline name
     this.streams = {}
 
+    this.initStream = Bacon.constant([])
+
     var processLimit = options.jobs || DEFAULT_JOBS
     // include sigh process as one job so subtract one
     // TODO: (processLimit > 0) when process-pools supports limit of 0
@@ -45,7 +47,7 @@ export default class {
    */
   compile(pipeline, inputStream = null, name = null) {
     if (! inputStream)
-      inputStream = Bacon.constant([])
+      inputStream = this.initStream
 
     var compileOperation = (operation, opData) => {
       var stream = operation.plugin ?
