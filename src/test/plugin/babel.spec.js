@@ -10,9 +10,8 @@ describe('babel plugin', () => {
   // TODO: use a single babel plugin for all tests to avoid all the delays due
   //       to starting subprocesses.
   var procPool
-  beforeEach(() => {
-    procPool = new ProcessPool
-  })
+  beforeEach(() => { procPool = new ProcessPool })
+  afterEach(() => { procPool.destroy() })
 
   it('compiles a single add event', function() {
     this.timeout(2500)

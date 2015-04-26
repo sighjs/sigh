@@ -56,5 +56,8 @@ describe('sourceMap helper module', () => {
       pos.column.should.equal(4)
       pos.source.should.equal('file2.js')
     })
+    .finally(() => {
+      procPool.destroy()
+    })
   })
 })

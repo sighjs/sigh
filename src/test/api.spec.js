@@ -13,7 +13,8 @@ describe('api', () => {
   it('compile should build working bacon streams from pipelines in Sigh.js file', function() {
     this.timeout(3000)
 
-    var pathBackup
+    var pathBackup, compiler
+
     return rm(TMP_PATH)
     .then(() => copy(FIXTURE_PATH, TMP_PATH))
     .then(() => {
@@ -21,7 +22,7 @@ describe('api', () => {
       process.chdir(TMP_PATH)
 
       var opts = { environment: 'production' }
-      var compiler = new PipelineCompiler(opts)
+      compiler = new PipelineCompiler(opts)
       return compileSighfile(compiler, opts)
     })
     .then(streams => streams.js.toPromise(Promise))
@@ -31,6 +32,7 @@ describe('api', () => {
       event.path.should.equal('dist/combined.js')
     })
     .finally(() => {
+      compiler.destroy()
       if (pathBackup)
         process.chdir(pathBackup)
     })
