@@ -81,7 +81,7 @@ sigh plugins are injected into the variables defined at the top of the file. Som
 
 ### Running sigh
 
-Compile all pipelines and exit:
+Running `sigh` with no arguments will run all pipelines.
 ```bash
 % sigh
 ```
@@ -92,14 +92,22 @@ Compile all pipelines and then watch files for changes compiling those that have
 ```
 
 Compile/watch only the specified pipeline (with the `sigh.js` shown above the source and tests would be compiled but the tests would never be run).
-```
+```bash
 % sigh -w build:source build:tests
 ```
 
 This is equivalent to using the alias defined in `sigh.js`:
-```
+```bash
 % sigh -w build
 ```
+
+It is also possible to create pipelines on the `pipeline.explicit` object that only run if specifically requested:
+
+```javascript
+  pipelines.explicit['run:tests'] = [ mocha() ]
+```
+
+This pipeline would only run if `sigh run:tests` is used but not with `sigh`.
 
 # Built-in plugins
 
@@ -229,7 +237,6 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 * Should be able to forward stream input to `pipeline` plugin.
 * `pipeline` plugin should not forward errors down the stream.
 * `gulp` plugin adapter
-* Document `pipeline.explicit`.
 * More documentation for `pipeline` plugin.
 * More documentation about building plugins.
 * Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [toFileSystemState](https://github.com/sighjs/sigh/blob/master/src/stream.js).
