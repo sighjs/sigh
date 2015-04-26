@@ -20,7 +20,16 @@ export default function(op, ...pipelineNames) {
   // during this call the streams may not be set up, wait until the first
   // "stream initialisation" value before merging the pipeline streams.
   return op.stream.take(1).flatMap(events => {
-    return Bacon.mergeAll(pipelineNames.map(name => op.compiler.streams[name]))
+    return Bacon.mergeAll(_.reduce(
+      pipelineNames,
+      (streams, name) => {
+        var stream = op.compiler.streams[name]
+        if (stream)
+          streams.push(stream)
+        return streams
+      },
+      []
+    ))
   })
 }
 
