@@ -21,6 +21,4 @@ export default function(op, ...pipelines) {
     []
   )
   .then(streams => Bacon.mergeAll(streams.filter(stream => stream !== op.compiler.initStream)))
-  // env may pass on null when the input stream is null... those are filtered
-  // out above
 }
