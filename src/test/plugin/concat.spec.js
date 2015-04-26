@@ -9,7 +9,7 @@ import { makeEvent } from './helper'
 
 describe('concat plugin', () => {
   it('concatenates three javascript files', () => {
-    var stream = Bacon.once([1, 2, 3].map(num => makeEvent(num)))
+    var stream = Bacon.constant([1, 2, 3].map(num => makeEvent(num)))
 
     return concat({ stream }, 'output.js', 10).toPromise(Promise).then(events => {
       events.length.should.equal(1)

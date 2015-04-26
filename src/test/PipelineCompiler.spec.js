@@ -12,7 +12,7 @@ describe('PipelineCompiler', () => {
     return compiler.compile([
       op => {
         // TODO: test op.stream is Bacon.constant([])
-        return Bacon.once(1)
+        return Bacon.constant(1)
       },
       op => op.stream.map(v => v + 1)
     ])
@@ -24,7 +24,7 @@ describe('PipelineCompiler', () => {
     return compiler.compile(op => {
       op.watch.should.be.true
       // TODO: test op.stream is Bacon.constant([])
-      return Bacon.once(420)
+      return Bacon.constant(420)
     })
     .then(
       stream => stream.toPromise(Promise).then(value => value.should.equal(420))
@@ -36,7 +36,7 @@ describe('PipelineCompiler', () => {
     return compiler.compile(plugin((op, arg1, arg2) => {
         should.not.exist(op.watch)
         // TODO: test op.stream is Bacon.constant([])
-        return Bacon.once(arg1 + arg2)
+        return Bacon.constant(arg1 + arg2)
     }, 7, 11))
     .then(stream => stream.toPromise(Promise).then(value => value.should.equal(18)))
   })

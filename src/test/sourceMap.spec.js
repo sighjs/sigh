@@ -34,7 +34,7 @@ describe('sourceMap helper module', () => {
   it('applies one source map to another', function() {
     this.timeout(3300)
 
-    var inputStream = Bacon.once([1, 2].map(num => makeEvent(num)))
+    var inputStream = Bacon.constant([1, 2].map(num => makeEvent(num)))
     var concatStream = concat({ stream: inputStream }, 'output.js', 10)
     var procPool = new ProcessPool
     var babelStream = babel({ stream: concatStream, procPool })

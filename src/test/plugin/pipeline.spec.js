@@ -67,7 +67,7 @@ describe('pipeline plugin', () => {
   it('can subscribe to a pipeline before it has been compiled', () => {
     var pipelineOp = pipeline({ stream, compiler }, 'stream')
 
-    compiler.compile(op => Bacon.once(1), null, 'stream')
+    compiler.compile(op => Bacon.constant(1), null, 'stream')
     .then(stream => {
       compiler.streams.stream = compiler.streams.stream.delay(0)
       return pipelineOp.toPromise(Promise)

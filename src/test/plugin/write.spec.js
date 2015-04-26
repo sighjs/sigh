@@ -13,7 +13,7 @@ var TMP_FILE = TMP_PATH + '/' + PROJ_PATH
 describe('write plugin', () => {
   it('writes a single file with no map to output directory with identity map', () => {
     var data = 'var pump\n'
-    var stream = Bacon.once([ new Event({ path: PROJ_PATH, type: 'add', data }) ])
+    var stream = Bacon.constant([ new Event({ path: PROJ_PATH, type: 'add', data }) ])
 
     return write({ stream }, TMP_PATH).toPromise(Promise).then(events => {
       // console.log('write events %j', events)
@@ -27,7 +27,7 @@ describe('write plugin', () => {
 
   it('write a single file containing a basePath', () => {
     var data = 'var  pumpbaby\n'
-    var stream = Bacon.once([
+    var stream = Bacon.constant([
       new Event({ basePath: 'subdir', path: PROJ_PATH, type: 'add', data })
     ])
 

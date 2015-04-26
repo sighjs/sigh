@@ -8,7 +8,7 @@ import { plugin, makeEvent } from './helper'
 
 describe('merge plugin', () => {
   it('combines three streams into one', () => {
-    var streams = [1, 2, 3].map(i => plugin(op => Bacon.once([ makeEvent(i) ])))
+    var streams = [1, 2, 3].map(i => plugin(op => Bacon.constant([ makeEvent(i) ])))
     var opData = { compiler: new PipelineCompiler }
 
     return merge(opData, ...streams).then(streams => {

@@ -7,7 +7,7 @@ describe('stream api', () => {
   it('mapEvents intercepts errors', () => {
     return new Promise(function(resolve, reject) {
       var stream = mapEvents(
-        Bacon.once([1, 2, 3, 4]),
+        Bacon.constant([1, 2, 3, 4]),
         v => v % 2 ? v : new Bacon.Error(v)
       ).delay(0)
 

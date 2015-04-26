@@ -23,7 +23,7 @@ describe('babel plugin', () => {
       type: 'add',
       data
     })
-    var stream = Bacon.once([ event ])
+    var stream = Bacon.constant([ event ])
 
     return babel({ stream, procPool }).toPromise(Promise).then(events => {
       events.length.should.equal(1)
