@@ -13,7 +13,7 @@ module.exports = function(pipelines) {
     write('lib/test')
   ]
 
-  pipelines.alias('build', ['test:js', 'source:js'])
+  pipelines.alias.build = ['test:js', 'source:js']
 
   pipelines['tests:run'] = [
     pipeline('source:js', 'test:js'),

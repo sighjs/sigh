@@ -60,7 +60,7 @@ module.exports = function(pipelines) {
     write('build/test')
   ]
 
-  pipelines.alias('build', ['build:source', 'build:tests'])
+  pipelines.alias.build = ['build:source', 'build:tests']
 
   pipelines['run:tests'] = [
     pipeline('build:source', 'build:tests'),
