@@ -126,44 +126,48 @@ export function compileSighfile(compiler, opts = {}) {
   var pipelines = { alias: {}, explicit: {} }
   sighModule(pipelines)
 
-  if (opts.pipelines && opts.pipelines.length) {
-    if (! _.isEmpty(pipelines.alias)) {
-      opts.pipelines = _.flatten(
-        opts.pipelines.map(pipelineName => {
-          return pipelines.alias[pipelineName] || pipelineName
-        })
-      )
-    }
-
-    if (! _.isEmpty(pipelines.explicit)) {
-      opts.pipelines.forEach(pipelineName => {
-        var explicitPipeline = pipelines.explicit[pipelineName]
-        if (explicitPipeline)
-          pipelines[pipelineName] = explicitPipeline
-      })
-    }
-
-    Object.keys(pipelines).forEach(name => {
-      if (opts.pipelines.indexOf(name) === -1)
-        delete pipelines[name]
-    })
-  }
-
-  // remove non-pipelines from pipelines object
-  delete pipelines.alias
-  delete pipelines.explicit
+  var runPipelines = selectPipelines(opts.pipelines, pipelines)
 
   if (opts.verbose) {
     log(
       'running pipelines [ %s ] with %s jobs',
-      Object.keys(pipelines).join(', '),
+      Object.keys(runPipelines).join(', '),
       opts.jobs
     )
   }
 
   return Promise.props(
-    _.mapValues(pipelines, (pipeline, name) => compiler.compile(pipeline, null, name))
+    _.mapValues(runPipelines, (pipeline, name) => compiler.compile(pipeline, null, name))
   )
+}
+
+function selectPipelines(selected, pipelines) {
+  if (! selected || selected.length === 0)
+    return _.omit(pipelines, 'alias', 'explicit')
+
+  if (! _.isEmpty(pipelines.alias)) {
+    selected = _.flatten(
+      selected.map(pipelineName => {
+        return pipelines.alias[pipelineName] || pipelineName
+      })
+    )
+  }
+
+  if (! _.isEmpty(pipelines.explicit)) {
+    selected.forEach(pipelineName => {
+      var explicitPipeline = pipelines.explicit[pipelineName]
+      if (explicitPipeline)
+        pipelines[pipelineName] = explicitPipeline
+    })
+  }
+
+  var runPipelines = {}
+  Object.keys(pipelines).forEach(name => {
+    if (selected.indexOf(name) !== -1)
+      runPipelines[name] = pipelines[name]
+  })
+
+  return runPipelines
 }
 
 function injectPlugin(module, pluginName) {
