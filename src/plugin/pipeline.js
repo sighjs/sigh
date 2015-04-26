@@ -7,7 +7,7 @@ import { bufferingDebounce } from '../stream'
 var DEFAULT_DEBOUNCE = 200
 
 export default function(op, ...pipelineNames) {
-  if (op.stream != op.compiler.initStream) {
+  if (op.stream !== op.compiler.initStream) {
     // when `pipeline` is not the first item in a stream then forward input events
     op.stream.onValue(events => {
       if (events.length === 0)
