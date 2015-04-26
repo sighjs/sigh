@@ -12,7 +12,7 @@ export default function(op, ...pipelines) {
     pipeline => op.compiler.compile(pipeline, op.stream || null),
     { concurrency: 1 } // to ensure treeIndex ordering
   )
-  .then(streams => Bacon.mergeAll(streams.filter(stream => stream !== null)))
+  .then(streams => Bacon.mergeAll(streams.filter(stream => stream !== op.compiler.initStream)))
   // env may pass on null when the input stream is null... those are filtered
   // out above
 }
