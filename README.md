@@ -241,6 +241,5 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 * More documentation about building plugins.
 * Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [toFileSystemState](https://github.com/sighjs/sigh/blob/master/src/stream.js).
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
-* When using positional arguments and one of the pipelines used in a `pipeline` is not selected then this can prevent sigh from exiting.
 * `glob` plugin should also forward events from input stream.
 * Investigate possibility of grunt plugin adapter

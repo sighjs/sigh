@@ -8,13 +8,7 @@ var DEFAULT_DEBOUNCE = 200
 
 export default function(op, ...pipelineNames) {
   if (op.stream !== op.compiler.initStream) {
-    // when `pipeline` is not the first item in a stream then forward input events
-    op.stream.onValue(events => {
-      if (events.length === 0)
-        return
-
-      // TODO: ...
-    })
+    // TODO: record dependency between streams
   }
 
   // during this call the streams may not be set up, wait until the first
