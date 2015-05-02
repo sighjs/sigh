@@ -30,7 +30,7 @@ describe('babel plugin', () => {
 
       var { data, sourceMap } = events[0]
       data.should.equal('define("subdir/file", ["exports"], function (exports) {\n  "use strict";\n\n  var pump = function pump() {\n    return "pumper";\n  };\n});')
-      sourceMap.mappings.should.equal(';;;AAAA,MAAI,IAAI,GAAG;WAAM,QAAQ;GAAA,CAAA')
+      sourceMap.mappings.should.equal(';;;AAAA,MAAI,IAAI,GAAG,SAAP,IAAI;WAAS,QAAQ;GAAA,CAAA')
       sourceMap.file.should.equal(event.path)
     })
   })
