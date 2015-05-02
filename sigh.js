@@ -18,8 +18,7 @@ module.exports = function(pipelines) {
   pipelines['tests:run'] = [
     pipeline('source:js', 'test:js'),
     debounce(700),
-    // TODO: pipeline('mocha')
-    mocha({ files: 'lib/test/**/*.spec.js' })
+    pipeline({ activate: true }, 'mocha')
   ]
 
   pipelines.explicit.mocha = [ mocha({ files: 'lib/test/**/*.spec.js' }) ]

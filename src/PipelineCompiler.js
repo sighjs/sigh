@@ -19,6 +19,9 @@ export default class {
     this.watch = options.watch
     this.environment = options.environment
 
+    // dependency name against array of input stream
+    this.pipelineInputs = {}
+
     // compiled stream by pipeline name
     this.streams = {}
 
@@ -31,6 +34,14 @@ export default class {
       --processLimit
 
     this.procPool = new ProcessPool({ processLimit })
+  }
+
+  addPipelineInput(name, stream) {
+    var pipelineInputs = this.pipelineInputs[name]
+    if (pipelineInputs)
+      pipelineInputs.push(stream)
+    else
+      this.pipelineInputs[name] = [ stream ]
   }
 
   /**
@@ -46,6 +57,15 @@ export default class {
    * @return {Bacon} stream that results from combining all operations in the pipeline.
    */
   compile(pipeline, inputStream = null, name = null) {
+    if (name) {
+      var pipelineInputs = this.pipelineInputs[name]
+      if (pipelineInputs) {
+        inputStream = Bacon.mergeAll(
+          inputStream ? [ inputStream, ...pipelineInputs ] : pipelineInputs
+        )
+      }
+    }
+
     if (! inputStream)
       inputStream = this.initStream
 
