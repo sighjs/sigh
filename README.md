@@ -150,6 +150,8 @@ module.exports = function(pipelines) {
 ```
 This pipeline takes all files with the extension `js` recursively reachable from `src` and writes each one to `build` directory (without the `src` prefix due to `basePath`).
 
+The write plugin forwards the events down the stream, this is useful in combination with the `pipeline` plugin.
+
 ## merge
 The `merge` plugin combines many streams together.
 
@@ -249,7 +251,7 @@ pipelines['tests:run'] = [
 ]
 ```
 
-In this example the `pipeline` plugin in the `tests:run` pipeline pipes the output from the named pipelines. By default it will not force a pipeline to run unless the user specifies it, if the user runs `sigh test:js tests:run` the `pipeline` plugin will issue stream events from the `test:js` pipeline only.
+In this example the `pipeline` plugin in the `tests:run` pipeline receives the output from the `source:js` and `test:js` pipelines. By default it will not force a pipeline to run unless the user specifies it, if the user runs `sigh test:js tests:run` the `pipeline` plugin will issue stream events from the `test:js` pipeline only.
 
 To force a pipeline to activate a named plugin the `activate` option can be used, the previous `tests:run` pipeline could be rewritten more flexibly to allow the user to run mocha tests manually as such:
 
