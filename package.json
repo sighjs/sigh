@@ -24,23 +24,23 @@
     "url": "https://github.com/sighjs/sigh/issues"
   },
   "dependencies": {
-    "bluebird": "~2.9.13",
-    "chokidar": "~1.0.0",
-    "esprima": "~2.1.0",
-    "fs-extra": "~0.18.0",
-    "glob": "~5.0.1",
-    "lodash": "~3.6.0",
-    "process-pool": "~0.3.1",
+    "bluebird": "^2.9.13",
+    "chokidar": "^1.0.0",
+    "esprima": "^2.1.0",
+    "fs-extra": "^0.18.0",
+    "glob": "^5.0.1",
+    "lodash": "^3.6.0",
+    "process-pool": "^0.3.1",
     "rewire": "~2.3.1",
     "sigh-core": "^0.11.1",
-    "source-map": "~0.4.0",
-    "source-map-support": "~0.2.10"
+    "source-map": "^0.4.0",
+    "source-map-support": "^0.2.10"
   },
   "devDependencies": {
-    "babel": "~5.0.8",
-    "chai": "~2.2.0",
-    "grunt": "~0.4.5",
-    "mocha": "~2.2.1",
+    "babel": "^5.0.8",
+    "chai": "^2.2.0",
+    "grunt": "^0.4.5",
+    "mocha": "^2.2.1",
     "sigh": "^0.11.0",
     "sigh-cli": "^0.2.1",
     "sigh-mocha": "^0.0.3"
