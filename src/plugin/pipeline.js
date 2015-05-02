@@ -13,7 +13,8 @@ export default function(op, ...pipelineNames) {
 
   if (op.stream !== compiler.initStream) {
     pipelineNames.forEach(name => {
-      compiler.addPipelineInput(name, op.stream)
+      // TODO: avoid forwarding []?
+      compiler.addPipelineInput(name, op.stream.skipErrors())
     })
   }
 
@@ -29,6 +30,6 @@ export default function(op, ...pipelineNames) {
         return streams
       },
       []
-    ))
+    )).skipErrors()
   })
 }

@@ -273,7 +273,6 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 
 # Future Work
 * Should be able to forward stream input to a plugin that is nested inside another plugin (e.g. a merge).
-* `pipeline` plugin should not forward errors down the stream.
 * `gulp` plugin adapter
 * More documentation about building plugins.
 * Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [toFileSystemState](https://github.com/sighjs/sigh/blob/master/src/stream.js).
