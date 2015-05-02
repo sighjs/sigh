@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { toFileSystemState } from '../stream'
-import { concatenate as concatSourceMaps } from '../sourceMap'
+import { concatenate as concatSourceMaps } from 'sigh-core/lib/sourceMap'
 import Event from '../Event'
 
 export default function(op, outputPath) {

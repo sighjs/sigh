@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { apply as sourceMapApply, generateIdentitySourceMap } from './sourceMap'
+import { apply as sourceMapApply, generateIdentitySourceMap } from 'sigh-core/lib/sourceMap'
 
 /**
  * Event passed through pipeline (which can be modified, concatenated, witheld etc. by any

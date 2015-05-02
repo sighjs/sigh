@@ -6,7 +6,7 @@ import path from 'path'
 import Bacon from 'baconjs'
 import functionLimit from 'process-pool/lib/functionLimit'
 
-import log from './log'
+import log from 'sigh-core/lib/log'
 import PipelineCompiler from './PipelineCompiler'
 import merge from './plugin/merge'
 import babel from './plugin/babel'
@@ -102,13 +102,15 @@ export function compileSighfile(compiler, opts = {}) {
   }
   catch (e) {}
 
+  var notPlugin = { 'sigh-cli': true, 'sigh-core' : true }
+
   if (packageJson) {
     [ packageJson.devDependencies, packageJson.dependencies ].forEach(deps => {
       if (! deps)
         return
 
       _.forEach(deps, function(version, pkg) {
-        if (/^sigh-/.test(pkg) && pkg !== 'sigh-cli')
+        if (/^sigh-/.test(pkg) && ! notPlugin[pkg])
           plugins[pkg.substr(5)] = require(path.join(process.cwd(), 'node_modules', pkg))
       })
     })
