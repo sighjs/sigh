@@ -145,7 +145,7 @@ export function compileSighfile(compiler, opts = {}) {
 
   return Promise.props(
     _.mapValues(runPipelines, (pipeline, name) => limiter(() => {
-      // This ensures that user selected pipelines dependent streams are
+      // This ensures that user selected pipeline's input streams are
       // merged with the init stream.
       var inputStream = selectedPipelines[name] ? compiler.initStream : null
       return compiler.compile(pipeline, inputStream, name)
