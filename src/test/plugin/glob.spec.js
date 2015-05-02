@@ -1,4 +1,4 @@
-import Bacon from 'baconjs'
+import { Bacon } from 'sigh-core'
 import _ from 'lodash'
 import Promise from 'bluebird'
 import fs from 'fs'

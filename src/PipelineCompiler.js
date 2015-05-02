@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import Bacon from 'baconjs'
+import { Bacon } from 'sigh-core'
 import Promise from 'bluebird'
 import ProcessPool from 'process-pool'
 

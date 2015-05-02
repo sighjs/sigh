@@ -1,4 +1,4 @@
-import Bacon from 'baconjs'
+import { Bacon } from 'sigh-core'
 import Promise from 'bluebird'
 
 import Event from '../../Event'

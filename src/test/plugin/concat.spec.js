@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import Promise from 'bluebird'
-import Bacon from 'baconjs'
+import { Bacon } from 'sigh-core'
 
 import Event from '../../Event'
 import concat from '../../plugin/concat'

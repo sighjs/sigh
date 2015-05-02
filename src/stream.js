@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import Promise from 'bluebird'
-import Bacon from 'baconjs'
+import { Bacon } from 'sigh-core'
 
 /**
  * Adapt a stream to pull Bacon.Error values out of the `events` array payload and

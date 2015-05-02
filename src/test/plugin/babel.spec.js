@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import Promise from 'bluebird'
-import Bacon from 'baconjs'
+import { Bacon } from 'sigh-core'
 import ProcessPool from 'process-pool'
 
 import Event from '../../Event'

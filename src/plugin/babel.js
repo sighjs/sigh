@@ -1,5 +1,5 @@
 import path from 'path'
-import Bacon from 'baconjs'
+import { Bacon } from 'sigh-core'
 import _ from 'lodash'
 
 import { mapEvents } from '../stream'

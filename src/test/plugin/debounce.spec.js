@@ -1,5 +1,5 @@
 import Promise from 'bluebird'
-import Bacon from 'baconjs'
+import { Bacon } from 'sigh-core'
 
 import PipelineCompiler from '../../PipelineCompiler'
 import Event from '../../Event'

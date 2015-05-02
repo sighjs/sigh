@@ -1,5 +1,5 @@
 import Promise from 'bluebird'
-import Bacon from 'baconjs'
+import { Bacon } from 'sigh-core'
 import _ from 'lodash'
 
 import { bufferingDebounce } from '../stream'

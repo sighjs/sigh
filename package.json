@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "description": "A web asset-pipeline combining the best features of existing state of the art.",
   "main": "index",
   "directories": {
@@ -24,7 +24,6 @@
     "url": "https://github.com/sighjs/sigh/issues"
   },
   "dependencies": {
-    "baconjs": "~0.7.52",
     "bluebird": "~2.9.13",
     "chokidar": "~1.0.0",
     "esprima": "~2.1.0",
@@ -33,7 +32,7 @@
     "lodash": "~3.6.0",
     "process-pool": "~0.3.1",
     "rewire": "~2.3.1",
-    "sigh-core": "^0.10.1",
+    "sigh-core": "^0.11.0",
     "source-map": "~0.4.0",
     "source-map-support": "~0.2.10"
   },
