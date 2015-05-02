@@ -1,4 +1,6 @@
-var merge, babel, concat, debounce, env, glob, write
+// sigh's node_modules/package.json are symlinked to the same directory as this
+// sigh file which allows the babel plugin to be loaded.
+var merge, concat, debounce, env, glob, write, babel
 
 module.exports = function(pipelines) {
   pipelines['js'] = [

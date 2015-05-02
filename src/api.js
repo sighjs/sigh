@@ -8,7 +8,6 @@ import functionLimit from 'process-pool/lib/functionLimit'
 import { log, Bacon } from 'sigh-core'
 import PipelineCompiler from './PipelineCompiler'
 import merge from './plugin/merge'
-import babel from './plugin/babel'
 import concat from './plugin/concat'
 import debounce from './plugin/debounce'
 import env from './plugin/env'
@@ -16,7 +15,7 @@ import glob from './plugin/glob'
 import pipeline from './plugin/pipeline'
 import write from './plugin/write'
 
-var plugins = { merge, babel, concat, debounce, env, glob, pipeline, write }
+var plugins = { merge, concat, debounce, env, glob, pipeline, write }
 
 /**
  * Run Sigh.js
