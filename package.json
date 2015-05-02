@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "A web asset-pipeline combining the best features of existing state of the art.",
   "main": "index",
   "directories": {
@@ -41,7 +41,7 @@
     "chai": "^2.2.0",
     "grunt": "^0.4.5",
     "mocha": "^2.2.1",
-    "sigh": "^0.11.0",
+    "sigh": "^0.12.0",
     "sigh-babel": "^0.11.0",
     "sigh-cli": "^0.2.1",
     "sigh-mocha": "^0.0.3"
