@@ -272,6 +272,10 @@ To activate some plugins and not other one of the following equivalent formats c
 ```javascript
 pipeline({ activate: true }, 'mocha', { activate: false }, 'express')
 pipeline('express', { activate: true }, 'mocha')
+merge(
+  pipeline({ activate: true }, 'mocha'),
+  pipeline('express')
+)
 ```
 
 # Writing sigh plugins
