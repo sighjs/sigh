@@ -33,7 +33,7 @@
     "lodash": "~3.6.0",
     "process-pool": "~0.3.1",
     "rewire": "~2.3.1",
-    "sigh-core": "^0.10.0",
+    "sigh-core": "^0.10.1",
     "source-map": "~0.4.0",
     "source-map-support": "~0.2.10"
   },

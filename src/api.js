@@ -6,7 +6,7 @@ import path from 'path'
 import Bacon from 'baconjs'
 import functionLimit from 'process-pool/lib/functionLimit'
 
-import log from 'sigh-core/lib/log'
+import { log } from 'sigh-core'
 import PipelineCompiler from './PipelineCompiler'
 import merge from './plugin/merge'
 import babel from './plugin/babel'
