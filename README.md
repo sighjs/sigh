@@ -251,7 +251,7 @@ pipelines['tests:run'] = [
 ]
 ```
 
-In this example the `pipeline` plugin in the `tests:run` pipeline receives the output from the `source:js` and `test:js` pipelines. By default it will not force a pipeline to run unless the user specifies it, if the user runs `sigh test:js tests:run` the `pipeline` plugin will issue stream events from the `test:js` pipeline only.
+In this example the `pipeline` plugin in the `tests:run` pipeline forwards the output from the `source:js` and `test:js` pipelines down the stream. By default it will not force a pipeline to run unless the user specifies it e.g. if the user runs `sigh test:js tests:run` the `pipeline` plugin will issue stream events from the `test:js` pipeline only.
 
 To force a pipeline to activate a named plugin the `activate` option can be used, the previous `tests:run` pipeline could be rewritten more flexibly to allow the user to run mocha tests manually as such:
 
@@ -265,7 +265,7 @@ pipelines['tests:run'] = [
 pipelines.explicit.mocha = [ mocha({ files: 'lib/test/*.spec.js' }) ]
 ```
 
-This also shows that `pipeline` operations allow you to send events into another pipeline in additon to receiving events.
+This also shows that `pipeline` operations forward pipeline events to the named pipelines in addition to receiving events from them.
 
 # Writing sigh plugins
 
