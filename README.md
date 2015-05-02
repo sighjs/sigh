@@ -229,15 +229,50 @@ babel({ getModulePath: function(path) { return path.replace(/[^/]+\//, '') })
 ```
 * modules - A string denoting the type of modules babel should output e.g. amd/common, see [the babel API](https://babeljs.io/docs/usage/options/).
 
+## pipeline
+
+The pipeline plugin allows you to connect named pipelines together.
+
+```javascript
+pipelines['source:js'] = [
+  glob({ basePath: 'src' }, '*.js', 'plugin/*.js'), babel(), write('lib')
+]
+
+pipelines['test:js'] = [
+  glob({ basePath: 'test' }, '*.js', 'plugin/*.js'), babel(), write('lib')
+]
+
+pipelines['tests:run'] = [
+  pipeline('source:js', 'test:js'),
+  debounce(700),
+  mocha({ files: 'lib/test/*.spec.js' })
+]
+```
+
+In this example the `pipeline` plugin in the `tests:run` pipeline pipes the output from the named pipelines. By default it will not force a pipeline to run unless the user specifies it, if the user runs `sigh test:js tests:run` the `pipeline` plugin will issue stream events from the `test:js` pipeline only.
+
+To force a pipeline to activate a named plugin the `activate` option can be used, the previous `tests:run` pipeline could be rewritten more flexibly to allow the user to run mocha tests manually as such:
+
+```javascript
+pipelines['tests:run'] = [
+  pipeline('source:js', 'test:js'),
+  debounce(700),
+  pipeline({ activate: true }, 'mocha')
+]
+
+pipelines.explicit.mocha = [ mocha({ files: 'lib/test/*.spec.js' }) ]
+```
+
+This also shows that `pipeline` operations allow you to send events into another pipeline in additon to receiving events.
+
 # Writing sigh plugins
 
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
 # Future Work
-* Should be able to forward stream input to `pipeline` plugin.
+* Should be able to forward stream input to a plugin that is nested inside another plugin (e.g. a merge).
 * `pipeline` plugin should not forward errors down the stream.
 * `gulp` plugin adapter
-* More documentation for `pipeline` plugin.
 * More documentation about building plugins.
 * Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [toFileSystemState](https://github.com/sighjs/sigh/blob/master/src/stream.js).
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
