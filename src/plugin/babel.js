@@ -2,7 +2,7 @@ import path from 'path'
 import { Bacon } from 'sigh-core'
 import _ from 'lodash'
 
-import { mapEvents } from '../stream'
+import { mapEvents } from 'sigh-core/lib/stream'
 
 function eventCompiler(opts) {
   var babel = require('babel')

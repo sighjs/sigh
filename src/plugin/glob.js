@@ -4,7 +4,7 @@ import { Bacon } from 'sigh-core'
 import Promise from 'bluebird'
 var glob = Promise.promisify(require('glob'))
 
-import { bufferingDebounce, coalesceEvents } from '../stream'
+import { bufferingDebounce, coalesceEvents } from 'sigh-core/lib/stream'
 import Event from '../Event'
 
 // necessary to detect chokidar's duplicate/invalid events, see later comment

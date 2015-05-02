@@ -2,7 +2,7 @@ import Promise from 'bluebird'
 import { Bacon } from 'sigh-core'
 import _ from 'lodash'
 
-import { bufferingDebounce } from '../stream'
+import { bufferingDebounce } from 'sigh-core/lib/stream'
 
 var DEFAULT_DEBOUNCE = 200
 

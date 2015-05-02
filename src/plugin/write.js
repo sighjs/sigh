@@ -8,7 +8,7 @@ var writeFile = Promise.promisify(fs.writeFile)
 var unlink = Promise.promisify(fs.unlink)
 var ensureDir = Promise.promisify(fse.ensureDir)
 
-import { mapEvents } from '../stream'
+import { mapEvents } from 'sigh-core/lib/stream'
 
 export function writeEvent(basePath, event) {
   var { fileType } = event
