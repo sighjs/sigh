@@ -56,8 +56,11 @@ function adapter(gulpPlugin, op, ...args) {
     if (! registeredForEnd) {
       // delay until the first value to avoid starting stream during compilation stage
       op.stream.onEnd(() => {
-        gulpOutStream.removeListener('data', onGulpValue)
-        sink(new Bacon.End())
+        // without the nextTick then the last event can go missing on node 0.10
+        process.nextTick(() => {
+          gulpOutStream.removeListener('data', onGulpValue)
+          sink(new Bacon.End())
+        })
       })
       registeredForEnd = true
     }
