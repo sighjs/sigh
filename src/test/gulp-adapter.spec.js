@@ -13,8 +13,11 @@ describe('gulp adapter', () => {
     var data = '  function hey() {\n  return    14 }\n\n  var a = 1'
     var stream = Bacon.constant([ new Event({ path: 'file1.js', type: 'add', data }) ])
 
-    // TODO: s/firstT/t/
-    return adapted({ stream }).firstToPromise(Promise).then(events => {
+    var op = adapted({ stream })
+    var nCalls = 0
+
+    op.onValue(events => {
+      ++nCalls
       events.length.should.equal(1)
       var event = events[0]
       var sizeReduction = data.length - event.data.length
@@ -32,6 +35,13 @@ describe('gulp adapter', () => {
       origPos.line.should.not.equal(transformedPos.line)
       origPos.line.should.equal(mappedPos.line)
       origPos.column.should.equal(mappedPos.column)
+    })
+
+    return new Promise(resolve => {
+      op.onEnd(() => {
+        nCalls.should.equal(1)
+        resolve()
+      })
     })
   })
 })

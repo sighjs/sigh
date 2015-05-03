@@ -7,10 +7,10 @@ import Event from './Event'
 export default gulpPlugin => adapter.bind(null, gulpPlugin)
 
 function adapter(gulpPlugin, op, ...args) {
-  var gulpInStream = new Transform({ objectMode: true })
-  var gulpOutStream = gulpInStream.pipe(gulpPlugin(...args))
+  var sink
+  var gulpAdaptedStream = Bacon.fromBinder(_sink => { sink = _sink })
 
-  var gulpAdaptedStream = Bacon.fromEvent(gulpOutStream, 'data').map(vinyl => {
+  var onGulpValue = vinyl => {
     var { __source: source } = vinyl
     if (! source)
       return new Bacon.Error('gulp plugin lost source, may not be compatible with sigh')
@@ -18,8 +18,12 @@ function adapter(gulpPlugin, op, ...args) {
     source.data = vinyl.contents.toString()
     source.sourceMap = vinyl.sourceMap
 
-    return [ source ]
-  })
+    sink([ source ])
+  }
+
+  var gulpInStream = new Transform({ objectMode: true })
+  var gulpOutStream = gulpInStream.pipe(gulpPlugin(...args))
+  gulpOutStream.on('data', onGulpValue)
 
   var passThroughStream = op.stream.flatMap(events => {
     var passThroughEvents = []
@@ -50,8 +54,14 @@ function adapter(gulpPlugin, op, ...args) {
     return passThroughEvents.length === 0 ? Bacon.never() : passThroughEvents
   })
 
-  // var terminateStream = op.stream.take(1).map(() => { op.stream.onEnd() })
+  // If I use map instead of flatMap then the function never gets called...
+  var terminateStream = op.stream.take(1).flatMap(() => {
+    op.stream.onEnd(() => {
+      gulpOutStream.removeListener('data', onGulpValue)
+      sink(new Bacon.End())
+    })
+    return new Bacon.End()
+  })
 
-  // TODO: close gulpAdaptedStream on end of input stream
-  return Bacon.mergeAll(gulpAdaptedStream, passThroughStream)
+  return Bacon.mergeAll(gulpAdaptedStream, passThroughStream, terminateStream)
 }
