@@ -5,6 +5,7 @@
 Sigh combines the best features of the best asset pipelines together with some unique features of its own including incredible speed by delegating tasks to multiple processes and perfect source maps even in production builds. No matter how many transpilers and minifiers you pass your code through Sigh will do the minimum work possible without touching your hard drive until the output files are written to disk.
 
 * Pipelines are written in JavaScript with a very neat tree-based syntax, no more grunt spaghetti or verbose gulp files: [plumber][plumber].
+* Supports gulp plugins.
 * Uses Functional Reactive Programming via [bacon.js][bacon], your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs], [gulp][gulp] uses node's built-in stream API).
 * Support source maps at every stage of the pipeline: [plumber][plumber] and [gulp][gulp] (gulp cannot concatenate source maps when merging streams).
 * Schedules work over multiple CPU cores to reduce build times and make better use of available processing resources.
@@ -77,7 +78,7 @@ The pipeline `run:tests` runs mocha when either the `build:tests` or `build:sour
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
-sigh plugins are injected into the variables defined at the top of the file. Some of the plugins are built-in (for now) and others are found by scanning package.json for dependency and devDependency entries of the format `sigh-*`.
+sigh plugins are injected into the variables defined at the top of the file. Some of the plugins are built-in (for now) and others are found by scanning package.json for dependency and devDependency entries of the format `sigh-*`. Sigh also searches for plugins of the format `gulp-*` and adapts them to work with sigh.
 
 ### Running sigh
 
@@ -266,7 +267,7 @@ merge(
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
 # Future Work
-* `gulp` plugin adapter
+* Work out why I cannot apply a source map to a concatenated source map, likely needs new code in [source-map](https://github.com/mozilla/source-map).
 * Should be able to forward stream input to a plugin that is nested inside another plugin (e.g. a merge).
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
 * `glob` plugin should also forward events from input stream.
