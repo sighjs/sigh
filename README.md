@@ -189,6 +189,8 @@ In this example the order of the files in `output.js` is determined by tree orde
 
 You can see here that `glob` uses multiple tree indexes and assigns them to events according to the index of the pattern that produced them.
 
+*Please note, currently transforming events output from the `concat` plugin will corrupt the output source maps.*
+
 ## debounce
 Combines events in the pipeline until the event stream settles for longer than the given period.
 
@@ -267,7 +269,7 @@ merge(
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
 # Future Work
-* Work out why I cannot apply a source map to a concatenated source map, likely needs new code in [source-map](https://github.com/mozilla/source-map).
+* Fix source map breakage when transforming events from `concat` plugin.
 * Should be able to forward stream input to a plugin that is nested inside another plugin (e.g. a merge).
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
 * `glob` plugin should also forward events from input stream.
