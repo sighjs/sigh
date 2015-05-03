@@ -216,7 +216,7 @@ This pipeline only concatenates the files together in `production` and `staging`
 
 ## pipeline
 
-The pipeline plugin allows you to connect named pipelines together.
+The pipeline plugin allows named pipelines to be connected.
 
 ```javascript
 pipelines['source:js'] = [
@@ -250,7 +250,7 @@ pipelines.explicit.mocha = [ mocha({ files: 'lib/test/*.spec.js' }) ]
 
 This also shows that `pipeline` operations forward pipeline events to the named pipelines in addition to receiving events from them.
 
-To activate some plugins and not other one of the following equivalent formats can be used:
+To activate some plugins and not others one of the following equivalent formats can be used:
 
 ```javascript
 pipeline({ activate: true }, 'mocha', { activate: false }, 'express')
