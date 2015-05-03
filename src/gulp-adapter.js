@@ -40,8 +40,10 @@ function adapter(gulpPlugin, op, ...args) {
       events.forEach(event => {
         var vinyl = new Vinyl({
           contents: new Buffer(event.data),
-          path: event.projectPath,
-          base: event.basePath,
+          path: event.path,
+          // the following messes with source maps...
+          // path: event.projectPath,
+          // base: event.basePath,
         })
 
         // the next cannot be attached via the constructor
