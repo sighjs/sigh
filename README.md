@@ -67,7 +67,7 @@ module.exports = function(pipelines) {
   pipelines['run:tests'] = [
     pipeline('build:source', 'build:tests'),
     debounce(500),
-    mocha()
+    mocha({ files: 'lib/**/*.spec.js' })
   ]
 }
 ```
@@ -106,7 +106,7 @@ This is equivalent to using the alias defined in `sigh.js`:
 It is also possible to create pipelines on the `pipeline.explicit` object that only run if specifically requested:
 
 ```javascript
-  pipelines.explicit['run:tests'] = [ mocha() ]
+  pipelines.explicit['run:tests'] = [ mocha({ files: 'lib/**/*.spec.js' }) ]
 ```
 
 This pipeline would only run if `sigh run:tests` is used but not with `sigh`.
