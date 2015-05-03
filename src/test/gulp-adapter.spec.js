@@ -1,3 +1,4 @@
+import Promise from 'bluebird'
 import { Bacon } from 'sigh-core'
 import gulpUglify from 'gulp-uglify'
 import { SourceMapConsumer } from 'source-map'
