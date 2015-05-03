@@ -38,9 +38,10 @@ Install sigh in the project:
 
 Write a file called `sigh.js` (or `Sigh.js`) and put it in the root of the project:
 ```javascript
-// To use a plugin it must be declared as a global variable.
+// To use a plugin it must be declared as a global variable, some plugins are
+// built-in and others are loaded by scanning package.json for entries
+// beginning with "sigh-" or "gulp-".
 var merge, glob, concat, write, env, pipeline
-// The above plugins are built-in, the next three are loaded from package.json.
 var uglify, mocha, babel
 
 module.exports = function(pipelines) {
