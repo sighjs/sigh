@@ -23,7 +23,10 @@ The first argument is used to pass information to the plugin, the subsequent arg
  * `treeIndex`: depth-first index of operator within pipeline tree. This can be written to in order to this to set the treeIndex for the next pipeline operation otherwise it is incremented by one.
  * `watch`: true if and only if the `-w` flag was used.
  * `environment`: environment being built (change with the `-e` or `--environment` flag).
+ * `procPool`: A [ProcessPool](https://github.com/ohjames/process-pool) instance configured to limit the number of active processes accoring to the `-j` argument passed to sigh. This can be used to schedule work over multiple CPUs, see the [sigh-babel plugin](https://github.com/sighjs/sigh-babel/blob/master/src/index.js) for an example.
  * `compiler`: a pipeline compiler that can be used to compile any sub-trees, this is used in advanced plugins that take other pipelines as arguments.
+
+The [sigh-core](https://github.com/sighjs/sigh-core) library also provides some functionality useful for writing plugins including access to the `Bacon` instance sigh uses.
 
 Assuming the plugin above is called `suffixer` it could be used in a Sighfile like:
 ```javascript
@@ -35,7 +38,7 @@ module.exports = function(pipelines) {
 The stream payload is an array of event objects, each event object contains the following fields:
   * `type`: `add`, `change`, or `remove`
   * `path`: path to source file.
-  * `sourceMap`: source map as javascript object (read-only, see applySourceMap).
+  * `sourceMap`: source map as javascript object, this is read-write but in most cases `applySourceMap` should be used instead of writing to this variable.
   * `data`: file content as string (plugins can modify this, if modified then applySourceMap should be called with a source map describing the modifications).
   * `sourceData`: original content before any transforms (read-only).
   * `fileType`: filename extension (read-only).
@@ -53,3 +56,6 @@ Plugins can also return a `Promise` to delay construction of the pipeline.
 ## Incremental rebuilds and plugins
 
 Due to the way Sigh's event stream works processing never needs to be repeated, only work relating to the actual files changed is performed. In most cases caching isn't necessary, in the few cases where it is Sigh handles it transparently. Library code available to plugin writers makes it simple to handle caching in cases where it is necessary.
+
+# Future updates to this document
+* Document file coalescing, for now see the [concat plugin](https://github.com/sighjs/sigh/blob/master/src/plugin/concat.js) and [toFileSystemState](https://github.com/sighjs/sigh-core/blob/master/src/stream.js).
