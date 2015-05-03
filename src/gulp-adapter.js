@@ -25,6 +25,8 @@ function adapter(gulpPlugin, op, ...args) {
   var gulpOutStream = gulpInStream.pipe(gulpPlugin(...args))
   gulpOutStream.on('data', onGulpValue)
 
+  var registeredForEnd = false
+
   var passThroughStream = op.stream.flatMap(events => {
     var passThroughEvents = []
     events = events.filter(event => {
@@ -51,17 +53,17 @@ function adapter(gulpPlugin, op, ...args) {
       })
     }
 
+    if (! registeredForEnd) {
+      // delay until the first value to avoid starting stream during compilation stage
+      op.stream.onEnd(() => {
+        gulpOutStream.removeListener('data', onGulpValue)
+        sink(new Bacon.End())
+      })
+      registeredForEnd = true
+    }
+
     return passThroughEvents.length === 0 ? Bacon.never() : passThroughEvents
   })
 
-  // If I use map instead of flatMap then the function never gets called...
-  var terminateStream = op.stream.take(1).flatMap(() => {
-    op.stream.onEnd(() => {
-      gulpOutStream.removeListener('data', onGulpValue)
-      sink(new Bacon.End())
-    })
-    return new Bacon.End()
-  })
-
-  return Bacon.mergeAll(gulpAdaptedStream, passThroughStream, terminateStream)
+  return Bacon.mergeAll(gulpAdaptedStream, passThroughStream)
 }
