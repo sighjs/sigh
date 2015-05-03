@@ -7,6 +7,7 @@ import { apply as sourceMapApply, generateIdentitySourceMap } from 'sigh-core/li
  *   type: add/remove/change: Represents how the file has changed since it was last seen, the first event will always be an array containing an "add" of all files in the project.
  *   sourceData: data of first source-producing operation.
  *   sourcePath: path of first file producing operation.
+ *   sourceMap: Represents the source map from the output of the latest transformation to the original source.
  *   data: current data in event (possibly transformed one or more times).
  *   createTime: Date resource was created by initial operation.
  */
@@ -66,6 +67,17 @@ export default class {
     }
 
     return this._sourceMap
+  }
+
+  /**
+   * Overwrites source map without application, only use when you know this is
+   * done externally.
+   */
+  set sourceMap(content) {
+    if (this._hasIdentitySourceMap)
+      delete this._hasIdentitySourceMap
+
+    this._sourceMap = content
   }
 
   applySourceMap(sourceMap) {
