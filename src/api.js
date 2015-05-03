@@ -6,7 +6,10 @@ import path from 'path'
 import functionLimit from 'process-pool/lib/functionLimit'
 
 import { log, Bacon } from 'sigh-core'
+
 import PipelineCompiler from './PipelineCompiler'
+import gulpAdapter from './gulp-adapter'
+
 import merge from './plugin/merge'
 import concat from './plugin/concat'
 import debounce from './plugin/debounce'
@@ -108,8 +111,17 @@ export function compileSighfile(compiler, opts = {}) {
         return
 
       _.forEach(deps, function(version, pkg) {
-        if (/^sigh-/.test(pkg) && ! notPlugin[pkg])
+        if (notPlugin[pkg])
+          return
+
+        if (/^sigh-/.test(pkg)) {
           plugins[pkg.substr(5)] = require(path.join(process.cwd(), 'node_modules', pkg))
+        }
+        else if (/^gulp-/.test(pkg)) {
+          var name = pkg.substr(5)
+          if (! plugins[name])
+            plugins[name] = gulpAdapter(require(path.join(process.cwd(), 'node_modules', pkg)))
+        }
       })
     })
   }
