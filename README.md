@@ -52,7 +52,7 @@ module.exports = function(pipelines) {
     ),
     debounce(500),
     concat('combined.js'),
-    env(uglify(), 'production', 'staging'),
+    env(uglify(), ['production', 'staging']),
     write('build/assets')
   ]
 
@@ -210,7 +210,7 @@ Runs the operation only when one of the selected environments is chosen (using s
 ```javascript
 pipelines['js'] = [
   glob('src/*.js'),
-  env(concat('output.js'), 'production', 'staging'),
+  env(concat('output.js'), ['production', 'staging']),
   write('build')
 ]
 ```
