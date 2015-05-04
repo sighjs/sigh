@@ -195,6 +195,12 @@ function selectPipelines(selected, pipelines) {
   return runPipelines
 }
 
+function reverseHash(hash) {
+  var ret = {}
+  Object.keys(hash).reverse().forEach(key => { ret[key] = hash[key] })
+  return ret
+}
+
 /**
  * @arg {Object} runPipelines A map of pipelines the user has chosen to run by name.
  * @arg {Object} pipelines A map of all pipelines by name.
@@ -230,9 +236,6 @@ function loadPipelineDependencies(runPipelines, pipelines) {
         }
       })
 
-      // this pipeline must come before those it activates
-      ret[name] = pipeline
-
       activations.forEach(activation => {
         var activationPipeline = pipelines[activation]
         if (! activationPipeline)
@@ -241,13 +244,18 @@ function loadPipelineDependencies(runPipelines, pipelines) {
         ret[activation] = activationPipeline
       })
 
+      // this pipeline must come after those it activates so that
+      // the dependency order is preserved after the list is reserved.
+      ret[name] = pipeline
+
       delete loading[name]
     })
   }
 
-  loadDeps(runPipelines)
 
-  return ret
+  loadDeps(reverseHash(runPipelines))
+
+  return reverseHash(ret)
 }
 
 function injectPlugin(module, pluginName) {
