@@ -165,9 +165,16 @@ export function compileSighfile(compiler, opts = {}) {
   )
 }
 
+/**
+ * Select pipelines, then _.assign(pipelines, pipelines.explicit) ; delete pipelines.explicit
+ * @param {Object} pipelines All pipelines by name and two extra keys, alias and explicit.
+ *                           After this function returns the explicit pipelines will be
+ *                           merged with the main pipelines and then the key will be deleted.
+ * @return {Object} Pipeline name against pipeline in the order the user selected them.
+ */
 function selectPipelines(selected, pipelines) {
   if (! selected || selected.length === 0)
-    return _.omit(pipelines, 'alias', 'explicit')
+    selected = Object.keys(_.omit(pipelines, 'alias', 'explicit'))
 
   if (! _.isEmpty(pipelines.alias)) {
     selected = _.flatten(
@@ -177,18 +184,12 @@ function selectPipelines(selected, pipelines) {
     )
   }
 
-  if (! _.isEmpty(pipelines.explicit)) {
-    selected.forEach(pipelineName => {
-      var explicitPipeline = pipelines.explicit[pipelineName]
-      if (explicitPipeline)
-        pipelines[pipelineName] = explicitPipeline
-    })
-  }
+  _.defaults(pipelines, pipelines.explicit)
+  delete pipelines.explicit
 
   var runPipelines = {}
-  Object.keys(pipelines).forEach(name => {
-    if (selected.indexOf(name) !== -1)
-      runPipelines[name] = pipelines[name]
+  selected.forEach(name => {
+    runPipelines[name] = pipelines[name]
   })
 
   return runPipelines
@@ -233,7 +234,7 @@ function loadPipelineDependencies(runPipelines, pipelines) {
       ret[name] = pipeline
 
       activations.forEach(activation => {
-        var activationPipeline = pipelines[activation] || pipelines.explicit[activation]
+        var activationPipeline = pipelines[activation]
         if (! activationPipeline)
           throw Error(`invalid pipeline ${activation}`)
 
