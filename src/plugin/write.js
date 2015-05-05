@@ -3,9 +3,12 @@ import Promise from 'bluebird'
 import fs from 'fs'
 
 import fse from 'fs-extra'
-var rm = Promise.promisify(fse.remove) // TODO: not used yet, see later comment
+
+var glob = Promise.promisify(require('glob'))
+
 var writeFile = Promise.promisify(fs.writeFile)
 var unlink = Promise.promisify(fs.unlink)
+var rm = Promise.promisify(fse.remove) // TODO: not used yet, see later comment
 var ensureDir = Promise.promisify(fse.ensureDir)
 
 import { mapEvents } from 'sigh-core/lib/stream'
@@ -54,14 +57,35 @@ export function writeEvent(basePath, event) {
 }
 
 // basePath = base directory in which to write output files
-export default function(op, basePath) {
-  // sanitize a path we are about to recursively remove... it must be below
-  // the current working directory (which contains Sigh.js)
-  if (! basePath || basePath[0] === '/' || basePath.substr(0, 3) === '../')
-    throw Error(`bad basePath '${basePath}'`)
+export default function(op, options, basePath) {
+  if (! basePath) {
+    basePath = options
+    options = {}
+  }
 
-  // TODO: do it with a promise
-  fse.removeSync(basePath)
+  var clobberPromise
+  var { clobber } = options
+  if (clobber) {
+    // sanitize a path we are about to recursively remove... it must be below
+    // the current working directory (which contains sigh.js)
+    if (! basePath || basePath[0] === '/' || basePath.substr(0, 3) === '../')
+      throw Error(`refusing to clobber '${basePath}' outside of project`)
 
-  return mapEvents(op.stream, writeEvent.bind(this, basePath))
+    if (clobber === true) {
+      clobberPromise = rm(basePath)
+    }
+    else {
+      if (! (clobber instanceof Array))
+        clobber = [ clobber ]
+
+      clobberPromise = Promise.map(clobber, pattern => {
+        return glob(pattern, { cwd: basePath }).then(
+          matches => Promise.map(matches, match => rm(path.join(basePath, match)))
+        )
+      })
+    }
+  }
+
+  var streamPromise = mapEvents(op.stream, writeEvent.bind(this, basePath))
+  return clobberPromise ? clobberPromise.thenReturn(streamPromise) : streamPromise
 }

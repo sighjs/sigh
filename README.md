@@ -140,7 +140,7 @@ module.exports = function(pipelines) {
     ```
 
 ## write
-The `write` plugin is responsible for writing data to the filesystem. It adds files corresponding to `Event` objects with type `add`, updates files for events with type `change` and removes files corresponding to events with type `remove`. The contents of the output directory are recursively removed when the pipeline is constructed. The output path of each file is determined by prefixing its `projectPath` with the argument to `write`. Operations that produce events (such as glob) take a `basePath` option so that the output path can be easily manipulated.
+The `write` plugin is responsible for writing data to the filesystem. It adds files corresponding to `Event` objects with type `add`, updates files for events with type `change` and removes files corresponding to events with type `remove`. The output path of each file is determined by prefixing its `projectPath` with the argument to `write`. Operations that produce events (such as glob) take a `basePath` option so that the output path can be easily manipulated.
 
 ```javascript
 module.exports = function(pipelines) {
@@ -153,6 +153,26 @@ module.exports = function(pipelines) {
 This pipeline takes all files with the extension `js` recursively reachable from `src` and writes each one to `build` directory (without the `src` prefix due to `basePath`).
 
 The write plugin forwards the events down the stream, this is useful in combination with the `pipeline` plugin.
+
+The clobber option can be used to recursively remove the contents of the directory when the plugin is initialised:
+```javascript
+module.exports = function(pipelines) {
+  pipelines['js'] = [
+    glob({ basePath: 'src' }, '**/*.js'),
+    write({ clobber: true }, 'build')
+  ]
+}
+```
+
+A glob pattern or list of glob patterns ([according to node-glob syntax](https://github.com/isaacs/node-glob)) can be supplied to `clobber` to restrict which files get removed.
+```javascript
+module.exports = function(pipelines) {
+  pipelines['js'] = [
+    glob({ basePath: 'src' }, '**/*.js'),
+    write({ clobber: '!(jspm_packages|config.js)' }, 'build')
+  ]
+}
+```
 
 ## merge
 The `merge` plugin combines many streams together.
