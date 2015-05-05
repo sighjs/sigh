@@ -64,7 +64,7 @@ module.exports = function(pipelines) {
 
   pipelines.alias.build = ['build:source', 'build:tests']
 
-  pipelines['run:tests'] = [
+  pipelines['tests:run'] = [
     pipeline('build:source', 'build:tests'),
     debounce(500),
     mocha({ files: 'lib/**/*.spec.js' })
@@ -75,7 +75,7 @@ The pipeline `build:source` globs files matching `src/**/*.js` (recursive glob) 
 
 The pipeline `build:tests` takes the files in `test`, compiles them with `babel` and writes each compiled file to the directory `build/test`. Each file's path relative to its `basePath` becomes its offset within the output directory, in this case only the filename is used.
 
-The pipeline `run:tests` runs mocha when either the `build:tests` or `build:source` pipelines complete. `run:tests` is delayed until neither pipeline completes for 500ms to avoid wasting CPU time.
+The pipeline `tests:run` runs mocha when either the `build:tests` or `build:source` pipelines complete. `tests:run` is delayed until neither pipeline completes for 500ms to avoid wasting CPU time.
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
@@ -106,10 +106,10 @@ This is equivalent to using the alias defined in `sigh.js`:
 It is also possible to create pipelines on the `pipeline.explicit` object that only run if specifically requested:
 
 ```javascript
-  pipelines.explicit['run:tests'] = [ mocha({ files: 'lib/**/*.spec.js' }) ]
+  pipelines.explicit['tests:run'] = mocha({ files: 'lib/**/*.spec.js' })
 ```
 
-This pipeline would only run if `sigh run:tests` is used but not with `sigh`.
+This pipeline would only run if `sigh tests:run` is used but not with `sigh`.
 
 # Built-in plugins
 
@@ -267,7 +267,7 @@ pipelines['tests:run'] = [
   pipeline({ activate: true }, 'mocha')
 ]
 
-pipelines.explicit.mocha = [ mocha({ files: 'lib/test/*.spec.js' }) ]
+pipelines.explicit.mocha = mocha({ files: 'lib/test/*.spec.js' })
 ```
 
 This also shows that `pipeline` operations forward pipeline events to the named pipelines in addition to receiving events from them.

@@ -21,5 +21,5 @@ module.exports = function(pipelines) {
     pipeline({ activate: true }, 'mocha')
   ]
 
-  pipelines.explicit.mocha = [ mocha({ files: 'lib/test/**/*.spec.js' }) ]
+  pipelines.explicit.mocha = mocha({ files: 'lib/test/**/*.spec.js' })
 }
