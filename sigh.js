@@ -1,13 +1,13 @@
 var glob, pipeline, babel, debounce, write, mocha
 
 module.exports = function(pipelines) {
-  pipelines['source:js'] = [
+  pipelines.buildSource = [
     glob({ basePath: 'src' }, '*.js', 'plugin/*.js'),
     babel({ modules: 'common' }),
     write('lib')
   ]
 
-  pipelines['test:js'] = [
+  pipelines.buildTests = [
     glob({ basePath: 'src/test' }, '*.js', 'plugin/*.js'),
     babel({ modules: 'common' }),
     write('lib/test')
@@ -15,7 +15,7 @@ module.exports = function(pipelines) {
 
   pipelines.alias.build = ['test:js', 'source:js']
 
-  pipelines['tests:run'] = [
+  pipelines.runTests = [
     pipeline('source:js', 'test:js'),
     debounce(700),
     pipeline({ activate: true }, 'mocha')
