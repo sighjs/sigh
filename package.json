@@ -1,7 +1,7 @@
 {
   "name": "sigh",
   "version": "0.12.8",
-  "description": "sigh, the declarative functional reactive build system for the web and node.js/io.js.",
+  "description": "sigh, the declarative functional reactive build system for the web and io.js/node.js.",
   "main": "index",
   "directories": {
     "lib": "./lib"

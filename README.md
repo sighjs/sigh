@@ -4,7 +4,7 @@
 
 [![build status](https://circleci.com/gh/sighjs/sigh.png)](https://circleci.com/gh/sighjs/sigh)
 
-Sigh is a declarative functional reactive build system for node.js and the web.
+Sigh is a declarative functional reactive build system for the web and io.js/node.js.
 
 Sigh combines the best features of the best asset pipelines with unique features including incredible speed by delegating tasks to multiple processes and perfect source maps even in production builds. With sigh sub-second incremental production rebuilds are a reality, including source map support allowing you to debug production issues happening against minified transpiled source against the original code.
 
