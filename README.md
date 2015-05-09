@@ -1,5 +1,7 @@
 # sigh
 
+![logo](https://raw.githubusercontent.com/sighjs/sigh-website/master/images/logo.png)
+
 [![build status](https://circleci.com/gh/sighjs/sigh.png)](https://circleci.com/gh/sighjs/sigh)
 
 Sigh combines the best features of the best asset pipelines together with some unique features of its own including incredible speed by delegating tasks to multiple processes and perfect source maps even in production builds. No matter how many transpilers and minifiers you pass your code through Sigh will do the minimum work possible without touching your hard drive until the output files are written to disk.
