@@ -51,7 +51,7 @@ export default class {
     if (lastLine !== -1) {
       var lastLine = value.substr(lastLineIdx + 1)
       if (sourceMapRegex.test(lastLine))
-        value = value.substr(0, lastLineIdx)
+        value = value.substr(0, lastLineIdx - 1)
     }
 
     this._data = value
