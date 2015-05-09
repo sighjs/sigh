@@ -1,6 +1,8 @@
 import { readFileSync } from 'fs'
 import { apply as sourceMapApply, generateIdentitySourceMap } from 'sigh-core/lib/sourceMap'
 
+var sourceMapRegex = /^\/[\/*]# sourceMappingURL=.*(\*\/)?/
+
 /**
  * Event passed through pipeline (which can be modified, concatenated, witheld etc. by any
  * pipeline operation), containing the following parameters:
@@ -41,10 +43,20 @@ export default class {
       this.path.substr(this.basePath.length + 1) : this.path
   }
 
+  // Set data stripping off source map comment if it exists.
   set data(value) {
+    // TODO: consider applying source map (parsed via URI/file load)?
+    // TODO: skip back another if empty line?
+    var lastLineIdx = value.lastIndexOf('\n')
+    if (lastLine !== -1) {
+      var lastLine = value.substr(lastLineIdx + 1)
+      if (sourceMapRegex.test(lastLine))
+        value = value.substr(0, lastLineIdx)
+    }
+
     this._data = value
-    // TODO: strip/parse source map comment
   }
+
   get data() { return this._data }
 
   /**
@@ -57,6 +69,10 @@ export default class {
 
   get fileType() {
     return this.path.substring(this.path.lastIndexOf('.') + 1)
+  }
+
+  changeFileSuffix(targetSuffix) {
+    this.path = this.path.substring(0, this.path.lastIndexOf('.')) + '.' + targetSuffix
   }
 
   get sourceMap() {

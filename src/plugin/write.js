@@ -29,10 +29,11 @@ export function writeEvent(basePath, event) {
     })
   }
 
+  var data // will hold event.data with a source map suffix for js/css
   var outputDir = path.dirname(outputPath)
 
   var promise = ensureDir(path.dirname(outputPath)).then(() => {
-    return writeFile(outputPath, event.data)
+    return writeFile(outputPath, data)
   })
 
   if (event.sourceMap) {
@@ -44,7 +45,9 @@ export function writeEvent(basePath, event) {
       suffix = '/*# sourceMappingURL=' + mapPath + ' */'
 
     if (suffix)
-      event.data += '\n' + suffix
+      data = event.data + '\n' + suffix
+    else
+      data = event.data
 
     promise = promise.then(() => {
       var { sourceMap } = event

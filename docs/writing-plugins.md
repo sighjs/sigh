@@ -50,6 +50,7 @@ The first array in the stream always contains an event of type `add` for every s
 
 The following methods are available:
   * `applySourceMap(nextSourceMap)`: apply a new source map on top of the resource's existing source map.
+  * `changeFileSuffix(targetSuffix)`: change the target suffix, e.g. from `scss` to `css`.
 
 Plugins can also return a `Promise` to delay construction of the pipeline.
 
