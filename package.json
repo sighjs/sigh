@@ -1,7 +1,7 @@
 {
   "name": "sigh",
   "version": "0.12.8",
-  "description": "A web asset-pipeline combining the best features of existing state of the art.",
+  "description": "sigh, the declarative functional reactive build system for the web and node.js/io.js.",
   "main": "index",
   "directories": {
     "lib": "./lib"

@@ -4,7 +4,9 @@
 
 [![build status](https://circleci.com/gh/sighjs/sigh.png)](https://circleci.com/gh/sighjs/sigh)
 
-Sigh combines the best features of the best asset pipelines together with some unique features of its own including incredible speed by delegating tasks to multiple processes and perfect source maps even in production builds. No matter how many transpilers and minifiers you pass your code through Sigh will do the minimum work possible without touching your hard drive until the output files are written to disk.
+Sigh is a declarative functional reactive build system for node.js and the web.
+
+Sigh combines the best features of the best asset pipelines with unique features including incredible speed by delegating tasks to multiple processes and perfect source maps even in production builds. With sigh sub-second incremental production rebuilds are a reality, including source map support allowing you to debug production issues happening against minified transpiled source against the original code.
 
 * Pipelines are written in JavaScript with a very neat tree-based syntax, no more grunt spaghetti or verbose gulp files: [plumber][plumber].
 * Supports gulp plugins.

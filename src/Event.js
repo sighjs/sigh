@@ -93,6 +93,7 @@ export default class {
     if (this._hasIdentitySourceMap)
       delete this._hasIdentitySourceMap
 
+    // TODO: ensure .file === this.path
     this._sourceMap = content
   }
 
