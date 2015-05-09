@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.12.7",
+  "version": "0.12.8",
   "description": "A web asset-pipeline combining the best features of existing state of the art.",
   "main": "index",
   "directories": {
@@ -32,7 +32,7 @@
     "lodash": "^3.6.0",
     "process-pool": "^0.3.1",
     "rewire": "~2.3.1",
-    "sigh-core": "^0.11.3",
+    "sigh-core": "^0.11.4",
     "source-map": "^0.4.0",
     "source-map-support": "^0.2.10",
     "vinyl": "^0.4.6"
