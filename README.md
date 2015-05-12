@@ -49,7 +49,7 @@ var merge, glob, concat, write, env, pipeline
 var uglify, mocha, babel
 
 module.exports = function(pipelines) {
-  pipelines['build:source'] = [
+  pipelines['build-source'] = [
     merge(
       [ glob('src/**/*.js'), babel() ],
       glob('vendor/*.js', 'bootstrap.js')
@@ -60,26 +60,26 @@ module.exports = function(pipelines) {
     write('build/assets')
   ]
 
-  pipelines['build:tests'] = [
+  pipelines['build-tests'] = [
     glob({ basePath: 'test' }, '*.js'),
     babel(),
     write('build/test')
   ]
 
-  pipelines.alias.build = ['build:source', 'build:tests']
+  pipelines.alias.build = ['build-source', 'build-tests']
 
-  pipelines['tests:run'] = [
-    pipeline('build:source', 'build:tests'),
+  pipelines['tests-run'] = [
+    pipeline('build-source', 'build-tests'),
     debounce(500),
     mocha({ files: 'lib/**/*.spec.js' })
   ]
 }
 ```
-The pipeline `build:source` globs files matching `src/**/*.js` (recursive glob) and transpiles them with babel, this transpiled output is concatenated together with the files matching the glob pattern `vendor/*.js` followed by the file `bootstrap.js` (`concat` operators sort files by the depth-first index of the source stream that produced their untransformed content). The concatenated resource is uglified (using `gulp-uglify`) but only during builds for `production` and `staging` environments. The resulting file is written to the directory `build/assets`.
+The pipeline `build-source` globs files matching `src/**/*.js` (recursive glob) and transpiles them with babel, this transpiled output is concatenated together with the files matching the glob pattern `vendor/*.js` followed by the file `bootstrap.js` (`concat` operators sort files by the depth-first index of the source stream that produced their untransformed content). The concatenated resource is uglified (using `gulp-uglify`) but only during builds for `production` and `staging` environments. The resulting file is written to the directory `build/assets`.
 
-The pipeline `build:tests` takes the files in `test`, compiles them with `babel` and writes each compiled file to the directory `build/test`. Each file's path relative to its `basePath` becomes its offset within the output directory, in this case only the filename is used.
+The pipeline `build-tests` takes the files in `test`, compiles them with `babel` and writes each compiled file to the directory `build/test`. Each file's path relative to its `basePath` becomes its offset within the output directory, in this case only the filename is used.
 
-The pipeline `tests:run` runs mocha when either the `build:tests` or `build:source` pipelines complete. `tests:run` is delayed until neither pipeline completes for 500ms to avoid wasting CPU time.
+The pipeline `tests-run` runs mocha when either the `build-tests` or `build-source` pipelines complete. `tests-run` is delayed until neither pipeline completes for 500ms to avoid wasting CPU time.
 
 Running `sigh -w` would compile all the files then watch the directories and files matching the glob patterns for changes. Each plugin caches resources and only recompiles the files that have changed.
 
@@ -99,7 +99,7 @@ Compile all pipelines and then watch files for changes compiling those that have
 
 Compile/watch only the specified pipeline (with the `sigh.js` shown above the source and tests would be compiled but the tests would never be run).
 ```bash
-% sigh -w build:source build:tests
+% sigh -w build-source build-tests
 ```
 
 This is equivalent to using the alias defined in `sigh.js`:
@@ -110,10 +110,10 @@ This is equivalent to using the alias defined in `sigh.js`:
 It is also possible to create pipelines on the `pipeline.explicit` object that only run if specifically requested:
 
 ```javascript
-  pipelines.explicit['tests:run'] = mocha({ files: 'lib/**/*.spec.js' })
+  pipelines.explicit['tests-run'] = mocha({ files: 'lib/**/*.spec.js' })
 ```
 
-This pipeline would only run if `sigh tests:run` is used but not with `sigh`.
+This pipeline would only run if `sigh tests-run` is used but not with `sigh`.
 
 # Built-in plugins
 
@@ -245,28 +245,28 @@ This pipeline only concatenates the files together in `production` and `staging`
 The pipeline plugin allows named pipelines to be connected.
 
 ```javascript
-pipelines['source:js'] = [
+pipelines['source-js'] = [
   glob({ basePath: 'src' }, '*.js', 'plugin/*.js'), babel(), write('lib')
 ]
 
-pipelines['test:js'] = [
+pipelines['test-js'] = [
   glob({ basePath: 'test' }, '*.js', 'plugin/*.js'), babel(), write('lib')
 ]
 
-pipelines['tests:run'] = [
-  pipeline('source:js', 'test:js'),
+pipelines['tests-run'] = [
+  pipeline('source-js', 'test-js'),
   debounce(700),
   mocha({ files: 'lib/test/*.spec.js' })
 ]
 ```
 
-In this example the `pipeline` plugin in the `tests:run` pipeline forwards the output from the `source:js` and `test:js` pipelines down the stream. By default it will not force a pipeline to run unless the user specifies it e.g. if the user runs `sigh test:js tests:run` the `pipeline` plugin will issue stream events from the `test:js` pipeline only.
+In this example the `pipeline` plugin in the `tests-run` pipeline forwards the output from the `source-js` and `test-js` pipelines down the stream. By default it will not force a pipeline to run unless the user specifies it e.g. if the user runs `sigh test-js tests-run` the `pipeline` plugin will issue stream events from the `test-js` pipeline only.
 
-To force a pipeline operation to activate a named pipeline the `activate` option can be used, the previous `tests:run` pipeline could be rewritten more flexibly to allow the user to run mocha tests manually as such:
+To force a pipeline operation to activate a named pipeline the `activate` option can be used, the previous `tests-run` pipeline could be rewritten more flexibly to allow the user to run mocha tests manually as such:
 
 ```javascript
-pipelines['tests:run'] = [
-  pipeline('source:js', 'test:js'),
+pipelines['tests-run'] = [
+  pipeline('source-js', 'test-js'),
   debounce(700),
   pipeline({ activate: true }, 'mocha')
 ]
