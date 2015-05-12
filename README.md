@@ -11,7 +11,7 @@ Sigh combines the best features of the best asset pipelines with unique features
 * Pipelines are written in JavaScript with a very neat tree-based syntax, no more grunt spaghetti or verbose gulp files: [plumber][plumber].
 * Supports gulp plugins.
 * Uses Functional Reactive Programming via [bacon.js][bacon], your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs], [gulp][gulp] uses node's built-in stream API).
-* Support source maps at every stage of the pipeline: [plumber][plumber] and [gulp][gulp] (gulp cannot concatenate source maps when merging streams).
+* Support source maps at every stage of the pipeline: [plumber][plumber] and [gulp][gulp] ([see gulp issue](https://github.com/wearefractal/gulp-concat/issues/94)).
 * Schedules work over multiple CPU cores to reduce build times and make better use of available processing resources.
 * Caches all data in memory where possible rather than the filesystem: [gulp][gulp].
 * Easy to write plugins in a small number of lines of code: [gobble][gobble].
