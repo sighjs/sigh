@@ -1,0 +1,9 @@
+dependencies:
+  override:
+    - 'nvm exec 0.10.33 npm install'
+    - 'nvm exec iojs-v1.3.0 npm install'
+
+test:
+  override:
+    - 'nvm exec 0.10.33 npm test'
+    - 'nvm exec iojs-v1.3.0 npm test'
