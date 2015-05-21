@@ -28,9 +28,7 @@ sigh plugin generator
  ◉ lodash
  ◉ sigh-core
 ```
-Your github username/author and CI choices are remembered and used as the defaults next time you run this command.
-
-It will then generate you scaffold for a plugin in the current directory according to the answers you give.
+This will generate code for you according to the responses you provide, your github username/author and CI choices are remembered and used as the defaults next time you run `sigh -p`.
 
 To begin developing change to the directory containing your plugin and run sigh:
 
