@@ -9,12 +9,13 @@ Sigh is a declarative functional reactive build system for the web and io.js/nod
 Sigh combines the best features of the best asset pipelines with unique features including best speed by delegating tasks to multiple processes and perfect source maps even in production builds. With sigh sub-second incremental production rebuilds are a reality, including source map support allowing you to debug production issues happening in minified transpiled source against the original code.
 
 * Pipelines are written in JavaScript with a very neat tree-based syntax, no more grunt spaghetti or verbose gulp files: [plumber][plumber].
-* Supports gulp plugins.
+* Supports gulp plugins [gulp][gulp].
 * Uses Functional Reactive Programming via [bacon.js][bacon], your asset pipelines are bacon streams ([plumber][plumber] uses Microsoft's [rxjs][rxjs], [gulp][gulp] uses node's built-in stream API).
 * Support source maps at every stage of the pipeline: [plumber][plumber] and [gulp][gulp] ([see gulp issue](https://github.com/wearefractal/gulp-concat/issues/94)).
 * Schedules work over multiple CPU cores to reduce build times and make better use of available processing resources.
 * Caches all data in memory where possible rather than the filesystem: [gulp][gulp].
 * Easy to write plugins in a small number of lines of code: [gobble][gobble].
+* Includes a plugin generator (`sigh -p plugin-name`) that asks user about their plugin and generates a scaffolded project ready for `npm publish`.
 * Support watching files and updating the pipeline as files change: [plumber][plumber] (and [gulp][gulp] when coupled with a couple of extra plugins). No special code or plugins are necessary for file watching, just use the `-w` flag.
 * Support incremental rebuilds (only perform the minimum work necessary on file changes): [broccoli][broccoli].
 * Inputs are based on simple glob expressions. Recursive glob expressions can be used when you want to speak in terms of directory trees rather than files.
