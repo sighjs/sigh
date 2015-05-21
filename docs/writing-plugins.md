@@ -1,6 +1,6 @@
 # Writing sigh plugins
 
-sigh will generator your plugin scaffolding for you, all you need to do then is fill in a small amount of code, push to git and you're done.
+sigh will generator your plugin scaffolding for you, all you need to do then is fill in a small amount of code, push to git, `npm publish` and you're done.
 
 First install sigh-cli:
 ```
