@@ -15,11 +15,11 @@ sigh -p your-plugin-name
 This will prompt you as following:
 ```
 sigh plugin generator
-? What is the name of this plugin? test
-? Which github username/organisation should own this plugin? sighjs
+? What is the name of this plugin? your plugin name
+? Which github username/organisation should own this plugin? my-username
 ? What's your github author? Your Name <name@email.net>
 ? Which of the following apply to your plugin? (Press <space> to select)
-❯◯ Maps input files to output files 1:1
+❯◉ Maps input files to output files 1:1
 ? Which features would you like to use? (Press <space> to select)
 ❯◉ CircleCI integration
  ◯ TravisCI integration
@@ -40,7 +40,7 @@ sigh -w
 
 You can add the `-v` or `-vv` flags for more information. Everytime you change a source file the plugin will be recompiled and tested.
 
-This is the code generated if you select the option "Maps input files to output files 1:1":
+This is the code generated if you select the options shown above:
 ```javascript
 import _ from 'lodash'
 import Promise from 'bluebird'
