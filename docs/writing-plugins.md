@@ -69,6 +69,22 @@ The first argument (called `op` here) is used to pass information to the plugin,
 
 The [sigh-core](https://github.com/sighjs/sigh-core) library also provides some functionality useful for writing plugins including access to the `Bacon` instance sigh uses.
 
+To adapt the code above so it suffixes a comment to each source file the scaffolded code would be adapted like this:
+
+```javascript
+import { mapEvents } from 'sigh-core/lib/stream'
+
+export default function(op, suffix) {
+  return mapEvents(op.stream, function(event) {
+    if (event.type !== 'add' && event.type !== 'change' && event.fileType !== 'js')
+      return event
+
+    event.data += `\n// data added by sigh-suffix plugin: ${suffix || "default"}`
+    return event
+  })
+}
+```
+
 Assuming the plugin above is called `suffixer` it could be used in a Sighfile like:
 ```javascript
 module.exports = function(pipelines) {
