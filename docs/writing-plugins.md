@@ -12,7 +12,7 @@ Then change to the directory where you want your plugin to live and type this:
 sigh -p your-plugin-name
 ```
 
-This will prompt you as following:
+This will prompt you like this:
 ```
 sigh plugin generator
 ? What is the name of this plugin? your plugin name
@@ -28,6 +28,7 @@ sigh plugin generator
  ◉ lodash
  ◉ sigh-core
 ```
+Your github username/author and CI choices are remembered and used as the defaults next time you run this command.
 
 It will then generate you scaffold for a plugin in the current directory according to the answers you give.
 
