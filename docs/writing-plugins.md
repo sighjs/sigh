@@ -47,7 +47,7 @@ import { Bacon } from 'sigh-core'
 import { mapEvents } from 'sigh-core/lib/stream'
 
 export default function(op, opts = {}) {
-  return mapEvents(op.stream, function(event) {
+  return mapEvents(op.stream, event => {
     if (event.type !== 'add' && event.type !== 'change')
       return event
 
@@ -75,7 +75,7 @@ To adapt the code above so it suffixes a comment to each source file the scaffol
 import { mapEvents } from 'sigh-core/lib/stream'
 
 export default function(op, suffix) {
-  return mapEvents(op.stream, function(event) {
+  return mapEvents(op.stream, event => {
     if (event.type !== 'add' && event.type !== 'change' && event.fileType !== 'js')
       return event
 
