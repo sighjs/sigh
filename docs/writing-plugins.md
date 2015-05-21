@@ -1,7 +1,49 @@
 # Writing sigh plugins
 
-First make a node module for your plugin and in the main library file as indicated by package.json (which defaults to index.js) put something like this:
+The easier way to write sigh-plugins is using the yeoman "sigh-plugin" generator. First install the yeoman cli, the yeoman generator and sigh-cli:
+```
+sudo npm install -g yo generator-sigh-plugin
+```
 
+Then create a directory for your plugin and change to it:
+```
+mkdir sigh-plugin
+cd sigh-plugin
+```
+
+Then run the generator:
+```
+yo sigh-plugin
+```
+
+This will ask you questions:
+```
+sigh plugin generator
+? What is the name of this plugin? test
+? Which github username/organisation should own this plugin? sighjs
+? What's your github author? Your Name <name@email.net>
+? Which of the following apply to your plugin? (Press <space> to select)
+❯◯ Maps input files to output files 1:1
+? Which features would you like to use? (Press <space> to select)
+❯◉ CircleCI integration
+ ◯ TravisCI integration
+? Which dependencies do you need? (Press <space> to select)
+❯◉ bluebird
+ ◉ lodash
+ ◉ sigh-core
+```
+
+It will then generate you scaffold for a plugin in the current directory according to the answers you give.
+
+To begin developing run:
+
+```
+sigh -w
+```
+
+You can add the `-v` or `-vv` flags for more information. Everytime you change a source file the plugin will be recompiled and tested.
+
+This is an example plugin:
 ```javascript
 // this plugin adds a redundant variable statement at the end of each javascript file
 module.exports = function(operation, text) {
