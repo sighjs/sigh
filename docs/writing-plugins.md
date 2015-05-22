@@ -20,7 +20,7 @@ sigh plugin generator
 ? What's your github author? Your Name <name@email.net>
 ? Which of the following apply to your plugin? (Press <space> to select)
 ❯◉ Maps input files to output files 1:1
-❯◯ Spreads work over multiple CPUs
+ ◯ Spreads work over multiple CPUs
 ? Which features would you like to use? (Press <space> to select)
 ❯◉ CircleCI integration
  ◯ TravisCI integration
@@ -123,7 +123,7 @@ sigh plugin generator
 ? What's your github author? Your Name <name@email.net>
 ? Which of the following apply to your plugin? (Press <space> to select)
 ❯◉ Maps input files to output files 1:1
-❯◉ Spreads work over multiple CPUs
+ ◉ Spreads work over multiple CPUs
 ? Which features would you like to use? (Press <space> to select)
 ❯◉ CircleCI integration
  ◯ TravisCI integration
