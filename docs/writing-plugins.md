@@ -57,9 +57,9 @@ export default function(op, opts = {}) {
   })
 }
 ```
-This is EcmaScript 6, but don't worry `sigh -w` will recompile your files as they change and re-run your tests for you. When you push to the npm registry then the compiled resources are pushed so user's of your plugin don't need to worry.
+Plugins are written using EcmaScript 6 as `sigh -w` makes it trivial to translate the code to ES5, the generated tests also run with source maps remapped to show the stack trace in the original source code. When the plugin is pushed to the npm registry the generated code is pushed so that users of the module will not have to wait for any compilation when installing the plugin. If you would prefer to use ES5 then the source files can be removed after the first compilation and the generated ES5 files in `lib` can be edited from here.
 
-The first argument (called `op` here) is used to pass information to the plugin, the subsequent arguments are passed from the arguments used within the `Sigh.js` file. The `operation` argument has the following fields:
+The first argument (called `op` here) to the exported function is used to pass information to the plugin, the subsequent arguments are passed from the arguments used within the `Sigh.js` file. The `operation` argument has the following fields:
 
  * `stream`: Bacon.js stream to adapt.
  * `treeIndex`: depth-first index of operator within pipeline tree. This can be written to in order to this to set the treeIndex for the next pipeline operation otherwise it is incremented by one.
