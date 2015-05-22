@@ -52,7 +52,10 @@ export default function(op, opts = {}) {
     if (event.type !== 'add' && event.type !== 'change')
       return event
 
+    // if (event.fileType !== 'relevantType') return event
     // TODO: alter event here or return a new event
+    // event.changeFileSuffix('newSuffix')
+
     return event
   })
 }
@@ -160,8 +163,7 @@ function adaptEvent(compiler) {
     if (event.type !== 'add' && event.type !== 'change')
       return event
 
-    var { fileType } = event
-    // if (fileType !== 'relevantType') return event
+    // if (event.fileType !== 'relevantType') return event
 
     return compiler(_.pick(event, 'type', 'data', 'path', 'projectPath')).then(result => {
       event.data = result.data
