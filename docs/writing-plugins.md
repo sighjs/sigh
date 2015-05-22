@@ -9,17 +9,18 @@ sudo npm install -g sigh-cli
 
 Then change to the directory where you want your plugin to live and type this:
 ```
-sigh -p your-plugin-name
+sigh -p my-plugin-name
 ```
 
 This will prompt you like this:
 ```
 sigh plugin generator
-? What is the name of this plugin? your plugin name
+? What is the name of this plugin? my plugin name
 ? Which github username/organisation should own this plugin? my-username
 ? What's your github author? Your Name <name@email.net>
 ? Which of the following apply to your plugin? (Press <space> to select)
 ❯◉ Maps input files to output files 1:1
+❯◯ Spreads work over multiple CPUs
 ? Which features would you like to use? (Press <space> to select)
 ❯◉ CircleCI integration
  ◯ TravisCI integration
@@ -33,7 +34,7 @@ This will generate code for you according to the responses you provide, your git
 To begin developing change to the directory containing your plugin and run sigh:
 
 ```
-cd sigh-your-plugin-name
+cd sigh-my-plugin-name
 sigh -w
 ```
 
@@ -110,6 +111,81 @@ The following methods are available:
   * `changeFileSuffix(targetSuffix)`: change the target suffix, e.g. from `scss` to `css`.
 
 Plugins can also return a `Promise` to delay construction of the pipeline.
+
+## Using multiple CPUs
+
+By answering the generator questions in this way:
+
+```
+sigh plugin generator
+? What is the name of this plugin? my plugin name
+? Which github username/organisation should own this plugin? my-username
+? What's your github author? Your Name <name@email.net>
+? Which of the following apply to your plugin? (Press <space> to select)
+❯◉ Maps input files to output files 1:1
+❯◉ Spreads work over multiple CPUs
+? Which features would you like to use? (Press <space> to select)
+❯◉ CircleCI integration
+ ◯ TravisCI integration
+? Which dependencies do you need? (Press <space> to select)
+❯◯ bluebird
+```
+
+The following scaffolding is generated:
+
+```javascript
+import _ from 'lodash'
+import { Bacon } from 'sigh-core'
+import { mapEvents } from 'sigh-core/lib/stream'
+
+function myPluginNameTask(opts) {
+  // this function is called once for each subprocess in order to cache state,
+  // it is not a closure and does not have access to the surrounding state, use
+  // `require` to include any modules you need, for further info see
+  // https://github.com/ohjames/process-pool
+  var log = require('sigh-core').log
+
+  // this task runs inside the subprocess to transform each event
+  return event => {
+    var data, sourceMap
+    // TODO: data = compile(event.data) etc.
+
+    return { data, sourceMap }
+  }
+}
+
+function adaptEvent(compiler) {
+  // data sent to/received from the subprocess has to be serialised/deserialised
+  return event => {
+    if (event.type !== 'add' && event.type !== 'change')
+      return event
+
+    var { fileType } = event
+    // if (fileType !== 'relevantType') return event
+
+    return compiler(_.pick(event, 'type', 'data', 'path', 'projectPath')).then(result => {
+      event.data = result.data
+
+      if (result.sourceMap)
+        event.applySourceMap(JSON.parse(result.sourceMap))
+
+      // event.changeFileSuffix('newSuffix')
+      return event
+    })
+  }
+}
+
+var pooledProc
+
+export default function(op, opts = {}) {
+  if (! pooledProc)
+    pooledProc = op.procPool.prepare(pumpsTask, opts, { module })
+
+  return mapEvents(op.stream, adaptEvent(pooledProc))
+}
+```
+
+The comments labelled `TODO` must then be filled in to complete the plugin.
 
 ## Incremental rebuilds and plugins
 
