@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.12.9",
+  "version": "0.12.10",
   "description": "sigh, the declarative functional reactive build system for the web and io.js/node.js.",
   "main": "index",
   "directories": {
@@ -32,7 +32,7 @@
     "lodash": "^3.6.0",
     "process-pool": "^0.3.2",
     "rewire": "~2.3.1",
-    "sigh-core": "^0.11.6",
+    "sigh-core": "^0.11.7",
     "source-map": "^0.4.0",
     "source-map-support": "^0.2.10",
     "vinyl": "^0.4.6"
