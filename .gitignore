@@ -1,6 +1,6 @@
 /npm-debug.log
 /node_modules
 /api.map
-/lib/*
-!/lib/.keepdir
-/test/tmp
+/lib
+/test/tmp/*
+!/test/tmp/.keepdir

@@ -2,16 +2,14 @@ import { Bacon } from 'sigh-core'
 import _ from 'lodash'
 import Promise from 'bluebird'
 import fs from 'fs'
-import fse from 'fs-extra'
 
-var copy = Promise.promisify(fse.copy)
-var rm = Promise.promisify(fse.remove)
+var copy = Promise.promisify(require('fs-extra').copy)
+var mkTmpDir = Promise.promisify(require('temp').mkdir)
 
 import Event from '../../Event'
 import glob from '../../plugin/glob'
 
 var FIXTURE_PATH = 'test/fixtures/simple-project'
-var TMP_PATH = 'test/tmp/glob'
 var FIXTURE_FILES = [
   FIXTURE_PATH + '/file1.js',
   FIXTURE_PATH + '/file2.js'
@@ -58,14 +56,16 @@ describe('glob plugin', () => {
   })
 
   it('detects changes to two files matching globbed pattern', () => {
-    return rm(TMP_PATH).then(() => {
-      return copy(FIXTURE_PATH, TMP_PATH)
+    var tmpPath
+    return mkTmpDir({ dir: 'test/tmp', prefix: 'sigh-glob-test-' }).then(_tmpPath => {
+      tmpPath = _tmpPath
+      return copy(FIXTURE_PATH, tmpPath)
     })
     .then(() => {
       return new Promise(function(resolve) {
         var nUpdates = 0
-        var files = [ TMP_PATH + '/file1.js', TMP_PATH + '/file2.js' ]
-        glob({ stream, watch: true, treeIndex: 4 }, TMP_PATH + '/*.js')
+        var files = [ tmpPath + '/file1.js', tmpPath + '/file2.js' ]
+        glob({ stream, watch: true, treeIndex: 4 }, tmpPath + '/*.js')
         .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
@@ -92,10 +92,9 @@ describe('glob plugin', () => {
   })
 
   it('detects new file', () => {
-    // TODO: allow this to work at TMP_PATH, could be to do with the chokidar watchers
-    //       not being closed between test runs.
-    var tmpPath = TMP_PATH + '2'
-    return rm(tmpPath).then(() => {
+    var tmpPath
+    return mkTmpDir({ dir: 'test/tmp', prefix: 'sigh-glob-test-2-' }).then(_tmpPath => {
+      tmpPath = _tmpPath
       return copy(FIXTURE_PATH, tmpPath)
     })
     .then(() => {

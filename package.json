@@ -45,6 +45,7 @@
     "sigh": "^0.12.0",
     "sigh-babel": "^0.11.2",
     "sigh-cli": "^0.2.1",
-    "sigh-mocha": "^0.1.0"
+    "sigh-mocha": "^0.1.0",
+    "temp": "^0.8.1"
   }
 }

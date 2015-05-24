@@ -1,25 +1,27 @@
 import Promise from 'bluebird'
-import fse from 'fs-extra'
-var copy = Promise.promisify(fse.copy)
-var rm = Promise.promisify(fse.remove)
+
+var copy = Promise.promisify(require('fs-extra').copy)
+var mkTmpDir = Promise.promisify(require('temp').mkdir)
 
 import PipelineCompiler from '../PipelineCompiler'
 import { compileSighfile } from '../api'
 
 var FIXTURE_PATH = 'test/fixtures/sigh-project'
-var TMP_PATH = 'test/tmp/api'
 
 describe('api', () => {
   it('compile should build working bacon streams from pipelines in Sigh.js file', function() {
     this.timeout(3000)
 
-    var pathBackup, compiler
+    var pathBackup, compiler, tmpPath
 
-    return rm(TMP_PATH)
-    .then(() => copy(FIXTURE_PATH, TMP_PATH))
+    return mkTmpDir({ dir: 'test/tmp', prefix: 'sigh-api-test-' })
+    .then(_tmpPath => {
+      tmpPath = _tmpPath
+      return copy(FIXTURE_PATH, tmpPath)
+    })
     .then(() => {
       pathBackup = process.cwd()
-      process.chdir(TMP_PATH)
+      process.chdir(tmpPath)
 
       var opts = { environment: 'production' }
       compiler = new PipelineCompiler(opts)
