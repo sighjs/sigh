@@ -30,9 +30,9 @@
     "fs-extra": "^0.18.0",
     "glob": "^5.0.1",
     "lodash": "^3.6.0",
-    "process-pool": "^0.3.1",
+    "process-pool": "^0.3.2",
     "rewire": "~2.3.1",
-    "sigh-core": "^0.11.4",
+    "sigh-core": "^0.11.6",
     "source-map": "^0.4.0",
     "source-map-support": "^0.2.10",
     "vinyl": "^0.4.6"
@@ -45,7 +45,7 @@
     "sigh": "^0.12.0",
     "sigh-babel": "^0.11.2",
     "sigh-cli": "^0.2.1",
-    "sigh-mocha": "^0.1.0",
+    "sigh-mocha": "^0.1.2",
     "temp": "^0.8.1"
   }
 }
