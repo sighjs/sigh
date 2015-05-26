@@ -29,6 +29,8 @@ Sigh combines the best features of the best asset pipelines with unique features
 [bacon]: https://baconjs.github.io/
 [broccoli]: https://github.com/broccolijs/broccoli
 
+Check out [this presentation](sighjs.github.io) on JavaScript build systems and sigh.
+
 ## Using sigh
 
 Install sigh-cli globally:

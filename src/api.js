@@ -188,6 +188,10 @@ function selectPipelines(selected, pipelines) {
   return runPipelines
 }
 
+/**
+ * Reverse the order of keys in a hash.
+ * Works in any JS VM that maintains key insertion order.
+ */
 function reverseHash(hash) {
   var ret = {}
   Object.keys(hash).reverse().forEach(key => { ret[key] = hash[key] })
