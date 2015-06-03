@@ -241,7 +241,7 @@ pipelines['js'] = [
   write('build')
 ]
 ```
-This pipeline only concatenates the files together in `production` and `staging` builds otherwise multiple files are written to the directory `build`. The allowed environments may also be passed as an array.
+This pipeline only concatenates the files together in `production` and `staging` builds otherwise multiple files are written to the directory `build`. The environments may be passed as an array or as positional parameters.
 
 ## pipeline
 
