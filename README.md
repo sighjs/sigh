@@ -159,7 +159,7 @@ module.exports = function(pipelines) {
 ```
 This pipeline takes all files with the extension `js` recursively reachable from `src` and writes each one to `build` directory (without the `src` prefix due to `basePath`).
 
-The write plugin forwards the events down the stream, this is useful in combination with the `pipeline` plugin.
+The write plugin passes events representing the written files down the stream, this is useful in combination with the `pipeline` plugin.
 
 The clobber option can be used to recursively remove the contents of the directory when the plugin is initialised:
 ```javascript
