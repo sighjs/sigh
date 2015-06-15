@@ -295,7 +295,7 @@ merge(
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
 # Future Work
-* Should be able to forward stream input to a plugin that is nested inside another plugin (e.g. a merge).
+* Detection of pipeline activations should look into `merge`.
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
 * `glob` plugin should also forward events from input stream.
 * grunt plugin adapter.
