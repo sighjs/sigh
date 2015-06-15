@@ -295,6 +295,8 @@ merge(
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
 # Future Work
+* Write `jspm` plugin.
+* Write blog post about how `jspm` + `sigh` is a great thing.
 * Detection of pipeline activations should look into `merge`.
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
 * `glob` plugin should also forward events from input stream.
