@@ -40,7 +40,7 @@ Install sigh-cli globally:
 
 Install sigh and sigh/gulp plugins in your project:
 ```bash
-% npm install --save-dev sigh sigh-babel gulp-uglify
+% npm install --save-dev sigh sigh-babel sigh-mocha gulp-uglify
 ```
 
 Write a file called `sigh.js` (or `Sigh.js`) and put it in the root of the project:
