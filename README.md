@@ -126,7 +126,7 @@ The glob plugin takes a list of glob expressions as arguments starting with an o
 
 ```javascript
 module.exports = function(pipelines) {
-  pipelines['js'] = [
+  pipelines.js = [
     glob('test/*.js', 'src/**/*.js', 'bootstrap.js'),
     write('build')
   ]
@@ -151,7 +151,7 @@ The `write` plugin is responsible for writing data to the filesystem. It adds fi
 
 ```javascript
 module.exports = function(pipelines) {
-  pipelines['js'] = [
+  pipelines.js = [
     glob({ basePath: 'src' }, '**/*.js'),
     write('build')
   ]
@@ -164,7 +164,7 @@ The write plugin passes events representing the written files down the stream, t
 The clobber option can be used to recursively remove the contents of the directory when the plugin is initialised:
 ```javascript
 module.exports = function(pipelines) {
-  pipelines['js'] = [
+  pipelines.js = [
     glob({ basePath: 'src' }, '**/*.js'),
     write({ clobber: true }, 'build')
   ]
@@ -174,7 +174,7 @@ module.exports = function(pipelines) {
 A glob pattern or list of glob patterns ([according to node-glob syntax](https://github.com/isaacs/node-glob)) can be supplied to `clobber` to restrict which files get removed.
 ```javascript
 module.exports = function(pipelines) {
-  pipelines['js'] = [
+  pipelines.js = [
     glob({ basePath: 'src' }, '**/*.js'),
     write({ clobber: '!(jspm_packages|config.js)' }, 'build')
   ]
@@ -185,7 +185,7 @@ module.exports = function(pipelines) {
 The `merge` plugin combines many streams together.
 
 ```javascript
-pipelines['js'] = [
+pipelines.js = [
   merge(
     [ glob({ basePath: 'src' }, '*.js'), babel() ],
     [ glob('vendor/*.js'), concat('vendor.js') ],
@@ -200,7 +200,7 @@ This would transpile files matching `src/*.js` using babel and copy them to the 
 The `concat` plugin concatenates all resources together into one file. The order in which the files are concatenated corresponds to the depth-first index within the tree of the plugin that produced the original source content of that file.
 
 ```javascript
-pipelines['js'] = [
+pipelines.js = [
   merge(
     [ glob('src/*.js'), babel() ],
     glob('loader.js', 'bootstrap.js')
@@ -221,7 +221,7 @@ You can see here that `glob` uses multiple tree indexes and assigns them to even
 Combines events in the pipeline until the event stream settles for longer than the given period.
 
 ```javascript
-pipelines['js'] = [
+pipelines.js = [
   glob('loader.js', 'bootstrap.js')
   debounce(200),
   concat('output.js'),
@@ -235,7 +235,7 @@ In this pipeline if `loader.js` and `bootstrap.js` change within 200 millisecond
 Runs the operation only when one of the selected environments is chosen (using sigh's `-e` or `--environment` flag) otherwise pass data through unchanged.
 
 ```javascript
-pipelines['js'] = [
+pipelines.js = [
   glob('src/*.js'),
   env(concat('output.js'), ['production', 'staging']),
   write('build')
@@ -283,7 +283,13 @@ To activate some plugins and not others one of the following equivalent formats 
 
 ```javascript
 pipeline({ activate: true }, 'mocha', { activate: false }, 'express')
+```
+
+```javascript
 pipeline('express', { activate: true }, 'mocha')
+```
+
+```javascript
 merge(
   pipeline({ activate: true }, 'mocha'),
   pipeline('express')
