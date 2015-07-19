@@ -48,10 +48,10 @@ export default class {
     // TODO: consider applying source map (parsed via URI/file load)?
     // TODO: skip back another if empty line?
     var lastLineIdx = value.lastIndexOf('\n')
-    if (lastLine !== -1) {
+    if (lastLineIdx !== -1) {
       var lastLine = value.substr(lastLineIdx + 1)
       if (sourceMapRegex.test(lastLine))
-        value = value.substr(0, lastLineIdx - 1)
+        value = value.substr(0, lastLineIdx)
     }
 
     this._data = value
