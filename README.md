@@ -161,7 +161,7 @@ This pipeline takes all files with the extension `js` recursively reachable from
 
 The write plugin passes events representing the written files down the stream, this is useful in combination with the `pipeline` plugin.
 
-The clobber option can be used to recursively remove the contents of the directory when the plugin is initialised:
+The clobber option can be used to recursively remove the contents of the output directory when the plugin is initialised:
 ```javascript
 module.exports = function(pipelines) {
   pipelines.js = [
