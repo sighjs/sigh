@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { toFileSystemState } from 'sigh-core/lib/stream'
 import { concatenate as concatSourceMaps } from 'sigh-core/lib/sourceMap'
 import Event from '../Event'
+import { log } from 'sigh-core'
 
 export default function(op, outputPath) {
   var fileExists = false
@@ -32,7 +33,20 @@ export default function(op, outputPath) {
         data += '\n'
         ++offset
       }
-      sourceMaps.push(event.sourceMap)
+
+      var sourceMap
+      try {
+        sourceMap = event.sourceMap
+      }
+      catch (e) {
+        log.warn('\x07could not construct identity source map for %s', event.projectPath)
+        if (e.message)
+          log.warn(e.message)
+      }
+
+      if (sourceMap) {
+        sourceMaps.push(sourceMap)
+      }
 
       if (idx < events.length - 1)
         offsets.push(cumOffset += offset)

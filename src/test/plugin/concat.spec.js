@@ -35,6 +35,23 @@ describe('concat plugin', () => {
     })
   })
 
+  it('should handle erronous js file without sourcemap', () => {
+      var data = "console.log('test)"
+
+      var event = new Event({
+          basePath: 'root',
+          path: 'root/subdir/output.js',
+          type: 'add',
+          data
+      })
+
+      var stream = Bacon.constant([ event ])
+
+      return concat({ stream }).toPromise(Promise).then(events => {
+        events[0]._sourceMap.sources.length.should.equal(0);
+      })
+  })
+
   xit('strips source map comments when concatenating two javascript files', () => {
   })
 })
