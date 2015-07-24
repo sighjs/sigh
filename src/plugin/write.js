@@ -1,6 +1,7 @@
 import path from 'path'
 import Promise from 'bluebird'
 import fs from 'fs'
+import { log } from 'sigh-core'
 
 import fse from 'fs-extra'
 
@@ -36,7 +37,17 @@ export function writeEvent(basePath, event) {
     return writeFile(outputPath, data)
   })
 
-  if (event.sourceMap) {
+  var sourceMap
+  try {
+    sourceMap = event.sourceMap
+  }
+  catch (e) {
+    log.warn('\x07could not construct identity source map for %s', projectPath)
+    if (e.message)
+      log.warn(e.message)
+  }
+
+  if (sourceMap) {
     var mapPath = projectFile + '.map'
     var suffix
     if (fileType === 'js')
@@ -50,7 +61,6 @@ export function writeEvent(basePath, event) {
       data = event.data
 
     promise = promise.then(() => {
-      var { sourceMap } = event
       sourceMap.sources = sourceMap.sources.map(source => path.relative(outputDir, source))
       return writeFile(path.join(outputDir, mapPath), JSON.stringify(sourceMap))
     })
