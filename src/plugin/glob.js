@@ -28,7 +28,7 @@ export default function(op, ...patterns) {
   if (opts.basePath)
     patterns = patterns.map(pattern => opts.basePath + '/' + pattern)
 
-  return op.stream.flatMapLatest(() => {
+  var makeGlobStream = events => {
     var stream = Bacon.combineAsArray(
       patterns.map(
         (pattern, idx) => Bacon.fromPromise(
@@ -39,10 +39,12 @@ export default function(op, ...patterns) {
       )
     )
     .map(_.flatten)
-    .map(files => files.map(file => {
-      file.initPhase = true
-      return newEvent('add', file)
-    }))
+    .map(files => {
+      return events.concat(files.map(file => {
+        file.initPhase = true
+        return newEvent('add', file)
+      }))
+    })
     .take(1)
 
     if (! op.watch)
@@ -71,5 +73,16 @@ export default function(op, ...patterns) {
     return stream.changes().concat(
       coalesceEvents( bufferingDebounce(updates, debounce).map(_.flatten) )
     )
+  }
+
+  var globStream
+  return op.stream.flatMap(events => {
+    if (! globStream) {
+      globStream = makeGlobStream(events)
+      return globStream
+    }
+    else {
+      return events
+    }
   })
 }

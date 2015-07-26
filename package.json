@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.12.14",
+  "version": "0.12.15",
   "description": "sigh, the declarative functional reactive build system for the web and io.js/node.js.",
   "main": "index",
   "directories": {

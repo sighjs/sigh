@@ -30,6 +30,26 @@ describe('glob plugin', () => {
     })
   })
 
+  it('globs a wildcard and forwards initial input events', () => {
+    var stream = Bacon.constant([new Event({
+      type: 'add',
+      path: 'blah.js',
+      data: 'var blah',
+    })])
+
+    return glob({ stream }, FIXTURE_PATH + '/*.js').toPromise(Promise).then(events => {
+      events.length.should.equal(3)
+
+      var updates = events.slice(1)
+      _.pluck(updates, 'projectPath').sort().should.eql(FIXTURE_FILES)
+      updates.forEach(file => {
+        file.initPhase.should.be.true
+        file.type.should.equal('add')
+        file.opTreeIndex.should.equal(1)
+      })
+    })
+  })
+
   it('globs a wildcard using the basePath option', () => {
     var opData = { stream, treeIndex: 4 }
     return glob(opData, { basePath: FIXTURE_PATH }, '*.js')
@@ -87,6 +107,54 @@ describe('glob plugin', () => {
               resolve()
               return Bacon.noMore
             }
+          }
+        })
+      })
+    })
+  })
+
+  it('forwards subsequent input events along with file change events', () => {
+    var delayedInputEvent = new Event({
+      type: 'add',
+      path: 'blah.js',
+      data: 'var blah',
+    })
+
+    var twoStream = Bacon.mergeAll(
+      stream,
+      Bacon.later(300, [delayedInputEvent])
+    )
+
+    var tmpPath
+    return mkTmpDir({ dir: 'test/tmp', prefix: 'sigh-glob-test-' }).then(_tmpPath => {
+      tmpPath = _tmpPath
+      return copy(FIXTURE_PATH, tmpPath)
+    })
+    .then(() => {
+      return new Promise(function(resolve) {
+        var nUpdates = 0
+        var updateFile = tmpPath + '/file1.js'
+        glob({ stream: twoStream, watch: true, treeIndex: 4 }, tmpPath + '/*.js')
+        .onValue(updates => {
+          if (++nUpdates === 1) {
+            updates.length.should.equal(2)
+            _.delay(fs.appendFile, 50, updateFile, 'var file1line2 = 24;\n')
+          }
+          else if (nUpdates === 2) {
+            updates.should.eql([
+              new Event({
+                type: 'change',
+                path: updateFile,
+                initPhase: false,
+                opTreeIndex: 4,
+                createTime: updates[0].createTime
+              }),
+            ])
+          }
+          else {
+            updates[0].should.equal(delayedInputEvent)
+            resolve()
+            return Bacon.noMore
           }
         })
       })

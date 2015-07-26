@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.15
+ * glob: forwards input events down stream with glob/watch events.
+
 ## v0.12.14
  * debounce: avoid loss of events when a file is changed during debouncing of events in the init phase.
 

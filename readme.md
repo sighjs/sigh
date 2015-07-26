@@ -133,6 +133,17 @@ module.exports = function(pipelines) {
 }
 ```
 
+The glob plugin also forwards input events down the stream:
+```javascript
+module.exports = function(pipelines) {
+  pipelines.js = [
+    glob('test/*.js')
+    glob('src/**/*.js'), // forwards glob events from test directory
+    write('build')
+  ]
+}
+```
+
 ### options
   * basePath: restricts the glob to operate within basePath and also attaches the property to all resources (affecting their projectPath field).
 
@@ -311,5 +322,4 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 * pipeline: `activate` should activate (but not create dependency) in first position of pipeline.
 * Detection of pipeline activations should look into `merge`.
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
-* `glob` plugin should forward events from input stream.
 * grunt plugin adapter.
