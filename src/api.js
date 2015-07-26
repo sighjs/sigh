@@ -17,8 +17,9 @@ import env from './plugin/env'
 import glob from './plugin/glob'
 import pipeline from './plugin/pipeline'
 import write from './plugin/write'
+import filter from './plugin/filter'
 
-var plugins = { merge, concat, debounce, env, glob, pipeline, write }
+var plugins = { merge, concat, debounce, env, glob, pipeline, write, filter }
 
 /**
  * Run Sigh.js

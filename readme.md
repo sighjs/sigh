@@ -307,6 +307,26 @@ merge(
 )
 ```
 
+## filter
+
+Filters events from the pipeline.
+
+Filters out events where the `projectPath` does not begin with the letter `b`:
+```javascript
+pipelines['source-js'] = [
+  glob({ basePath: 'src' }, '*.js'),
+  filter({ projectPath: /^b/ })
+]
+```
+
+Only pass events with type `update` down the pipeline:
+```javascript
+pipelines['source-js'] = [
+  glob({ basePath: 'src' }, '*.js'),
+  filter({ type: 'update' })
+]
+```
+
 # Writing sigh plugins
 
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)

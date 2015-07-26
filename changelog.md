@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.16
+ * add filter plugin.
+
 ## v0.12.15
  * glob: forwards input events down stream with glob/watch events.
 
