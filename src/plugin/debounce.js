@@ -16,12 +16,19 @@ export default function(op, delay = 500) {
     if (events.some(event => ! event.initPhase)) {
       // glob found end of init phase
       initPhase = false
+      if (buffer.length) {
+        events = buffer.concat(events)
+        buffer.length = 0
+      }
       return events
     }
 
     // TODO: coalesce events to reflect latest fs state
-    buffer.push(events)
-    return Bacon.later(delay, buffer).map(buffer => _.flatten(buffer.splice(0)))
+    buffer.push(...events)
+
+    // if another event is published then flatMapLatest unsubscribes from
+    // the stream returned previously ensuring the splice doesn't happen.
+    return Bacon.later(delay, buffer).map(buffer => buffer.splice(0))
   })
 
 }
