@@ -17,8 +17,8 @@ export default function(op, ...patterns) {
   var { treeIndex = 1, debounce = DEFAULT_DEBOUNCE } = op
   op.nextTreeIndex = treeIndex + patterns.length
 
-  var newEvent = (type, { path, treeIndex }) => {
-    var props = { type, path, opTreeIndex: treeIndex }
+  var newEvent = (type, { path, treeIndex, initPhase = false }) => {
+    var props = { type, path, initPhase, opTreeIndex: treeIndex }
     if (opts.basePath)
       props.basePath = opts.basePath
     props.createTime = new Date
@@ -39,7 +39,10 @@ export default function(op, ...patterns) {
       )
     )
     .map(_.flatten)
-    .map(files => files.map(newEvent.bind(this, 'add')))
+    .map(files => files.map(file => {
+      file.initPhase = true
+      return newEvent('add', file)
+    }))
     .take(1)
 
     if (! op.watch)

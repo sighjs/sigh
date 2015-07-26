@@ -23,6 +23,7 @@ describe('glob plugin', () => {
       updates.length.should.equal(2)
       _.pluck(updates, 'projectPath').sort().should.eql(FIXTURE_FILES)
       updates.forEach(file => {
+        file.initPhase.should.be.true
         file.type.should.equal('add')
         file.opTreeIndex.should.equal(1)
       })
@@ -77,6 +78,7 @@ describe('glob plugin', () => {
               new Event({
                 type: 'change',
                 path: files[nUpdates - 2],
+                initPhase: false,
                 opTreeIndex: 4,
                 createTime: updates[0].createTime
               }),
@@ -113,6 +115,7 @@ describe('glob plugin', () => {
               new Event({
                 type: 'add',
                 path: addedFile,
+                initPhase: false,
                 opTreeIndex: 4,
                 createTime: updates[0].createTime
               }),

@@ -218,7 +218,7 @@ In this example the order of the files in `output.js` is determined by tree orde
 You can see here that `glob` uses multiple tree indexes and assigns them to events according to the index of the pattern that produced them.
 
 ## debounce
-Combines events in the pipeline until the event stream settles for longer than the given period.
+Combines events in the pipeline until the event stream settles for longer than the given period. The debounce is deactivated after sigh enters "file watch" mode (to ensure minimum build delays during development).
 
 ```javascript
 pipelines.js = [
@@ -303,7 +303,7 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 # Future Work
 * Write `jspm` plugin.
 * Write blog post about how `jspm` + `sigh` is a great thing.
-* debouce: `initOnly` option to disable debounce after sigh enters watch mode.
+* debouce: `duringWatch` option to also debounce after sigh enters watch mode.
 * pipeline: `activate` should activate (but not create dependency) in first position of pipeline.
 * Detection of pipeline activations should look into `merge`.
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.

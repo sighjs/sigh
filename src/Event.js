@@ -16,6 +16,7 @@ var sourceMapRegex = /^\/[\/*]# sourceMappingURL=.*(\*\/)?/
 export default class {
   constructor(fields) {
     this.type = fields.type
+    this.initPhase = fields.initPhase
     this.sourcePath = this.path = fields.path
 
     this.opTreeIndex = fields.opTreeIndex

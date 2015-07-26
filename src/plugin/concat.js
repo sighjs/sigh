@@ -66,7 +66,8 @@ export default function(op, outputPath) {
       path: outputPath,
       data,
       sourceMap,
-      createTime
+      createTime,
+      initPhase: ! events.some(event => ! event.initPhase)
     }) ]
     fileExists = true
     return ret

@@ -8,7 +8,7 @@ import { plugin, makeEvent } from './helper'
 
 describe('debounce plugin', () => {
   it('debounces two streams', () => {
-    var streams = Bacon.fromArray([ 1, 2 ].map(idx => [ makeEvent(idx) ]))
+    var streams = Bacon.fromArray([ 1, 2 ].map(idx => [ makeEvent(idx, true) ]))
     var compiler = new PipelineCompiler
     var opData = { compiler }
 
