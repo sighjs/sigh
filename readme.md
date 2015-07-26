@@ -300,6 +300,10 @@ merge(
 
 Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/docs/writing-plugins.md)
 
+# Changelog
+
+[Link to changelog](https://github.com/sighjs/sigh/blob/master/changelog.md).
+
 # Future Work
 * Write `jspm` plugin.
 * Write blog post about how `jspm` + `sigh` is a great thing.
