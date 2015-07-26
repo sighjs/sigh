@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { Bacon } from 'sigh-core'
 
 export default function(op, ...filters) {
   filters = _.flatten(filters)

@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.17
+ * fix crash when filter plugin filters all events.
+
 ## v0.12.16
  * add filter plugin.
 
