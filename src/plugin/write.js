@@ -30,40 +30,40 @@ export function writeEvent(basePath, event) {
     })
   }
 
-  var data // will hold event.data with a source map suffix for js/css
+  var { data } = event
   var outputDir = path.dirname(outputPath)
 
   var promise = ensureDir(path.dirname(outputPath)).then(() => {
     return writeFile(outputPath, data)
   })
 
-  var sourceMap
-  try {
-    sourceMap = event.sourceMap
-  }
-  catch (e) {
-    log.warn('\x07could not construct identity source map for %s', projectPath)
-    if (e.message)
-      log.warn(e.message)
-  }
+  if (event.supportsSourceMap) {
+    var sourceMap
+    try {
+      sourceMap = event.sourceMap
+    }
+    catch (e) {
+      log.warn('\x07could not construct identity source map for %s', projectPath)
+      if (e.message)
+        log.warn(e.message)
+    }
 
-  if (sourceMap) {
-    var mapPath = projectFile + '.map'
-    var suffix
-    if (fileType === 'js')
-      suffix = '//# sourceMappingURL=' + mapPath
-    else if (fileType === 'css')
-      suffix = '/*# sourceMappingURL=' + mapPath + ' */'
+    if (sourceMap) {
+      var mapPath = projectFile + '.map'
+      var suffix
+      if (fileType === 'js')
+        suffix = '//# sourceMappingURL=' + mapPath
+      else if (fileType === 'css')
+        suffix = '/*# sourceMappingURL=' + mapPath + ' */'
 
-    if (suffix)
-      data = event.data + '\n' + suffix
-    else
-      data = event.data
+      if (suffix)
+        data += '\n' + suffix
 
-    promise = promise.then(() => {
-      sourceMap.sources = sourceMap.sources.map(source => path.relative(outputDir, source))
-      return writeFile(path.join(outputDir, mapPath), JSON.stringify(sourceMap))
-    })
+      promise = promise.then(() => {
+        sourceMap.sources = sourceMap.sources.map(source => path.relative(outputDir, source))
+        return writeFile(path.join(outputDir, mapPath), JSON.stringify(sourceMap))
+      })
+    }
   }
 
   return promise.then(() => event)

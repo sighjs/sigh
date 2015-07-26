@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.18
+ * fix writing files that do not support source maps.
+
 ## v0.12.17
  * fix crash when filter plugin filters all events.
 
