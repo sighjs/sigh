@@ -78,9 +78,12 @@ export default class {
 
   get sourceMap() {
     if (! this._sourceMap) {
-      this._hasIdentitySourceMap = true
       this._sourceMap = generateIdentitySourceMap(this.fileType, this.sourcePath, this.data)
-      this._sourceMap.sourcesContent = [ this.sourceData ]
+
+      if (this._sourceMap) {
+        this._hasIdentitySourceMap = true
+        this._sourceMap.sourcesContent = [ this.sourceData ]
+      }
     }
 
     return this._sourceMap

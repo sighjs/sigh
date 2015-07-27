@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.19
+ * fix crash when using gulp-adapter for file type that doesn't support identity source map generation.
+
 ## v0.12.18
  * fix writing files that do not support source maps.
 
