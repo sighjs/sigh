@@ -56,7 +56,7 @@ export function invoke(opts = {}) {
 
           log('pipeline %s complete: %s seconds', pipelineName, timeDuration)
           if (opts.verbose > 1)
-            events.forEach(event => { log.nested(`${event.type} ${event.path}`) })
+            events.forEach(event => { log.nested(`${event.type} ${event.path} [${event.projectPath}]`) })
         })
 
         stream.onError(error => {
