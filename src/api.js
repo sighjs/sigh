@@ -55,8 +55,13 @@ export function invoke(opts = {}) {
           var timeDuration = relTime(createTime ? createTime.getTime() : pipeStartTime)
 
           log('pipeline %s complete: %s seconds', pipelineName, timeDuration)
-          if (opts.verbose > 1)
-            events.forEach(event => { log.nested(`${event.type} ${event.path} [${event.projectPath}]`) })
+          if (opts.verbose > 1) {
+            events.forEach(event => {
+              var { path, projectPath } = event
+              var suffix = path !== projectPath ? ` [${event.projectPath}]` : ''
+              log.nested(`${event.type} ${event.path}${suffix}`)
+            })
+          }
         })
 
         stream.onError(error => {
