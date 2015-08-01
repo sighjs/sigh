@@ -1,5 +1,9 @@
 # sigh changelog
 
+## v0.12.20
+ * write plugin sets `basePath` to equal write directory.
+ * setters for Event.basePath and Event.projectPath.
+
 ## v0.12.19
  * fix crash when using gulp-adapter for file type that doesn't support identity source map generation.
 

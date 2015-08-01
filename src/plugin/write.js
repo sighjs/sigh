@@ -18,12 +18,12 @@ export function writeEvent(basePath, event) {
   var { fileType } = event
   var projectFile = path.basename(event.path)
   var { projectPath } = event
-  var outputPath = path.join(basePath, projectPath)
 
-  // amend object passed out of pipeline to reflect written file
-  delete event.basePath
-  event.path = outputPath
+  // the projectPath remains the same but the basePath is changed to point to
+  // the output directory
+  event.basePath = basePath
 
+  var outputPath = event.path
   if (event.type === 'remove') {
     return unlink(outputPath).then(() => {
       return event.supportsSourceMap ? unlink(outputPath + '.map').then(() => event) : event
