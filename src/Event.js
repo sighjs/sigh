@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs'
+import { join as pathJoin } from 'path'
 import { apply as sourceMapApply, generateIdentitySourceMap } from 'sigh-core/lib/sourceMap'
 
 var sourceMapRegex = /^\/[\/*]# sourceMappingURL=.*(\*\/)?/
@@ -20,7 +21,7 @@ export default class {
     this.sourcePath = this.path = fields.path
 
     this.opTreeIndex = fields.opTreeIndex
-    this.basePath = fields.basePath
+    this._basePath = fields.basePath
 
     // setting the data here can also add a source map
     if (this.type === 'remove')
@@ -37,11 +38,23 @@ export default class {
 
   // does this need to be a property?
   get projectPath() {
-    if (! this.basePath)
+    if (! this._basePath)
       return this.path
 
-    return this.path.indexOf(this.basePath) === 0 ?
-      this.path.substr(this.basePath.length + 1) : this.path
+    return this.path.indexOf(this._basePath) === 0 ?
+      this.path.substr(this._basePath.length + 1) : this.path
+  }
+
+  set projectPath(value) {
+    this.path = this._basePath ? pathJoin(this._basePath, value) : value
+  }
+
+  get basePath() { return this._basePath }
+
+  set basePath(value) {
+    var { projectPath } = this
+    this._basePath = value
+    this.path = pathJoin(value, projectPath)
   }
 
   // Set data stripping off source map comment if it exists.
