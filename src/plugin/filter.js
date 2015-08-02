@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { Bacon } from 'sigh-core'
 
-export default function(op, ...filters) {
+export default function(select, op, ...filters) {
   filters = _.flatten(filters)
 
   return op.stream.flatMap(events => {
@@ -10,7 +10,7 @@ export default function(op, ...filters) {
       return []
 
     events = events.filter(event => {
-      return ! filters.some(filter => {
+      return filters.some(filter => {
         for (var key in filter) {
           var keyFilter = filter[key]
           var value = event[key]
@@ -23,7 +23,7 @@ export default function(op, ...filters) {
         }
 
         return false
-      })
+      }) ? (! select) : select
     })
 
     return events.length === 0 ? Bacon.never() : events

@@ -19,7 +19,11 @@ import pipeline from './plugin/pipeline'
 import write from './plugin/write'
 import filter from './plugin/filter'
 
-var plugins = { merge, concat, debounce, env, glob, pipeline, write, filter }
+var plugins = {
+  merge, concat, debounce, env, glob, pipeline, write,
+  select: filter.bind(null, true),
+  reject: filter.bind(null, false),
+}
 
 /**
  * Run Sigh.js

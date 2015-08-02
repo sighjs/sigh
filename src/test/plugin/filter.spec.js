@@ -14,7 +14,7 @@ describe('filter plugin', () => {
     ]
     var stream = Bacon.constant(events)
 
-    return filter({ stream }, { projectPath: /^b/ }).toPromise(Promise)
+    return filter(true, { stream }, { projectPath: /^b/ }).toPromise(Promise)
     .then(events => {
       events.length.should.equal(1)
       events[0].projectPath.should.equal('blah.js')
@@ -28,7 +28,7 @@ describe('filter plugin', () => {
     ]
     var stream = Bacon.constant(events)
 
-    return filter({ stream }, { type: 'add' }).toPromise(Promise)
+    return filter(true, { stream }, { type: 'add' }).toPromise(Promise)
     .then(events => {
       events.length.should.equal(1)
       events[0].projectPath.should.equal('blah.js')

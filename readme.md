@@ -307,23 +307,35 @@ merge(
 )
 ```
 
-## filter
+## select
 
-Filters events from the pipeline.
+Filters events from the pipeline leaving only those that match all expressions.
 
-Filters out events where the `projectPath` does not begin with the letter `b`:
+Select only events where the `projectPath` begins with the letter `b`.
 ```javascript
 pipelines['source-js'] = [
   glob({ basePath: 'src' }, '*.js'),
-  filter({ projectPath: /^b/ })
+  select({ projectPath: /^b/ })
 ]
 ```
 
-Only pass events with type `update` down the pipeline:
+Only pass events down the pipeline with type `add` and that begin with the letter `c`.
 ```javascript
 pipelines['source-js'] = [
   glob({ basePath: 'src' }, '*.js'),
-  filter({ type: 'update' })
+  select({ type: 'update', projectPath: /^c/ })
+]
+```
+
+## reject
+
+Filters events from the pipeline leaving only those that don't match all expressions.
+
+Filters out `add` events where `projectPath` begins with `b`.
+```javascript
+pipelines['source-js'] = [
+  glob({ basePath: 'src' }, '*.js'),
+  reject({ type: 'add', projectPath: /^b/ })
 ]
 ```
 
