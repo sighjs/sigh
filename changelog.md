@@ -1,6 +1,9 @@
 # sigh changelog
 
 ## v0.12.20
+ * `select` and `reject` instead of `filter`.
+
+## v0.12.20
  * write plugin sets `basePath` to equal write directory.
  * setters for Event.basePath and Event.projectPath.
 
