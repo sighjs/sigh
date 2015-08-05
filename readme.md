@@ -319,7 +319,7 @@ pipelines['source-js'] = [
 ]
 ```
 
-Only pass events down the pipeline with type `add` and that begin with the letter `c`.
+Only pass events down the pipeline with type `update` and that begin with the letter `c`.
 ```javascript
 pipelines['source-js'] = [
   glob({ basePath: 'src' }, '*.js'),
