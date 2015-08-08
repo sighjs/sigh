@@ -1,8 +1,6 @@
 import Vinyl from 'vinyl'
-import { Bacon } from 'sigh-core'
+import { Bacon, Event } from 'sigh-core'
 import { Transform } from 'stream'
-
-import Event from './Event'
 
 export default gulpPlugin => adapter.bind(null, gulpPlugin)
 
