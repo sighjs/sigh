@@ -1,9 +1,8 @@
 import _ from 'lodash'
-import { Bacon } from 'sigh-core'
+import { Bacon, Event } from 'sigh-core'
 import Promise from 'bluebird'
 import { readFileSync, existsSync } from 'fs'
 
-import Event from '../../Event'
 import write from '../../plugin/write'
 
 var TMP_PATH = 'test/tmp/write'

@@ -1,4 +1,4 @@
-import Event from '../../Event'
+import { Event } from 'sigh-core'
 
 export function makeEvent(num, initPhase = false) {
   return new Event({

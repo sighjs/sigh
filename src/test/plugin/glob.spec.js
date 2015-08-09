@@ -1,4 +1,4 @@
-import { Bacon } from 'sigh-core'
+import { Bacon, Event } from 'sigh-core'
 import _ from 'lodash'
 import Promise from 'bluebird'
 import fs from 'fs'
@@ -6,7 +6,6 @@ import fs from 'fs'
 var copy = Promise.promisify(require('fs-extra').copy)
 var mkTmpDir = Promise.promisify(require('temp').mkdir)
 
-import Event from '../../Event'
 import glob from '../../plugin/glob'
 
 var FIXTURE_PATH = 'test/fixtures/simple-project'

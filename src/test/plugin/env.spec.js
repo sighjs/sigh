@@ -1,7 +1,6 @@
-import { Bacon } from 'sigh-core'
+import { Bacon, Event } from 'sigh-core'
 import Promise from 'bluebird'
 
-import Event from '../../Event'
 import env from '../../plugin/env'
 import PipelineCompiler from '../../PipelineCompiler'
 import { plugin } from './helper'

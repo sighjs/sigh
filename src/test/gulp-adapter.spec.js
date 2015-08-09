@@ -1,10 +1,9 @@
 import Promise from 'bluebird'
-import { Bacon } from 'sigh-core'
+import { Bacon, Event } from 'sigh-core'
 import gulpUglify from 'gulp-uglify'
 import { SourceMapConsumer } from 'source-map'
 import { positionOf } from 'sigh-core/lib/sourceMap'
 
-import Event from '../Event'
 import gulpAdapter from '../gulp-adapter'
 
 describe('gulp adapter', () => {

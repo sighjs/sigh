@@ -1,8 +1,7 @@
 import _ from 'lodash'
 import Promise from 'bluebird'
-import { Bacon } from 'sigh-core'
+import { Bacon, Event } from 'sigh-core'
 
-import Event from '../../Event'
 import concat from '../../plugin/concat'
 import { SourceMapConsumer } from 'source-map'
 import { makeEvent } from './helper'
