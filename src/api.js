@@ -231,6 +231,8 @@ function loadPipelineDependencies(runPipelines, pipelines) {
 
       // ignore pipelines in the first position as they only provide output, not
       // input and this can be associated dynamically through a flatMap
+      // TODO: if this pipeline itself has input then the above comment no
+      //       longer applies.
       pipeline.slice(1).forEach(pluginMeta => {
         if (pluginMeta.plugin === plugins.pipeline) {
           var activateState = false
