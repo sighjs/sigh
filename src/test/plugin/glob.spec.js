@@ -121,7 +121,7 @@ describe('glob plugin', () => {
 
     var twoStream = Bacon.mergeAll(
       stream,
-      Bacon.later(300, [delayedInputEvent])
+      Bacon.later(400, [delayedInputEvent])
     )
 
     var tmpPath
