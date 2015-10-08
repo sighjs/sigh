@@ -69,4 +69,13 @@ describe('write plugin', () => {
       writeStream.onError(reject)
     })
   })
+  
+  it('can turn off source maps', () => {
+    var data = 'abcde'
+    var stream = Bacon.constant([ new Event({ path: PROJ_PATH, type: 'add', data }) ])
+
+    return write({ stream }, { sourceMap: false }, TMP_PATH).toPromise(Promise).then(events => {
+      readFileSync(TMP_FILE).toString().should.equal(data)
+    })
+  })
 })
