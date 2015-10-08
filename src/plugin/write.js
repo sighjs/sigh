@@ -14,7 +14,7 @@ var ensureDir = Promise.promisify(fse.ensureDir)
 
 import { mapEvents } from 'sigh-core/lib/stream'
 
-export function writeEvent(basePath, event) {
+export function writeEvent(basePath, doSourceMap, event) {
   var { fileType } = event
   var projectFile = path.basename(event.path)
   var { projectPath } = event
@@ -37,7 +37,7 @@ export function writeEvent(basePath, event) {
     return writeFile(outputPath, data)
   })
 
-  if (event.supportsSourceMap) {
+  if (event.supportsSourceMap && doSourceMap) {
     var sourceMap
     try {
       sourceMap = event.sourceMap
@@ -76,8 +76,12 @@ export default function(op, options, basePath) {
     options = {}
   }
 
+  var { clobber, sourceMap } = options
+  
+  if (! Object.hasOwnProperty.call(options, 'sourceMap'))
+    sourceMap = true
+  
   var clobberPromise
-  var { clobber } = options
   if (clobber) {
     // sanitize a path we are about to recursively remove... it must be below
     // the current working directory (which contains sigh.js)
@@ -99,6 +103,6 @@ export default function(op, options, basePath) {
     }
   }
 
-  var streamPromise = mapEvents(op.stream, writeEvent.bind(this, basePath))
+  var streamPromise = mapEvents(op.stream, writeEvent.bind(this, basePath, sourceMap))
   return clobberPromise ? clobberPromise.thenReturn(streamPromise) : streamPromise
 }
