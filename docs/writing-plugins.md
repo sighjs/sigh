@@ -35,8 +35,11 @@ To begin developing change to the directory containing your plugin and run sigh:
 
 ```
 cd sigh-my-plugin-name
+npm install babel@5
 sigh -w
 ```
+
+Note the `npm install babel@5` is needed, this is due to [yeoman's inability to install peer dependencies for you](https://github.com/yeoman/generator-angular/issues/1205).
 
 You can add the `-v` or `-vv` flags for more information. Everytime you change a source file the plugin will be recompiled and tested.
 
