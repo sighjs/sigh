@@ -24,14 +24,16 @@ export default function(op, ...patterns) {
     return new Event(props)
   }
 
-  if (opts.basePath)
+  if (opts.basePath) {
     patterns = patterns.map(pattern => opts.basePath + '/' + pattern)
+    delete opts.basePath
+  }
 
   var makeGlobStream = events => {
     var stream = Bacon.combineAsArray(
       patterns.map(
         (pattern, idx) => Bacon.fromPromise(
-          glob(pattern).then(
+          glob(pattern, opts).then(
             paths => paths.map(path => ({ path, treeIndex: treeIndex + idx }))
           )
         )
