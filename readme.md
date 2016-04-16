@@ -137,7 +137,7 @@ The glob plugin also forwards input events down the stream:
 ```javascript
 module.exports = function(pipelines) {
   pipelines.js = [
-    glob('test/*.js')
+    glob('test/*.js'),
     glob('src/**/*.js'), // forwards glob events from test directory
     write('build')
   ]
@@ -157,7 +157,7 @@ module.exports = function(pipelines) {
     glob({ debounce: 500 }, '*.js')
     ```
 
-  * encoding: Set file encoding.
+  * encoding: Set `encoding` attribute of all generated events to this, this attribute is used by the `write` plugin.
 
     ```javascript
     glob({ encoding: 'binary' }, '*.png')
