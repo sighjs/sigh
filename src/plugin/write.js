@@ -34,7 +34,7 @@ export function writeEvent(basePath, event) {
   var outputDir = path.dirname(outputPath)
 
   var promise = ensureDir(path.dirname(outputPath)).then(() => {
-    return writeFile(outputPath, data)
+    return writeFile(outputPath, data, {encoding: event.encoding})
   })
 
   if (event.supportsSourceMap) {
