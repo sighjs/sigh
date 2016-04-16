@@ -17,7 +17,7 @@ export default function(op, ...patterns) {
   op.nextTreeIndex = treeIndex + patterns.length
 
   var newEvent = (type, { path, treeIndex, initPhase = false }) => {
-    var props = { type, path, initPhase, opTreeIndex: treeIndex }
+    var props = { type, path, initPhase, opTreeIndex: treeIndex, encoding: opts.encoding }
     if (opts.basePath)
       props.basePath = opts.basePath
     props.createTime = new Date

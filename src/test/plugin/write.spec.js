@@ -7,6 +7,7 @@ import write from '../../plugin/write'
 
 var TMP_PATH = 'test/tmp/write'
 var PROJ_PATH = 'subdir/file1.js'
+var PROJ_PATH_BINARY = 'subdir/file2.bin'
 var TMP_FILE = TMP_PATH + '/' + PROJ_PATH
 
 describe('write plugin', () => {
@@ -39,6 +40,20 @@ describe('write plugin', () => {
 
       readFileSync(tmpFile + '.map').toString()
       .should.equal('{"version":3,"sources":["../../../subdir/file1.js"],"names":[],"mappings":"AAAA,KAAK","file":"file1.js","sourcesContent":["var  pumpbaby\\n"]}')
+    })
+  })
+
+  it('write a binary file', () => {
+    var data = new Buffer([0, 1, 2, 3, -1, 5, 6, 7, 0])
+    var stream = Bacon.constant([
+      new Event({ basePath: 'subdir', path: PROJ_PATH_BINARY, type: 'add', data: data.toString('binary'), encoding: 'binary', supportsSourceMap: false })
+    ])
+
+    return write({ stream }, TMP_PATH).toPromise(Promise).then(events => {
+      // subdir stripped from the output path due to basePath
+      var tmpFile = TMP_PATH + '/file2.bin'
+
+      readFileSync(tmpFile).equals(data).should.be.ok
     })
   })
 
