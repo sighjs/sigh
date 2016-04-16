@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.25
+ * merge with `collectInitial` didn't forward subsequent events in watch mode.
+
 ## v0.12.24
  * fix `merge` breakage from previous version.
 

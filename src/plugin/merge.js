@@ -30,12 +30,13 @@ export default function(op, ...pipelines) {
     return streamPromise.then(stream => {
       let { length: nStreamEventsLeft } = pipelines
       return stream.flatMapLatest(events => {
-        if (events.every(event => event.initPhase)) {
-          if (! --nStreamEventsLeft)
-            return Bacon.mergeAll([ Bacon.constant(events), stream ])
+        if (nStreamEventsLeft) {
+          return events.every(event => event.initPhase) && ! --nStreamEventsLeft ?
+            Bacon.mergeAll([ Bacon.constant(events), stream ]) : Bacon.never()
         }
-
-        return Bacon.never()
+        else {
+          return events
+        }
       })
     })
   }
