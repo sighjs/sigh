@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.23
+ * fix `merge` breakage from previous version.
+
 ## v0.12.22
  * `merge` has `collectInitial` option.
 

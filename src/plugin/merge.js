@@ -6,7 +6,7 @@ import { bufferingDebounce } from 'sigh-core/lib/stream'
 
 export default function(op, ...pipelines) {
   let collectInitial = false
-  if (! pipelines.stream) {
+  if (pipelines.length && ! pipelines[0].plugin) {
     const opts = pipelines.shift()
     collectInitial = opts.collectInitial
   }
