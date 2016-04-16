@@ -1,5 +1,11 @@
 # sigh changelog
 
+## v0.12.22
+ * `merge` has `collectInitial` option.
+
+## v0.12.21
+ * `filter` plugin is now present as `select` and `reject`.
+
 ## v0.12.20
  * `select` and `reject` instead of `filter`.
 
