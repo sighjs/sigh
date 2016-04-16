@@ -16,8 +16,11 @@ module.exports = function(pipelines) {
   pipelines.alias.build = ['build-sources', 'build-tests']
 
   pipelines['run-tests'] = [
-    pipeline('build-sources', 'build-tests'),
-    debounce(700),
+    merge(
+      { collectInitial: true },
+      pipeline('build-sources'),
+      pipeline('build-tests')
+    ),
     pipeline({ activate: true }, 'mocha')
   ]
 
