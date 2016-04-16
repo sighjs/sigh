@@ -53,7 +53,7 @@ describe('write plugin', () => {
       // subdir stripped from the output path due to basePath
       var tmpFile = TMP_PATH + '/file2.bin'
 
-      readFileSync(tmpFile).equals(data).should.be.ok
+      readFileSync(tmpFile).should.eql(data)
     })
   })
 
