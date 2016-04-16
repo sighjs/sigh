@@ -207,6 +207,19 @@ pipelines.js = [
 ```
 This would transpile files matching `src/*.js` using babel and copy them to the directory `build`. Files matching `vendor/*.js` will all be concatenated together into a single file at `build/vendor.js`. The file `bootstrap.js` will be copied to `build` without being modified beyond adding a source map comment.
 
+The `merge` plugin events as they come by default (so if the first of many streams emits an event it will be forwarded immediately, before other streams have emitted their own events). To have `merge` wait for every stream to emit one event before creating it's first event the `collectInitial` option can be used:
+
+```javascript
+pipelines.js = [
+  merge(
+    { collectInitial: true },
+    pipeline('build-tests'),
+    pipeline('build-source')
+  ),
+  pipeline('run-tests')
+]
+```
+
 ## concat
 The `concat` plugin concatenates all resources together into one file. The order in which the files are concatenated corresponds to the depth-first index within the tree of the plugin that produced the original source content of that file.
 
