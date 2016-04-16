@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.12.22",
+  "version": "0.12.23",
   "description": "the fastest and most expressive build system for the web and node.js/io.js",
   "main": "index",
   "directories": {
