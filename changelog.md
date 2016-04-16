@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.26
+ * glob/write plugins supports encoding.
+
 ## v0.12.25
  * merge with `collectInitial` didn't forward subsequent events in watch mode.
 
