@@ -273,7 +273,7 @@ function injectPlugin(module, pluginName) {
     throw new Error("Nonexistent plugin `" + pluginName + "'")
 
   try {
-    var varName = pluginName.replace(/(\w)-(\w)/, (match, $1, $2) => $1 + $2.toUpperCase())
+    var varName = _.camelCase(pluginName)
 
     module.__set__(varName, (...args) => ({ plugin, args }))
   }
