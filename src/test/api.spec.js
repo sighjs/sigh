@@ -5,10 +5,38 @@ var mkTmpDir = Promise.promisify(require('temp').mkdir)
 
 import PipelineCompiler from '../PipelineCompiler'
 import { compileSighfile } from '../api'
+import rewire from 'rewire'
 
 var FIXTURE_PATH = 'test/fixtures/sigh-project'
 
-describe('api', () => {
+describe('loadPipelineDependencies', () => {
+  const pipelinePlugin = require('../plugin/pipeline')
+  const fakePlugin = {}
+
+  const loadPipelineDependencies = rewire('../api').__get__('loadPipelineDependencies')
+
+  const makePluginDesc = (plugin, args = []) => ({ plugin, args })
+
+  it('should detect pipeline({ activate: true }, ...) and add dependency', function() {
+    const pipelines = {
+      dep1: [ makePluginDesc(fakePlugin, ['1']) ],
+      dep2: [ makePluginDesc(fakePlugin, ['2']) ],
+    }
+
+    const runPipelines = {
+      main: [
+        makePluginDesc(fakePlugin),
+        { plugin: pipelinePlugin, args: [{ activate: true }, 'dep1'] }
+      ]
+    }
+
+    var deps = loadPipelineDependencies(runPipelines, pipelines)
+    deps.should.have.property('dep1').and.equal(pipelines.dep1)
+    deps.should.not.have.property('dep2')
+  })
+})
+
+describe('compileSighFile', () => {
   it('compile should build working bacon streams from pipelines in Sigh.js file', function() {
     this.timeout(3000)
 
