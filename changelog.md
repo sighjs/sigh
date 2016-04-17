@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.27
+ * `pipeline({ activate: true }, ...)` works inside of `merge`.
+
 ## v0.12.26
  * glob/write plugins supports encoding.
 
