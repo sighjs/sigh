@@ -70,9 +70,17 @@ export default class {
       inputStream = this.initStream
 
     var compileOperation = (operation, opData) => {
-      var stream = operation.plugin ?
-        operation.plugin.apply(this, [ opData ].concat(operation.args)) :
-        operation(opData)
+      let stream
+      try {
+        stream = operation.plugin ?
+          operation.plugin.apply(this, [ opData ].concat(operation.args)) :
+          operation(opData)
+      }
+      catch (e) {
+        console.log('issue running pipeline', name)
+        console.log(e.stack ? e.stack : e)
+        process.exit(1)
+      }
 
       return Promise.resolve(stream).then(stream => {
         if (this.treeIndex === opData.treeIndex)
