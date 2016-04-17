@@ -233,17 +233,33 @@ function loadPipelineDependencies(runPipelines, pipelines) {
       // input and this can be associated dynamically through a flatMap
       // TODO: if this pipeline itself has input then the above comment no
       //       longer applies.
-      pipeline.slice(1).forEach(pluginMeta => {
-        if (pluginMeta.plugin === plugins.pipeline) {
-          var activateState = false
-          pluginMeta.args.forEach(arg => {
-            if (arg.hasOwnProperty('activate'))
-              activateState = arg.activate
-            else if (activateState)
-              activations.push(arg)
-          })
-        }
-      })
+      let skipNextLeaf = true
+
+      const scanPipelineForActivation = pipeline => {
+        pipeline.forEach(pluginMeta => {
+          if (pluginMeta.plugin === plugins.merge) {
+            scanPipelineForActivation(pluginMeta.args)
+            return
+          }
+
+          if (skipNextLeaf) {
+            skipNextLeaf = false
+            return
+          }
+
+          if (pluginMeta.plugin === plugins.pipeline) {
+            var activateState = false
+            pluginMeta.args.forEach(arg => {
+              if (arg.hasOwnProperty('activate'))
+                activateState = arg.activate
+              else if (activateState)
+                activations.push(arg)
+            })
+          }
+        })
+      }
+
+      scanPipelineForActivation(pipeline)
 
       activations.forEach(activation => {
         var activationPipeline = pipelines[activation]
