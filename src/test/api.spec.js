@@ -11,26 +11,43 @@ var FIXTURE_PATH = 'test/fixtures/sigh-project'
 
 describe('loadPipelineDependencies', () => {
   const pipelinePlugin = require('../plugin/pipeline')
+  const mergePlugin = require('../plugin/merge')
   const fakePlugin = {}
 
   const loadPipelineDependencies = rewire('../api').__get__('loadPipelineDependencies')
 
   const makePluginDesc = (plugin, args = []) => ({ plugin, args })
 
-  it('should detect pipeline({ activate: true }, ...) and add dependency', function() {
-    const pipelines = {
-      dep1: [ makePluginDesc(fakePlugin, ['1']) ],
-      dep2: [ makePluginDesc(fakePlugin, ['2']) ],
-    }
+  const pipelines = {
+    dep1: [ makePluginDesc(fakePlugin, ['1']) ],
+    dep2: [ makePluginDesc(fakePlugin, ['2']) ],
+  }
 
+
+  it('should ignore pipeline activation in first leaf and detect subsequent activation', function() {
     const runPipelines = {
       main: [
-        makePluginDesc(fakePlugin),
+        { plugin: pipelinePlugin, args: [{ activate: true }, 'dep2'] },
         { plugin: pipelinePlugin, args: [{ activate: true }, 'dep1'] }
       ]
     }
 
-    var deps = loadPipelineDependencies(runPipelines, pipelines)
+    const deps = loadPipelineDependencies(runPipelines, pipelines)
+    deps.should.have.property('dep1').and.equal(pipelines.dep1)
+    deps.should.not.have.property('dep2')
+  })
+
+  it('should detect pipeline activation in merge, ignoring activation in first leaf node', function() {
+    const runPipelines = {
+      main: [
+        makePluginDesc(mergePlugin, [
+          { plugin: pipelinePlugin, args: [{ activate: true }, 'dep2'] },
+          { plugin: pipelinePlugin, args: [{ activate: true }, 'dep1'] },
+        ]),
+      ]
+    }
+
+    const deps = loadPipelineDependencies(runPipelines, pipelines)
     deps.should.have.property('dep1').and.equal(pipelines.dep1)
     deps.should.not.have.property('dep2')
   })

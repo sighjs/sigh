@@ -372,5 +372,4 @@ Please see [plugin writing guide](https://github.com/sighjs/sigh/blob/master/doc
 * Write `jspm` plugin.
 * debouce: `duringWatch` option to also debounce after sigh enters watch mode.
 * pipeline: `activate` should activate (but not create dependency) in first position of pipeline.
-* Detection of pipeline activations should look into `merge`.
 * `sigh -w` should watch `sigh.js` file for changes in addition to the source files.
