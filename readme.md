@@ -163,6 +163,8 @@ module.exports = function(pipelines) {
     glob({ encoding: 'binary' }, '*.png')
     ```
 
+sigh does not curretly support events representing directories, please avoid globbing directory paths for now.
+
 ## write
 The `write` plugin is responsible for writing data to the filesystem. It adds files corresponding to `Event` objects with type `add`, updates files for events with type `change` and removes files corresponding to events with type `remove`. The output path of each file is determined by prefixing its `projectPath` with the argument to `write`. Operations that produce events (such as glob) take a `basePath` option so that the output path can be easily manipulated.
 
