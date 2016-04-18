@@ -60,7 +60,7 @@ export function writeEvent(basePath, event) {
         data += '\n' + suffix
 
       promise = promise.then(() => {
-        if (sourceMap.source) {
+        if (sourceMap.sources) {
           sourceMap.sources = sourceMap.sources.map(source => path.relative(outputDir, source)) 
           return writeFile(path.join(outputDir, mapPath), JSON.stringify(sourceMap))
         }
