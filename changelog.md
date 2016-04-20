@@ -1,5 +1,8 @@
 # sigh changelog
 
+## v0.12.29
+ * `merge` with `collectInitial` option was missing events.
+
 ## v0.12.28
  * errors thrown in plugins issue an error and exit the sigh process.
 
