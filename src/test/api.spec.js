@@ -10,8 +10,8 @@ import rewire from 'rewire'
 var FIXTURE_PATH = 'test/fixtures/sigh-project'
 
 describe('loadPipelineDependencies', () => {
-  const pipelinePlugin = require('../plugin/pipeline')
-  const mergePlugin = require('../plugin/merge')
+  const pipelinePlugin = require('../plugin/pipeline').default
+  const mergePlugin = require('../plugin/merge').default
   const fakePlugin = {}
 
   const loadPipelineDependencies = rewire('../api').__get__('loadPipelineDependencies')

@@ -96,6 +96,14 @@ export function invoke(opts = {}) {
 }
 
 /**
+ * Requires a plugin ensuring es6 modules are also supported
+ */
+function requirePlugin(path) {
+  const module = require(path)
+  return module.default || module
+}
+
+/**
  * Compile the Sigh.js file in the current directory with the given options.
  * @return {Promise} Resolves to an object { pipelineName: baconStream }
  */
@@ -117,12 +125,12 @@ export function compileSighfile(compiler, opts = {}) {
           return
 
         if (/^sigh-/.test(pkg)) {
-          plugins[pkg.substr(5)] = require(path.join(process.cwd(), 'node_modules', pkg))
+          plugins[pkg.substr(5)] = requirePlugin(path.join(process.cwd(), 'node_modules', pkg))
         }
         else if (/^gulp-/.test(pkg)) {
           var name = pkg.substr(5)
           if (! plugins[name])
-            plugins[name] = gulpAdapter(require(path.join(process.cwd(), 'node_modules', pkg)))
+            plugins[name] = gulpAdapter(requirePlugin(path.join(process.cwd(), 'node_modules', pkg)))
         }
       })
     })
