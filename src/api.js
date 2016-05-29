@@ -72,6 +72,8 @@ export function invoke(opts = {}) {
           exitCode = 1
           log.warn('\x07error: pipeline %s', pipelineName)
           log.warn(error)
+          if (error.stack)
+            log.warn(error.stack)
         })
       })
 
@@ -86,7 +88,9 @@ export function invoke(opts = {}) {
   }
   catch (e) {
     if (typeof e === 'function' && e instanceof Error) {
-      log.warn(e.message)
+      log.warn(e)
+      if (e.stack)
+        log.warn(e.stack)
       process.exit(1)
     }
     else {
