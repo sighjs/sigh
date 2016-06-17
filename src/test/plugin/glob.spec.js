@@ -119,9 +119,10 @@ describe('glob plugin', () => {
       data: 'var blah',
     })
 
+    var sink
     var twoStream = Bacon.mergeAll(
       stream,
-      Bacon.later(400, [delayedInputEvent])
+      Bacon.fromBinder(_sink => { sink = _sink; return () => undefined })
     )
 
     var tmpPath
@@ -149,6 +150,7 @@ describe('glob plugin', () => {
                 createTime: updates[0].createTime
               }),
             ])
+            sink([delayedInputEvent])
           }
           else {
             updates[0].should.equal(delayedInputEvent)
