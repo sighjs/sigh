@@ -7,7 +7,7 @@
     "lib": "./lib"
   },
   "scripts": {
-    "test": "./bootstrap.sh && sigh"
+    "test": "sigh"
   },
   "repository": {
     "type": "git",
