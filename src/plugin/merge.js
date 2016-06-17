@@ -36,8 +36,8 @@ export default function(op, ...pipelines) {
           if (events.every(event => event.initPhase)) {
             initEvents.push(...events)
 
-            return --nStreamEventsLeft ?
-              Bacon.mergeAll([ Bacon.constant(initEvents), stream ]) : Bacon.never()
+            return --nStreamEventsLeft ? Bacon.never() :
+                                         Bacon.mergeAll([ Bacon.constant(initEvents), stream ])
           }
         }
         else {
