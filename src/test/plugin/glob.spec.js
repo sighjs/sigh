@@ -89,8 +89,8 @@ describe('glob plugin', () => {
         .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
-            _.delay(fs.appendFile, 50, files[0], 'var file1line2 = 24;\n')
-            _.delay(fs.appendFile, 500, files[1], 'var file2line2 = 25;\n')
+            _.delay(fs.appendFile, 50, files[0], 'var file1line2 = 24;\n', () => {})
+            _.delay(fs.appendFile, 500, files[1], 'var file2line2 = 25;\n', () => {})
           }
           else {
             updates.should.eql([
@@ -138,7 +138,7 @@ describe('glob plugin', () => {
         .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
-            _.delay(fs.appendFile, 50, updateFile, 'var file1line2 = 24;\n')
+            _.delay(fs.appendFile, 50, updateFile, 'var file1line2 = 24;\n', () => {})
           }
           else if (nUpdates === 2) {
             updates.should.eql([
@@ -177,7 +177,7 @@ describe('glob plugin', () => {
         .onValue(updates => {
           if (++nUpdates === 1) {
             updates.length.should.equal(2)
-            _.delay(fs.writeFile, 300, addedFile, 'var file3line1 = 33;\n')
+            _.delay(fs.writeFile, 300, addedFile, 'var file3line1 = 33;\n', () => {})
           }
           else {
             updates.should.eql([
