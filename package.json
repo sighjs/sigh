@@ -1,6 +1,6 @@
 {
   "name": "sigh",
-  "version": "0.12.34",
+  "version": "0.12.35",
   "description": "the fastest and most expressive build system for the web and node.js/io.js",
   "main": "index",
   "directories": {
@@ -34,7 +34,7 @@
     "fs-extra": "^0.30.0",
     "glob": "^5.0.1",
     "lodash": "^3.6.0",
-    "process-pool": "^0.3.2",
+    "process-pool": "^0.3.5",
     "rewire": "~2.3.1",
     "sigh-core": "^0.11.8",
     "source-map": "^0.4.0",
@@ -47,7 +47,7 @@
     "babel-preset-stage-2": "^6.22.0",
     "chai": "^2.2.0",
     "gulp-uglify": "^1.2.0",
-    "sigh": "^0.12.0",
+    "sigh": "^0.12.35",
     "sigh-babel": "^0.12.2",
     "sigh-cli": "^0.2.1",
     "sigh-mocha": "^0.1.4",

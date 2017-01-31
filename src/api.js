@@ -3,7 +3,7 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import rewire from 'rewire'
 import path from 'path'
-import functionLimit from 'process-pool/lib/functionLimit'
+import activeCallLimiter from 'process-pool/lib/activeCallLimiter'
 
 import { log, Bacon } from 'sigh-core'
 
@@ -169,7 +169,7 @@ export function compileSighfile(compiler, opts = {}) {
   // to ensure the promises run one after the other so that plugins load
   // in dependency order, ideally they could be segmented according to
   // dependencies and loaded in several asynchronous batches.
-  const limiter = functionLimit(func => func(), 1)
+  const limiter = activeCallLimiter(func => func(), 1)
 
   return Promise.props(
     _.mapValues(runPipelines, (pipeline, name) => limiter(() => {
