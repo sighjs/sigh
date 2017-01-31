@@ -11,9 +11,9 @@ export default function(select, op, ...filters) {
 
     events = events.filter(event => {
       return filters.some(filter => {
-        for (var key in filter) {
-          var keyFilter = filter[key]
-          var value = event[key]
+        for (const key in filter) {
+          const keyFilter = filter[key]
+          const value = event[key]
           if (keyFilter instanceof RegExp) {
             if (! keyFilter.test(value))
               return true

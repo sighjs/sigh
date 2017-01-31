@@ -4,11 +4,11 @@ import PipelineCompiler from '../PipelineCompiler'
 
 import { plugin } from './plugin/helper'
 
-var should = require('chai').should()
+const should = require('chai').should()
 
 describe('PipelineCompiler', () => {
   it('should create appropriate stream from array', () => {
-    var compiler = new PipelineCompiler
+    const compiler = new PipelineCompiler
     return compiler.compile([
       op => {
         // TODO: test op.stream is Bacon.constant([])
@@ -20,7 +20,7 @@ describe('PipelineCompiler', () => {
   })
 
   it('should create stream from stream, passing watch option', () => {
-    var compiler = new PipelineCompiler({ watch: true })
+    const compiler = new PipelineCompiler({ watch: true })
     return compiler.compile(op => {
       op.watch.should.be.true
       // TODO: test op.stream is Bacon.constant([])
@@ -32,7 +32,7 @@ describe('PipelineCompiler', () => {
   })
 
   it('should pass arguments to plugin', () => {
-    var compiler = new PipelineCompiler
+    const compiler = new PipelineCompiler
     return compiler.compile(plugin((op, arg1, arg2) => {
         should.not.exist(op.watch)
         // TODO: test op.stream is Bacon.constant([])
@@ -42,7 +42,7 @@ describe('PipelineCompiler', () => {
   })
 
   it('should pass treeIndex and observe nextTreeIndex', () => {
-    var compiler = new PipelineCompiler
+    const compiler = new PipelineCompiler
     return compiler.compile([
       op => { op.treeIndex.should.equal(1) },
       op => { op.treeIndex.should.equal(2), op.treeIndex = 4 },

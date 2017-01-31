@@ -11,7 +11,7 @@ export function makeEvent(num, initPhase = false) {
 }
 
 export function plugin(plugin, ...args) {
-  var ret = { plugin }
+  const ret = { plugin }
   if (args.length)
     ret.args = args
   return ret

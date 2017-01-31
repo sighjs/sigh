@@ -7,11 +7,11 @@ import { plugin } from './helper'
 
 describe('filter plugin', () => {
   it('filters events according to a projectPath regex filter', () => {
-    var events = [
+    const events = [
       new Event({ type: 'add', path: 'blah.js', data: 'var blah' }),
       new Event({ type: 'add', path: 'plah.js', data: 'var plah' }),
     ]
-    var stream = Bacon.constant(events)
+    const stream = Bacon.constant(events)
 
     return filter(true, { stream }, { projectPath: /^b/ }).toPromise(Promise)
     .then(events => {
@@ -21,11 +21,11 @@ describe('filter plugin', () => {
   })
 
   it('filters events according to a type string filter', () => {
-    var events = [
+    const events = [
       new Event({ type: 'add', path: 'blah.js', data: 'var blah' }),
       new Event({ type: 'update', path: 'plah.js', data: 'var plah' }),
     ]
-    var stream = Bacon.constant(events)
+    const stream = Bacon.constant(events)
 
     return filter(true, { stream }, { type: 'add' }).toPromise(Promise)
     .then(events => {

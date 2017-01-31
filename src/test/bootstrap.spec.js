@@ -5,5 +5,5 @@ require('chai').should()
 import Promise from 'bluebird'
 import temp from 'temp'
 temp.track()
-var cleanup = Promise.promisify(temp.cleanup)
+const cleanup = Promise.promisify(temp.cleanup)
 after(() => cleanup())

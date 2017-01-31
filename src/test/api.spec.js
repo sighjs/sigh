@@ -1,13 +1,13 @@
 import Promise from 'bluebird'
 
-var copy = Promise.promisify(require('fs-extra').copy)
-var mkTmpDir = Promise.promisify(require('temp').mkdir)
+const copy = Promise.promisify(require('fs-extra').copy)
+const mkTmpDir = Promise.promisify(require('temp').mkdir)
 
 import PipelineCompiler from '../PipelineCompiler'
 import { compileSighfile } from '../api'
 import rewire from 'rewire'
 
-var FIXTURE_PATH = 'test/fixtures/sigh-project'
+const FIXTURE_PATH = 'test/fixtures/sigh-project'
 
 describe('loadPipelineDependencies', () => {
   const pipelinePlugin = require('../plugin/pipeline').default
@@ -57,7 +57,7 @@ describe('compileSighFile', () => {
   it('compile should build working bacon streams from pipelines in Sigh.js file', function() {
     this.timeout(3000)
 
-    var pathBackup, compiler, tmpPath
+    let pathBackup, compiler, tmpPath
 
     return mkTmpDir({ dir: 'test/tmp', prefix: 'sigh-api-test-' })
     .then(_tmpPath => {
@@ -68,14 +68,14 @@ describe('compileSighFile', () => {
       pathBackup = process.cwd()
       process.chdir(tmpPath)
 
-      var opts = { environment: 'production' }
+      const opts = { environment: 'production' }
       compiler = new PipelineCompiler(opts)
       return compileSighfile(compiler, opts)
     })
     .then(streams => streams.js.toPromise(Promise))
     .then(events => {
       events.length.should.equal(1)
-      var event = events[0]
+      const event = events[0]
       event.path.should.equal('dist/combined.js')
     })
     .finally(() => {

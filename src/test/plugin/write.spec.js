@@ -5,15 +5,15 @@ import { readFileSync, existsSync } from 'fs'
 
 import write from '../../plugin/write'
 
-var TMP_PATH = 'test/tmp/write'
-var PROJ_PATH = 'subdir/file1.js'
-var PROJ_PATH_BINARY = 'subdir/file2.bin'
-var TMP_FILE = TMP_PATH + '/' + PROJ_PATH
+const TMP_PATH = 'test/tmp/write'
+const PROJ_PATH = 'subdir/file1.js'
+const PROJ_PATH_BINARY = 'subdir/file2.bin'
+const TMP_FILE = TMP_PATH + '/' + PROJ_PATH
 
 describe('write plugin', () => {
   it('writes a single file with no map to output directory with identity map', () => {
-    var data = 'var pump\n'
-    var stream = Bacon.constant([ new Event({ path: PROJ_PATH, type: 'add', data }) ])
+    const data = 'var pump\n'
+    const stream = Bacon.constant([ new Event({ path: PROJ_PATH, type: 'add', data }) ])
 
     return write({ stream }, TMP_PATH).toPromise(Promise).then(events => {
       // console.log('write events %j', events)
@@ -26,14 +26,14 @@ describe('write plugin', () => {
   })
 
   it('write a single file containing a basePath', () => {
-    var data = 'var  pumpbaby\n'
-    var stream = Bacon.constant([
+    const data = 'var  pumpbaby\n'
+    const stream = Bacon.constant([
       new Event({ basePath: 'subdir', path: PROJ_PATH, type: 'add', data })
     ])
 
     return write({ stream }, TMP_PATH).toPromise(Promise).then(events => {
       // subdir stripped from the output path due to basePath
-      var tmpFile = TMP_PATH + '/file1.js'
+      const tmpFile = TMP_PATH + '/file1.js'
 
       readFileSync(tmpFile).toString()
       .should.equal(data + '\n//# sourceMappingURL=file1.js.map')
@@ -44,29 +44,29 @@ describe('write plugin', () => {
   })
 
   it('write a binary file', () => {
-    var data = new Buffer([0, 1, 2, 3, -1, 5, 6, 7, 0])
-    var stream = Bacon.constant([
+    const data = new Buffer([0, 1, 2, 3, -1, 5, 6, 7, 0])
+    const stream = Bacon.constant([
       new Event({ basePath: 'subdir', path: PROJ_PATH_BINARY, type: 'add', data: data.toString('binary'), encoding: 'binary', supportsSourceMap: false })
     ])
 
     return write({ stream }, TMP_PATH).toPromise(Promise).then(events => {
       // subdir stripped from the output path due to basePath
-      var tmpFile = TMP_PATH + '/file2.bin'
+      const tmpFile = TMP_PATH + '/file2.bin'
 
       readFileSync(tmpFile).should.eql(data)
     })
   })
 
   it('write a single file then remove it', () => {
-    var data = 'var mew\n'
-    var stream = Bacon.fromArray([
+    const data = 'var mew\n'
+    const stream = Bacon.fromArray([
       [ new Event({ path: PROJ_PATH, type: 'add', data }) ],
       [ new Event({ path: PROJ_PATH, type: 'remove', data }) ]
     ])
 
     return new Promise(function(resolve, reject) {
-      var nValues = 0
-      var writeStream = write({ stream }, TMP_PATH)
+      let nValues = 0
+      const writeStream = write({ stream }, TMP_PATH)
 
       writeStream.onValue(events => {
         // console.log('write events %j', events)

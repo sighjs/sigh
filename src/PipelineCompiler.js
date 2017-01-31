@@ -3,7 +3,7 @@ import { Bacon } from 'sigh-core'
 import Promise from 'bluebird'
 import ProcessPool from 'process-pool'
 
-var DEFAULT_JOBS = 4
+const DEFAULT_JOBS = 4
 
 export default class {
   /**
@@ -27,7 +27,7 @@ export default class {
 
     this.initStream = Bacon.constant([])
 
-    var processLimit = options.jobs || DEFAULT_JOBS
+    let processLimit = options.jobs || DEFAULT_JOBS
     // include sigh process as one job so subtract one
     // TODO: (processLimit > 0) when process-pools supports limit of 0
     if (processLimit > 1)
@@ -37,7 +37,7 @@ export default class {
   }
 
   addPipelineInput(name, stream) {
-    var pipelineInputs = this.pipelineInputs[name]
+    const pipelineInputs = this.pipelineInputs[name]
     if (pipelineInputs)
       pipelineInputs.push(stream)
     else
@@ -58,7 +58,7 @@ export default class {
    */
   compile(pipeline, inputStream = null, name = null) {
     if (name) {
-      var pipelineInputs = this.pipelineInputs[name]
+      const pipelineInputs = this.pipelineInputs[name]
       if (pipelineInputs) {
         inputStream = Bacon.mergeAll(
           inputStream ? [ inputStream, ...pipelineInputs ] : pipelineInputs
@@ -69,7 +69,7 @@ export default class {
     if (! inputStream)
       inputStream = this.initStream
 
-    var compileOperation = (operation, opData) => {
+    const compileOperation = (operation, opData) => {
       let stream
       try {
         stream = operation.plugin ?
@@ -99,9 +99,9 @@ export default class {
     if (! (pipeline instanceof Array))
       pipeline = [ pipeline ]
 
-    var { watch, environment } = this
-    var streamPromise = Promise.reduce(pipeline, (stream, operation) => {
-      var { treeIndex, procPool } = this
+    const { watch, environment } = this
+    const streamPromise = Promise.reduce(pipeline, (stream, operation) => {
+      const { treeIndex, procPool } = this
       return compileOperation(operation, {
         stream,
         watch,

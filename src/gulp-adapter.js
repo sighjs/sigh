@@ -5,11 +5,11 @@ import { Transform } from 'stream'
 export default gulpPlugin => adapter.bind(null, gulpPlugin)
 
 function adapter(gulpPlugin, op, ...args) {
-  var sink
-  var gulpAdaptedStream = Bacon.fromBinder(_sink => { sink = _sink })
+  let sink
+  const gulpAdaptedStream = Bacon.fromBinder(_sink => { sink = _sink })
 
-  var onGulpValue = vinyl => {
-    var { __source: source } = vinyl
+  const onGulpValue = vinyl => {
+    const { __source: source } = vinyl
     if (! source)
       return new Bacon.Error('gulp plugin lost source, may not be compatible with sigh')
 
@@ -19,14 +19,14 @@ function adapter(gulpPlugin, op, ...args) {
     sink([ source ])
   }
 
-  var gulpInStream = new Transform({ objectMode: true })
-  var gulpOutStream = gulpInStream.pipe(gulpPlugin(...args))
+  const gulpInStream = new Transform({ objectMode: true })
+  const gulpOutStream = gulpInStream.pipe(gulpPlugin(...args))
   gulpOutStream.on('data', onGulpValue)
 
-  var registeredForEnd = false
+  let registeredForEnd = false
 
-  var passThroughStream = op.stream.flatMap(events => {
-    var passThroughEvents = []
+  const passThroughStream = op.stream.flatMap(events => {
+    const passThroughEvents = []
     events = events.filter(event => {
       if (event.type === 'change' || event.type === 'add')
         return true
@@ -36,7 +36,7 @@ function adapter(gulpPlugin, op, ...args) {
 
     if (events.length !== 0) {
       events.forEach(event => {
-        var vinyl = new Vinyl({
+        const vinyl = new Vinyl({
           contents: new Buffer(event.data),
           path: event.path,
           // the following messes with source maps...

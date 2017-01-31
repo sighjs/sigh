@@ -5,6 +5,5 @@ export default function(op, pipeline, ...envs) {
   if (! _.includes(envs, op.environment))
     return op.stream
 
-  var compiled = op.compiler.compile(pipeline, op.stream)
-  return compiled
+  return op.compiler.compile(pipeline, op.stream)
 }

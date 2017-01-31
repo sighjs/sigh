@@ -5,40 +5,40 @@ import { log } from 'sigh-core'
 
 import fse from 'fs-extra'
 
-var glob = Promise.promisify(require('glob'))
+const glob = Promise.promisify(require('glob'))
 
-var writeFile = Promise.promisify(fs.writeFile)
-var unlink = Promise.promisify(fs.unlink)
-var rm = Promise.promisify(fse.remove) // TODO: not used yet, see later comment
-var ensureDir = Promise.promisify(fse.ensureDir)
+const writeFile = Promise.promisify(fs.writeFile)
+const unlink = Promise.promisify(fs.unlink)
+const rm = Promise.promisify(fse.remove) // TODO: not used yet, see later comment
+const ensureDir = Promise.promisify(fse.ensureDir)
 
 import { mapEvents } from 'sigh-core/lib/stream'
 
 export function writeEvent(basePath, event) {
-  var { fileType } = event
-  var projectFile = path.basename(event.path)
-  var { projectPath } = event
+  const { fileType } = event
+  const projectFile = path.basename(event.path)
+  const { projectPath } = event
 
   // the projectPath remains the same but the basePath is changed to point to
   // the output directory
   event.basePath = basePath
 
-  var outputPath = event.path
+  const outputPath = event.path
   if (event.type === 'remove') {
     return unlink(outputPath).then(() => {
       return event.supportsSourceMap ? unlink(outputPath + '.map').then(() => event) : event
     })
   }
 
-  var { data } = event
-  var outputDir = path.dirname(outputPath)
+  let { data } = event
+  const outputDir = path.dirname(outputPath)
 
-  var promise = ensureDir(path.dirname(outputPath)).then(() => {
+  let promise = ensureDir(path.dirname(outputPath)).then(() => {
     return writeFile(outputPath, data, {encoding: event.encoding})
   })
 
   if (event.supportsSourceMap) {
-    var sourceMap
+    let sourceMap
     try {
       sourceMap = event.sourceMap
     }
@@ -49,8 +49,8 @@ export function writeEvent(basePath, event) {
     }
 
     if (sourceMap) {
-      var mapPath = projectFile + '.map'
-      var suffix
+      const mapPath = projectFile + '.map'
+      let suffix
       if (fileType === 'js')
         suffix = '//# sourceMappingURL=' + mapPath
       else if (fileType === 'css')
@@ -76,8 +76,8 @@ export default function(op, options, basePath) {
     options = {}
   }
 
-  var clobberPromise
-  var { clobber } = options
+  let clobberPromise
+  let { clobber } = options
   if (clobber) {
     // sanitize a path we are about to recursively remove... it must be below
     // the current working directory (which contains sigh.js)
@@ -99,6 +99,6 @@ export default function(op, options, basePath) {
     }
   }
 
-  var streamPromise = mapEvents(op.stream, writeEvent.bind(this, basePath))
+  const streamPromise = mapEvents(op.stream, writeEvent.bind(this, basePath))
   return clobberPromise ? clobberPromise.thenReturn(streamPromise) : streamPromise
 }

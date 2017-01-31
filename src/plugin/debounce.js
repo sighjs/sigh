@@ -6,8 +6,8 @@ import { bufferingDebounce } from 'sigh-core/lib/stream'
 export default function(op, delay = 500) {
   // return bufferingDebounce(op.stream, delay).map(_.flatten)
 
-  var initPhase = true
-  var buffer = []
+  let initPhase = true
+  const buffer = []
   return op.stream.flatMapLatest(events => {
     // avoid buffering during file watch phase
     if (! initPhase)

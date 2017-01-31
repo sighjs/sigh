@@ -6,7 +6,7 @@ import PipelineCompiler from '../../PipelineCompiler'
 import pipeline from '../../plugin/pipeline'
 
 describe('pipeline plugin', () => {
-  var compiler, stream
+  let compiler, stream
   beforeEach(() => {
     compiler = new PipelineCompiler
     stream = compiler.initStream
@@ -18,7 +18,7 @@ describe('pipeline plugin', () => {
     ))
     .then(streams => {
       return new Promise(function(resolve, reject) {
-        var nValues = 0
+        let nValues = 0
         pipeline({ stream, compiler }, 'stream1', 'stream2').onValue(events => {
           ++nValues
           events.should.eql(nValues)
@@ -43,7 +43,7 @@ describe('pipeline plugin', () => {
 
       return Promise.all([
         new Promise(function(resolve, reject) {
-          var nValues = 0
+          let nValues = 0
           pipeline({ stream, compiler }, 'stream1', 'stream2').onValue(events => {
             ++nValues
             events.should.equal(nValues)
@@ -65,7 +65,7 @@ describe('pipeline plugin', () => {
   })
 
   it('can subscribe to a pipeline before it has been compiled', () => {
-    var pipelineOp = pipeline({ stream, compiler }, 'stream')
+    const pipelineOp = pipeline({ stream, compiler }, 'stream')
 
     compiler.compile(op => Bacon.constant(1), null, 'stream')
     .then(stream => {

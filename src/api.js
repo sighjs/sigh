@@ -19,7 +19,7 @@ import pipeline from './plugin/pipeline'
 import write from './plugin/write'
 import filter from './plugin/filter'
 
-var plugins = {
+const plugins = {
   merge, concat, debounce, env, glob, pipeline, write,
   select: filter.bind(null, true),
   reject: filter.bind(null, false),
@@ -31,12 +31,12 @@ var plugins = {
  */
 export function invoke(opts = {}) {
   try {
-    var exitCode = 0
-    var streams
-    var compiler = new PipelineCompiler(opts)
+    let exitCode = 0
+    let streams
+    const compiler = new PipelineCompiler(opts)
 
-    var startTime = Date.now()
-    var relTime = (time = startTime) => ((Date.now() - time) / 1000).toFixed(3)
+    const startTime = Date.now()
+    const relTime = (time = startTime) => ((Date.now() - time) / 1000).toFixed(3)
 
     return compileSighfile(compiler, opts)
     .then(_streams => {
@@ -49,20 +49,20 @@ export function invoke(opts = {}) {
     .then(() => {
       if (opts.verbose)
         log('subprocesses started in %s seconds', relTime())
-      var pipeStartTime = Date.now()
+      const pipeStartTime = Date.now()
 
       _.forEach(streams, (stream, pipelineName) => {
         stream.onValue(events => {
-          var now = new Date
+          const now = new Date
 
-          var createTime = _.min(events, 'createTime').createTime
-          var timeDuration = relTime(createTime ? createTime.getTime() : pipeStartTime)
+          const createTime = _.min(events, 'createTime').createTime
+          const timeDuration = relTime(createTime ? createTime.getTime() : pipeStartTime)
 
           log('pipeline %s complete: %s seconds', pipelineName, timeDuration)
           if (opts.verbose > 1) {
             events.forEach(event => {
-              var { path, projectPath } = event
-              var suffix = path !== projectPath ? ` [${event.projectPath}]` : ''
+              const { path, projectPath } = event
+              const suffix = path !== projectPath ? ` [${event.projectPath}]` : ''
               log.nested(`${event.type} ${event.path}${suffix}`)
             })
           }
@@ -112,12 +112,13 @@ function requirePlugin(path) {
  * @return {Promise} Resolves to an object { pipelineName: baconStream }
  */
 export function compileSighfile(compiler, opts = {}) {
+  let packageJson
   try {
-    var packageJson = JSON.parse(fs.readFileSync('package.json'))
+    packageJson = JSON.parse(fs.readFileSync('package.json'))
   }
   catch (e) {}
 
-  var notPlugin = { 'sigh-cli': true, 'sigh-core' : true }
+  const notPlugin = { 'sigh-cli': true, 'sigh-core' : true }
 
   if (packageJson) {
     [ packageJson.devDependencies, packageJson.dependencies ].forEach(deps => {
@@ -132,7 +133,7 @@ export function compileSighfile(compiler, opts = {}) {
           plugins[pkg.substr(5)] = requirePlugin(path.join(process.cwd(), 'node_modules', pkg))
         }
         else if (/^gulp-/.test(pkg)) {
-          var name = pkg.substr(5)
+          const name = pkg.substr(5)
           if (! plugins[name])
             plugins[name] = gulpAdapter(requirePlugin(path.join(process.cwd(), 'node_modules', pkg)))
         }
@@ -140,7 +141,7 @@ export function compileSighfile(compiler, opts = {}) {
     })
   }
 
-  var sighPath
+  let sighPath
   try {
     sighPath = require.resolve(path.join(process.cwd(), 'Sigh'))
   }
@@ -148,14 +149,14 @@ export function compileSighfile(compiler, opts = {}) {
     sighPath = require.resolve(path.join(process.cwd(), 'sigh'))
   }
 
-  var sighModule = rewire(sighPath)
+  const sighModule = rewire(sighPath)
   _.forEach(plugins, (plugin, key) => injectPlugin(sighModule, key))
 
-  var pipelines = { alias: {}, explicit: {} }
+  const pipelines = { alias: {}, explicit: {} }
   sighModule(pipelines)
 
-  var selectedPipelines = selectPipelines(opts.pipelines, pipelines)
-  var runPipelines = loadPipelineDependencies(selectedPipelines, pipelines)
+  const selectedPipelines = selectPipelines(opts.pipelines, pipelines)
+  const runPipelines = loadPipelineDependencies(selectedPipelines, pipelines)
 
   if (opts.verbose) {
     log(
@@ -168,13 +169,13 @@ export function compileSighfile(compiler, opts = {}) {
   // to ensure the promises run one after the other so that plugins load
   // in dependency order, ideally they could be segmented according to
   // dependencies and loaded in several asynchronous batches.
-  var limiter = functionLimit(func => func(), 1)
+  const limiter = functionLimit(func => func(), 1)
 
   return Promise.props(
     _.mapValues(runPipelines, (pipeline, name) => limiter(() => {
       // This ensures that user selected pipeline's input streams are
       // merged with the init stream.
-      var inputStream = selectedPipelines[name] ? compiler.initStream : null
+      const inputStream = selectedPipelines[name] ? compiler.initStream : null
       return compiler.compile(pipeline, inputStream, name)
     }))
   )
@@ -202,7 +203,7 @@ function selectPipelines(selected, pipelines) {
   _.defaults(pipelines, pipelines.explicit)
   delete pipelines.explicit
 
-  var runPipelines = {}
+  const runPipelines = {}
   selected.forEach(name => {
     runPipelines[name] = pipelines[name]
   })
@@ -215,7 +216,7 @@ function selectPipelines(selected, pipelines) {
  * Works in any JS VM that maintains key insertion order.
  */
 function reverseHash(hash) {
-  var ret = {}
+  const ret = {}
   Object.keys(hash).reverse().forEach(key => { ret[key] = hash[key] })
   return ret
 }
@@ -226,10 +227,10 @@ function reverseHash(hash) {
  * @return {Object} A map of pipelines that should be run with dependents after dependencies.
  */
 function loadPipelineDependencies(runPipelines, pipelines) {
-  var ret = {}
-  var loading = {}
+  const ret = {}
+  const loading = {}
 
-  var loadDeps = srcPipelines => {
+  const loadDeps = srcPipelines => {
     _.forEach(srcPipelines, (pipeline, name) => {
       if (ret.name)
         return
@@ -239,7 +240,7 @@ function loadPipelineDependencies(runPipelines, pipelines) {
       loading[name] = true
 
       // TODO: also cursively scan args, e.g. if used in merge
-      var activations = []
+      const activations = []
 
       // ignore pipelines in the first position as they only provide output, not
       // input and this can be associated dynamically through a flatMap
@@ -260,7 +261,7 @@ function loadPipelineDependencies(runPipelines, pipelines) {
           }
 
           if (pluginMeta.plugin === plugins.pipeline) {
-            var activateState = false
+            let activateState = false
             pluginMeta.args.forEach(arg => {
               if (arg.hasOwnProperty('activate'))
                 activateState = arg.activate
@@ -274,7 +275,7 @@ function loadPipelineDependencies(runPipelines, pipelines) {
       scanPipelineForActivation(pipeline)
 
       activations.forEach(activation => {
-        var activationPipeline = pipelines[activation]
+        const activationPipeline = pipelines[activation]
         if (! activationPipeline)
           throw Error(`invalid pipeline ${activation}`)
 
@@ -296,12 +297,12 @@ function loadPipelineDependencies(runPipelines, pipelines) {
 }
 
 function injectPlugin(module, pluginName) {
-  var plugin = plugins[pluginName]
+  const plugin = plugins[pluginName]
   if (! plugin)
     throw new Error("Nonexistent plugin `" + pluginName + "'")
 
   try {
-    var varName = _.camelCase(pluginName)
+    const varName = _.camelCase(pluginName)
 
     module.__set__(varName, (...args) => ({ plugin, args }))
   }

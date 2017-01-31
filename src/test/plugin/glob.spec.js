@@ -3,19 +3,19 @@ import _ from 'lodash'
 import Promise from 'bluebird'
 import fs from 'fs'
 
-var copy = Promise.promisify(require('fs-extra').copy)
-var mkTmpDir = Promise.promisify(require('temp').mkdir)
+const copy = Promise.promisify(require('fs-extra').copy)
+const mkTmpDir = Promise.promisify(require('temp').mkdir)
 
 import glob from '../../plugin/glob'
 
-var FIXTURE_PATH = 'test/fixtures/simple-project'
-var FIXTURE_FILES = [
+const FIXTURE_PATH = 'test/fixtures/simple-project'
+const FIXTURE_FILES = [
   FIXTURE_PATH + '/file1.js',
   FIXTURE_PATH + '/file2.js'
 ]
 
 describe('glob plugin', () => {
-  var stream = Bacon.constant([])
+  const stream = Bacon.constant([])
 
   it('globs a wildcard', () => {
     return glob({ stream }, FIXTURE_PATH + '/*.js').toPromise(Promise).then(updates => {
@@ -30,7 +30,7 @@ describe('glob plugin', () => {
   })
 
   it('globs a wildcard and forwards initial input events', () => {
-    var stream = Bacon.constant([new Event({
+    const stream = Bacon.constant([new Event({
       type: 'add',
       path: 'blah.js',
       data: 'var blah',
@@ -39,7 +39,7 @@ describe('glob plugin', () => {
     return glob({ stream }, FIXTURE_PATH + '/*.js').toPromise(Promise).then(events => {
       events.length.should.equal(3)
 
-      var updates = events.slice(1)
+      const updates = events.slice(1)
       _.pluck(updates, 'projectPath').sort().should.eql(FIXTURE_FILES)
       updates.forEach(file => {
         file.initPhase.should.be.true
@@ -50,7 +50,7 @@ describe('glob plugin', () => {
   })
 
   it('globs a wildcard using the basePath option', () => {
-    var opData = { stream, treeIndex: 4 }
+    const opData = { stream, treeIndex: 4 }
     return glob(opData, { basePath: FIXTURE_PATH }, '*.js')
     .toPromise(Promise)
     .then(updates => {
@@ -62,7 +62,7 @@ describe('glob plugin', () => {
   })
 
   it('globs two wildcards', () => {
-    var opData = { stream, treeIndex: 1 }
+    const opData = { stream, treeIndex: 1 }
     return glob(opData, FIXTURE_PATH + '/*1.js', FIXTURE_PATH + '/*2.js')
     .toPromise(Promise)
     .then(updates => {
@@ -76,15 +76,15 @@ describe('glob plugin', () => {
   })
 
   it('detects changes to two files matching globbed pattern', () => {
-    var tmpPath
+    let tmpPath
     return mkTmpDir({ dir: 'test/tmp', prefix: 'sigh-glob-test-' }).then(_tmpPath => {
       tmpPath = _tmpPath
       return copy(FIXTURE_PATH, tmpPath)
     })
     .then(() => {
       return new Promise(function(resolve) {
-        var nUpdates = 0
-        var files = [ tmpPath + '/file1.js', tmpPath + '/file2.js' ]
+        let nUpdates = 0
+        const files = [ tmpPath + '/file1.js', tmpPath + '/file2.js' ]
         glob({ stream, watch: true, treeIndex: 4 }, tmpPath + '/*.js')
         .onValue(updates => {
           if (++nUpdates === 1) {
@@ -113,27 +113,27 @@ describe('glob plugin', () => {
   })
 
   it('forwards subsequent input events along with file change events', () => {
-    var delayedInputEvent = new Event({
+    const delayedInputEvent = new Event({
       type: 'add',
       path: 'blah.js',
       data: 'var blah',
     })
 
-    var sink
-    var twoStream = Bacon.mergeAll(
+    let sink
+    const twoStream = Bacon.mergeAll(
       stream,
       Bacon.fromBinder(_sink => { sink = _sink; return () => undefined })
     )
 
-    var tmpPath
+    let tmpPath
     return mkTmpDir({ dir: 'test/tmp', prefix: 'sigh-glob-test-' }).then(_tmpPath => {
       tmpPath = _tmpPath
       return copy(FIXTURE_PATH, tmpPath)
     })
     .then(() => {
       return new Promise(function(resolve) {
-        var nUpdates = 0
-        var updateFile = tmpPath + '/file1.js'
+        let nUpdates = 0
+        const updateFile = tmpPath + '/file1.js'
         glob({ stream: twoStream, watch: true, treeIndex: 4 }, tmpPath + '/*.js')
         .onValue(updates => {
           if (++nUpdates === 1) {
@@ -163,16 +163,16 @@ describe('glob plugin', () => {
   })
 
   it('detects new file', () => {
-    var tmpPath
+    let tmpPath
     return mkTmpDir({ dir: 'test/tmp', prefix: 'sigh-glob-test-2-' }).then(_tmpPath => {
       tmpPath = _tmpPath
       return copy(FIXTURE_PATH, tmpPath)
     })
     .then(() => {
-      var addedFile = tmpPath + '/added-file.js'
+      const addedFile = tmpPath + '/added-file.js'
       return new Promise(function(resolve) {
-        var nUpdates = 0
-        var files = [ tmpPath + '/file1.js', tmpPath + '/file2.js' ]
+        let nUpdates = 0
+        const files = [ tmpPath + '/file1.js', tmpPath + '/file2.js' ]
         glob({ stream, watch: true, treeIndex: 4 }, tmpPath + '/*.js')
         .onValue(updates => {
           if (++nUpdates === 1) {

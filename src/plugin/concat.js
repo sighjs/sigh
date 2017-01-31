@@ -4,18 +4,20 @@ import { concatenate as concatSourceMaps } from 'sigh-core/lib/sourceMap'
 import { log, Event } from 'sigh-core'
 
 export default function(op, outputPath) {
-  var fileExists = false
-  var maxCreateTime = new Date(-8640000000000000)
+  let fileExists = false
+  let maxCreateTime = new Date(-8640000000000000)
 
   return toFileSystemState(op.stream)
   .map(function(eventCache) {
-    var data = '', sourceMaps = []
-    var offsets = [0], cumOffset = 0
-    var events = _.sortBy(eventCache, 'opTreeIndex')
+    let data = ''
+    const sourceMaps = []
+    const offsets = [0]
+    let cumOffset = 0
+    const events = _.sortBy(eventCache, 'opTreeIndex')
 
     // set this to the earliest new createTime after maxCreateTime
-    var createTime = null
-    var nextMaxCreateTime = maxCreateTime
+    let createTime = null
+    let nextMaxCreateTime = maxCreateTime
 
     events.forEach((event, idx) => {
       if (event.createTime > maxCreateTime) {
@@ -26,14 +28,14 @@ export default function(op, outputPath) {
           nextMaxCreateTime = event.createTime
       }
 
-      var offset = event.lineCount - 1
+      let offset = event.lineCount - 1
       data += event.data
       if (data[data.length - 1] !== '\n') {
         data += '\n'
         ++offset
       }
 
-      var sourceMap
+      let sourceMap
       try {
         sourceMap = event.sourceMap
       }
@@ -57,10 +59,10 @@ export default function(op, outputPath) {
 
     maxCreateTime = nextMaxCreateTime
 
-    var sourceMap = concatSourceMaps(sourceMaps, offsets)
+    const sourceMap = concatSourceMaps(sourceMaps, offsets)
     sourceMap.file = outputPath
 
-    var ret = [ new Event({
+    const ret = [ new Event({
       type: fileExists ? 'change' : 'add',
       path: outputPath,
       data,

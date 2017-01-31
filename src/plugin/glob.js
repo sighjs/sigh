@@ -2,22 +2,22 @@ import chokidar from 'chokidar'
 import _ from 'lodash'
 import { Bacon, Event } from 'sigh-core'
 import Promise from 'bluebird'
-var glob = Promise.promisify(require('glob'))
+const glob = Promise.promisify(require('glob'))
 
 import { bufferingDebounce, coalesceEvents } from 'sigh-core/lib/stream'
 
 // necessary to detect chokidar's duplicate/invalid events, see later comment
-var DEFAULT_DEBOUNCE = 120
+const DEFAULT_DEBOUNCE = 120
 
 export default function(op, ...patterns) {
   // the first argument could be an option object rather than a pattern
-  var opts = typeof patterns[0] === 'object' ? patterns.shift() : {}
+  const opts = typeof patterns[0] === 'object' ? patterns.shift() : {}
 
-  var { treeIndex = 1, debounce = DEFAULT_DEBOUNCE } = op
+  const { treeIndex = 1, debounce = DEFAULT_DEBOUNCE } = op
   op.nextTreeIndex = treeIndex + patterns.length
 
-  var newEvent = (type, { path, treeIndex, initPhase = false }) => {
-    var props = { type, path, initPhase, opTreeIndex: treeIndex, encoding: opts.encoding }
+  const newEvent = (type, { path, treeIndex, initPhase = false }) => {
+    const props = { type, path, initPhase, opTreeIndex: treeIndex, encoding: opts.encoding }
     if (opts.basePath)
       props.basePath = opts.basePath
     props.createTime = new Date
@@ -27,8 +27,8 @@ export default function(op, ...patterns) {
   if (opts.basePath)
     patterns = patterns.map(pattern => opts.basePath + '/' + pattern)
 
-  var makeGlobStream = events => {
-    var stream = Bacon.combineAsArray(
+  const makeGlobStream = events => {
+    const stream = Bacon.combineAsArray(
       patterns.map(
         (pattern, idx) => Bacon.fromPromise(
           glob(pattern).then(
@@ -49,12 +49,12 @@ export default function(op, ...patterns) {
     if (! op.watch)
       return stream
 
-    var watchers = patterns.map(
+    const watchers = patterns.map(
       pattern => chokidar.watch(pattern, { ignoreInitial: true })
     )
 
-    var chokEvRemap = { unlink: 'remove' }
-    var updates = Bacon.mergeAll(
+    const chokEvRemap = { unlink: 'remove' }
+    const updates = Bacon.mergeAll(
       _.flatten(['add', 'change', 'unlink'].map(type => watchers.map(
         (watcher, idx) => Bacon.fromEvent(watcher, type).map(
           path => {
@@ -74,7 +74,7 @@ export default function(op, ...patterns) {
     )
   }
 
-  var globStream
+  let globStream
   return op.stream.flatMap(events => {
     if (! globStream) {
       globStream = makeGlobStream(events)

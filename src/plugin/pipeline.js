@@ -4,10 +4,10 @@ import _ from 'lodash'
 
 import { bufferingDebounce } from 'sigh-core/lib/stream'
 
-var DEFAULT_DEBOUNCE = 200
+const DEFAULT_DEBOUNCE = 200
 
 export default function(op, ...pipelineNames) {
-  var { compiler } = op
+  const { compiler } = op
 
   pipelineNames = pipelineNames.filter(p => ! p.hasOwnProperty('activate'))
 
@@ -24,7 +24,7 @@ export default function(op, ...pipelineNames) {
     return Bacon.mergeAll(_.reduce(
       pipelineNames,
       (streams, name) => {
-        var stream = compiler.streams[name]
+        const stream = compiler.streams[name]
         if (stream)
           streams.push(stream)
         return streams
